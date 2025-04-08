@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "458397158619",
+    "project_id": "food-delivery-c58af",
+    "storage_bucket": "food-delivery-c58af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458397158619:android:68324b3d183219d2ec10fe",
+        "android_client_info": {
+          "package_name": "com.example.food_delivery"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3PVTY58nq70vARSsdCDd9zrmQmnNMYdE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458397158619:android:6a944fdab99a520eec10fe",
+        "android_client_info": {
+          "package_name": "com.example.privatily_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3PVTY58nq70vARSsdCDd9zrmQmnNMYdE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458397158619:android:2221bd0b9fdec2f8ec10fe",
+        "android_client_info": {
+          "package_name": "com.tictac.wrteam.TicTacToe"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3PVTY58nq70vARSsdCDd9zrmQmnNMYdE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -38,6 +38,13 @@ dependencies:
   gap: ^3.0.1
   visibility_detector: ^0.4.0+2
   font_awesome_flutter:
+  firebase_core: ^3.13.0
+  cloud_firestore: ^5.6.6
+  firebase_storage: ^12.4.5
+  image_picker:
+  image_picker_web:
+  firebase_auth: ^5.5.2
+  lottie: ^3.3.1
 
 dev_dependencies:
   flutter_test:
