@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:privatily_app/preview/privatily_preview_image.dart';
+import '../login_screen/logic.dart';
+import '../login_screen/view.dart';
+import '../mytextfield/custom_field.dart';
 import '../sections/FAQ_section.dart';
 import '../sections/FooterSection.dart';
 import '../sections/contact_us_seaction.dart';
@@ -23,6 +28,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final ScrollController _scrollController = ScrollController();
+  final Login_pageLogic logic = Get.put(Login_pageLogic());
+
   final GlobalKey _testimonialKey = GlobalKey();
   bool showChatBox = false;
 
@@ -61,6 +68,8 @@ class _HomeState extends State<Home> {
     );
   }
 
+  bool showLoginForm = false;
+  bool showSignupForm = false;
   Widget chatPopup() {
     return Positioned(
       bottom: 100,
@@ -78,73 +87,162 @@ class _HomeState extends State<Home> {
             borderRadius: BorderRadius.circular(20),
             boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 25)],
           ),
-          child: Column(
+          child: showLoginForm
+              ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
               Row(
                 children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.deepPurple.shade100,
-                    child: const Icon(Icons.auto_awesome, color: Colors.deepPurple),
-                  ),
-                  const SizedBox(width: 8),
                   const Expanded(
                     child: Text(
-                      "Privatily\nAI Assistant",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      "Login",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   IconButton(
-                    onPressed: () => setState(() => showChatBox = false),
                     icon: const Icon(Icons.close),
+                    onPressed: () {
+                      setState(() {
+                        showChatBox = false;
+                        showLoginForm = false;
+                        showSignupForm = false;
+                      });
+                    },
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
-              chatBubble(
-                icon: Icons.auto_awesome,
-                time: "5:53 AM",
-                text: "Hi, We're online 24/7",
+              const SizedBox(height: 16),
+              CustomInputField(
+                controller: logic.emailC,
+                hintText: 'Email',
               ),
-              chatBubble(
-                icon: Icons.auto_awesome,
-                time: "5:54 AM",
-                text: "Please enter your email",
-                inputHint: "john.doe@example.com",
+              const SizedBox(height: 12),
+              CustomInputField(
+                controller: logic.passC,
+                hintText: 'Password',
+                isPassword: true,
               ),
-              const Spacer(),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  logic.signIn(); // Login logic
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  minimumSize: const Size.fromHeight(50),
+                ),
+                child: const Text("Login", style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          )
+              : showSignupForm
+              ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               Row(
                 children: [
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "Fill in your details",
-                        filled: true,
-                        fillColor: const Color(0xFFF3F6FD),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
+                  const Expanded(
+                    child: Text(
+                      "Sign Up",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  FloatingActionButton(
-                    mini: true,
-                    backgroundColor: Colors.deepPurple,
-                    onPressed: () {},
-                    child: const Icon(Icons.send, size: 18),
-                  )
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      setState(() {
+                        showChatBox = false;
+                        showLoginForm = false;
+                        showSignupForm = false;
+                      });
+                    },
+                  ),
                 ],
-              )
+              ),
+              const SizedBox(height: 16),
+              CustomInputField(
+                controller: logic.NameC,
+                hintText: 'User Name',
+              ),
+              const SizedBox(height: 12),
+              CustomInputField(
+                controller: logic.emailC,
+                hintText: 'Email',
+              ),
+              const SizedBox(height: 12),
+              CustomInputField(
+                controller: logic.passC,
+                hintText: 'Password',
+                isPassword: true,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  logic.createUser(); // Sign up logic
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  minimumSize: const Size.fromHeight(50),
+                ),
+                child: const Text("Sign Up", style: TextStyle(color: Colors.white)),
+              ),
             ],
+          )
+              : Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      showLoginForm = true;
+                      showSignupForm = false;
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                  ),
+                  child: const Text(
+                    "Login",
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      showSignupForm = true;
+                      showLoginForm = false;
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple.shade100,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+                  ),
+                  child: const Text(
+                    "Sign Up",
+                    style: TextStyle(fontSize: 16, color: Colors.deepPurple),
+                  ),
+                ),
+              ],
+            ),
           ),
         )
             : const SizedBox.shrink(),
       ),
     );
   }
+
+
+
+
 
   Widget chatBubble({required IconData icon, required String time, required String text, String? inputHint}) {
     return Padding(
