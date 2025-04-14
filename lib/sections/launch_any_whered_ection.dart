@@ -7,8 +7,6 @@ class LaunchAnywhereSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       final isMobile = constraints.maxWidth < 600;
-      final isTablet = constraints.maxWidth >= 600 && constraints.maxWidth < 1024;
-      final isDesktop = constraints.maxWidth >= 1024;
 
       return Container(
         padding: EdgeInsets.symmetric(
@@ -20,7 +18,7 @@ class LaunchAnywhereSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // ✅ Left Side Text
+            // ✅ Left Side (Text)
             Expanded(
               flex: isMobile ? 0 : 1,
               child: Padding(
@@ -33,7 +31,7 @@ class LaunchAnywhereSection extends StatelessWidget {
                   children: [
                     RichText(
                       text: TextSpan(
-                        text: 'Launch your company\nfrom ',
+                        text: 'Launch your digital business\nfrom ',
                         style: TextStyle(
                           fontSize: isMobile ? 22 : 30,
                           fontWeight: FontWeight.bold,
@@ -44,7 +42,7 @@ class LaunchAnywhereSection extends StatelessWidget {
                           TextSpan(
                             text: '→ anywhere',
                             style: TextStyle(
-                              color: Colors.deepPurple,
+                              color: Color(0xFF00C853), // Green for LaunchCode
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -53,7 +51,7 @@ class LaunchAnywhereSection extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      "Act now! Gain exclusive access to top-tier financial solutions, reserved solely for US-based companies, and significantly boost your business’s potential for success.",
+                      "Choose a ready-to-launch script, provide your assets, and let us deploy it across app stores, domains, and hosting platforms. No coding. No stress. Just results.",
                       style: TextStyle(
                         color: Colors.black54,
                         fontSize: isMobile ? 13 : 14,
@@ -67,13 +65,13 @@ class LaunchAnywhereSection extends StatelessWidget {
 
             if (!isMobile) const SizedBox(width: 40),
 
-            // ✅ Right Side Image
+            // ✅ Right Side (Image)
             Expanded(
               flex: isMobile ? 0 : 1,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(20),
                 child: Image.asset(
-                  'assets/images/img.png',
+                  'assets/images/img.png', // ✅ Update this with LaunchCode-themed image if needed
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),

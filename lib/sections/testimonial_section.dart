@@ -16,21 +16,21 @@ class _TestimonialSectionState extends State<TestimonialSection>
   final List<Map<String, String>> testimonials = [
     {
       'message':
-      'Their speed and prices are unmatched! Starting my business in the U.S. with Privatily was very easy. Their team took care of everything, and I really can’t thank them enough.',
-      'name': 'Yusuf',
-      'country': 'From Pakistan 🇵🇰'
+      'LaunchCode made it incredibly easy to get my app live. Within days, my app was on the Play Store and I was receiving real customer traffic. 100% recommend!',
+      'name': 'Johan ',
+      'country': 'From USA 🇺🇸'
     },
     {
       'message':
-      'Privatily provides excellent customer service. They are always responsive to concerns and keep you updated throughout the process. I was recommended to them by a friend and I highly recommend them to others.',
-      'name': 'Chinedu',
-      'country': 'From Nigeria 🇳🇬'
+      'Their dashboard, support, and deployment process is seamless. LaunchCode is perfect for developers looking to scale fast.',
+      'name': 'Faizal Khan',
+      'country': 'From UK 🇬🇧'
     },
     {
       'message':
-      'I got an outstanding service for my US LLC formation. Their team was not only professional but also highly responsive throughout the entire process, making everything seamless and efficient.',
-      'name': 'Jamal',
-      'country': 'From Morocco 🇲🇦'
+      'From selecting the script to launching my brand online, LaunchCode handled everything! Now my store is running and earning.',
+      'name': 'Omar',
+      'country': 'From Egypt 🇪🇬'
     },
   ];
 
@@ -85,7 +85,7 @@ class _TestimonialSectionState extends State<TestimonialSection>
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text(
-            'Trusted by entrepreneurs\nfrom 150+ countries',
+            'Loved by global entrepreneurs powered by LaunchCode',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 32,
@@ -98,19 +98,19 @@ class _TestimonialSectionState extends State<TestimonialSection>
           Stack(
             alignment: Alignment.center,
             children: [
-              // 🎯 Box-style gradient background
+              // Green gradient background for LaunchCode
               Container(
-                height: 280, // ✅ Adjusted height for perfect balance
-                width: 980,  // ✅ Matches visual layout in screenshot
+                height: 280,
+                width: 980,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(26),
                   gradient: const LinearGradient(
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                     colors: [
-                      Color(0xFF5C4DFF), // 💜 Deep Purple (Left)
-                      Color(0xFFAA6EFF), // 💜 Light Purple (Center)
-                      Color(0xFFFF9E9E), // ❤️ Pinkish Red (Right)
+                      Color(0xFF00B36B),
+                      Color(0xFF00D084),
+                      Color(0xFF32CD32),
                     ],
                   ),
                   boxShadow: [
@@ -123,9 +123,6 @@ class _TestimonialSectionState extends State<TestimonialSection>
                   ],
                 ),
               ),
-
-
-              // Testimonials with animation
               Wrap(
                 spacing: 20,
                 runSpacing: 20,

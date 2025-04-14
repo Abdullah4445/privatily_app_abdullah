@@ -66,9 +66,9 @@ class OurMissionSection extends StatelessWidget {
             ),
             children: [
               TextSpan(
-                text: 'Privatily',
+                text: 'LaunchCode',
                 style: TextStyle(
-                  color: Color(0xFF5C4DFF),
+                  color: Color(0xFF00C853),
                 ),
               )
             ],
@@ -76,13 +76,11 @@ class OurMissionSection extends StatelessWidget {
         ),
         const Gap(20),
         const Text(
-          "Privatily’s mission is to be the global partner for aspiring business\n"
-              "owners, streamlining the path to company formation in the USA,\n"
-              "UK, and Canada. We deliver a comprehensive suite of services,\n"
-              "from LLC and LTD registrations to full business incorporation,\n"
-              "designed for modern entrepreneurial needs. Our goal is to\n"
-              "empower clients to quickly and confidently establish and grow\n"
-              "their businesses worldwide.",
+          "LaunchCode’s mission is to simplify and speed up tech business launches\n"
+              "worldwide. We provide ready-to-deploy software solutions and full-stack\n"
+              "support—from branding and configuration to hosting and store submission.\n"
+              "Our goal is to empower startups, freelancers, and agencies with automation\n"
+              "and simplicity so they can focus on revenue instead of development.",
           style: TextStyle(
             fontSize: 16,
             height: 1.7,

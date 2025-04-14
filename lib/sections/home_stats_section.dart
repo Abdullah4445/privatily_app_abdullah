@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import 'package:flutter/material.dart';
+import 'package:visibility_detector/visibility_detector.dart';
+
 class HomeStatsSection extends StatefulWidget {
   const HomeStatsSection({super.key});
 
@@ -15,7 +18,7 @@ class _HomeStatsSectionState extends State<HomeStatsSection> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
-    final horizontalSpacing = isMobile ? 24.0 : 80.0;
+    final horizontalSpacing = isMobile ? 20.0 : 60.0;
 
     return VisibilityDetector(
       key: const Key('home-stats-section'),
@@ -26,20 +29,34 @@ class _HomeStatsSectionState extends State<HomeStatsSection> {
           });
         }
       },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 40),
-        child: Center(
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            spacing: horizontalSpacing,
-            runSpacing: 20,
-            children: [
-              _StatItem(title: 'Clients', endValue: 2300, animate: _visible),
-              _StatItem(title: 'Companies formed', endValue: 2800, animate: _visible),
-              _StatItem(title: 'Countries served', endValue: 150, animate: _visible),
-              _StatItem(title: 'Years of experience', endValue: 6, animate: _visible),
-            ],
-          ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 16),
+        color: const Color(0xFFF9F9FF),
+        child: Column(
+          children: [
+            const Text(
+              'LaunchCode by Numbers',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 40),
+            Center(
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                spacing: horizontalSpacing,
+                runSpacing: 30,
+                children: [
+                  _StatItem(title: 'Clients', endValue: 2300, animate: _visible),
+                  _StatItem(title: 'Projects Delivered', endValue: 2800, animate: _visible),
+                  _StatItem(title: 'Countries Reached', endValue: 150, animate: _visible),
+                  _StatItem(title: 'Years in Industry', endValue: 6, animate: _visible),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -68,12 +85,7 @@ class _StatItemState extends State<_StatItem> with SingleTickerProviderStateMixi
   @override
   void initState() {
     super.initState();
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    );
-
+    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 2));
     _animation = IntTween(begin: 0, end: widget.endValue).animate(_controller)
       ..addListener(() => setState(() {}));
   }
@@ -81,8 +93,6 @@ class _StatItemState extends State<_StatItem> with SingleTickerProviderStateMixi
   @override
   void didUpdateWidget(covariant _StatItem oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    // Start animation when 'animate' becomes true
     if (widget.animate && !_controller.isAnimating && _animation.value == 0) {
       _controller.forward();
     }
@@ -96,25 +106,37 @@ class _StatItemState extends State<_StatItem> with SingleTickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 140,
+    return Container(
+      width: 160,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 20,
+            offset: Offset(0, 10),
+          ),
+        ],
+      ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             '${_animation.value}+',
             style: const TextStyle(
-              fontSize: 32,
+              fontSize: 36,
               fontWeight: FontWeight.w900,
-              color: Colors.black,
+              color: Colors.deepPurple,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           Text(
             widget.title,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 15,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
               color: Colors.black87,
             ),
           ),

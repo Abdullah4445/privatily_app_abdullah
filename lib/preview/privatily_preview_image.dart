@@ -64,7 +64,7 @@ class _PrivatilyPreviewImageState extends State<PrivatilyPreviewImage>
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
               child: Image.asset(
-                'assets/images/Privatily-Product-Preview-2.jpg',
+                'assets/images/pp.png',
                 width: double.infinity,
                 fit: BoxFit.fitWidth,
               ),

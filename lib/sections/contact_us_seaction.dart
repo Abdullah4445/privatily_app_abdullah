@@ -11,27 +11,27 @@ class ContactUsSection extends StatelessWidget {
 
         return Stack(
           children: [
-            // 🔵 Gradient top background
+            // ✅ LaunchCode green background
             Container(
               height: 300,
               width: double.infinity,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Color(0xFF3E29F0), Color(0xFF4E38F8)],
+                  colors: [Color(0xFF00C853), Color(0xFF1B5E20)],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
               ),
             ),
 
-            // 🧾 Main Content
+            // ✉️ Main content
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
                   const SizedBox(height: 40),
                   Text(
-                    "Reach Out, We're Here to Help!",
+                    "Got questions? Let's talk!",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: isMobile ? 22 : 28,
@@ -41,7 +41,7 @@ class ContactUsSection extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    "Complete the form, and our team will promptly respond to your inquiry within our working hours!",
+                    "Drop your details and our LaunchCode experts will assist you in launching your dream product, hassle-free.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white70,
@@ -50,7 +50,7 @@ class ContactUsSection extends StatelessWidget {
                   ),
                   const SizedBox(height: 40),
 
-                  // 📦 Form + Image Box
+                  // 🧾 Form + Image
                   Center(
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 1200),
@@ -64,30 +64,30 @@ class ContactUsSection extends StatelessWidget {
                           direction: isMobile ? Axis.vertical : Axis.horizontal,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // ✉️ Form Side
+                            // ✅ Form
                             Expanded(
                               flex: isMobile ? 0 : 1,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text(
-                                    'Send us a message',
+                                    'Talk to a LaunchCode expert',
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                   const SizedBox(height: 20),
-                                  _buildInput('Name'),
-                                  _buildInput('Email'),
-                                  _buildInput('Subject'),
-                                  _buildInput('Message', maxLines: 4),
+                                  _buildInput('Full Name'),
+                                  _buildInput('Email Address'),
+                                  _buildInput('Your Business Idea'),
+                                  _buildInput('Additional Notes', maxLines: 4),
                                   const SizedBox(height: 20),
                                   SizedBox(
                                     width: double.infinity,
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.black,
+                                        backgroundColor: const Color(0xFF00C853),
                                         foregroundColor: Colors.white,
                                         padding: const EdgeInsets.symmetric(vertical: 16),
                                         shape: RoundedRectangleBorder(
@@ -95,7 +95,7 @@ class ContactUsSection extends StatelessWidget {
                                         ),
                                       ),
                                       onPressed: () {},
-                                      child: const Text('Send message'),
+                                      child: const Text('Get in touch'),
                                     ),
                                   ),
                                 ],
@@ -104,7 +104,7 @@ class ContactUsSection extends StatelessWidget {
 
                             if (!isMobile) const SizedBox(width: 40),
 
-                            // 👨‍💻 Image + Banners (with Stack)
+                            // ✅ Image side
                             if (!isMobile)
                               Expanded(
                                 flex: 1,
@@ -119,7 +119,7 @@ class ContactUsSection extends StatelessWidget {
                                       top: 0,
                                       left: 0,
                                       child: Image.asset(
-                                        'assets/images/banner_1.png', // replace with your image name
+                                        'assets/images/banner_1.png',
                                         width: 260,
                                       ),
                                     ),
@@ -127,7 +127,7 @@ class ContactUsSection extends StatelessWidget {
                                       top: 80,
                                       left: 10,
                                       child: Image.asset(
-                                        'assets/images/banner_2.png', // replace with your image name
+                                        'assets/images/banner_2.png',
                                         width: 240,
                                       ),
                                     ),

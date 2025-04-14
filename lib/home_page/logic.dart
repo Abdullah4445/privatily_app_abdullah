@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
-import '../chat_page/view.dart';
+// import '../chat_page/view.dart';
 import '../models/students.dart';
 
 class HomeLogic extends GetxController {
@@ -53,12 +53,12 @@ class HomeLogic extends GetxController {
           print("⚡ Chat Room Already Exists: $chatRoomId");
         }
       }
-      // Navigate to ChatPage
-      Get.to(() => ChattingPage(
-            chatRoomId: chatRoomId,
-            receiverId: otherUserId,
-            receiverName: receiverName,
-          ));
+      // // Navigate to ChatPage
+      // Get.to(() => ChattingPage(
+      //       chatRoomId: chatRoomId,
+      //       receiverId: otherUserId,
+      //       receiverName: receiverName,
+      //     ));
     } catch (e) {
       Get.snackbar("Error", "❌ Failed to create chat room: $e");
     }

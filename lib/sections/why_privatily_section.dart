@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class WhyPrivatilySection extends StatefulWidget {
-  const WhyPrivatilySection({super.key});
+class WhyLaunchCodeSection extends StatefulWidget {
+  const WhyLaunchCodeSection({super.key});
 
   @override
-  State<WhyPrivatilySection> createState() => _WhyPrivatilySectionState();
+  State<WhyLaunchCodeSection> createState() => _WhyLaunchCodeSectionState();
 }
 
-class _WhyPrivatilySectionState extends State<WhyPrivatilySection>
+class _WhyLaunchCodeSectionState extends State<WhyLaunchCodeSection>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
@@ -65,7 +65,7 @@ class _WhyPrivatilySectionState extends State<WhyPrivatilySection>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Why Privatily?',
+                      'Why LaunchCode?',
                       style: TextStyle(
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
@@ -74,13 +74,13 @@ class _WhyPrivatilySectionState extends State<WhyPrivatilySection>
                     ),
                     const SizedBox(height: 20),
                     const Text(
-                      "We know how to take the complexity out of forming your company because we’ve been in your shoes. Privatily was born because we struggled ourselves—facing a complicated, lengthy process when trying to set up our own company in a supported country. Since 2019, we’ve been committed to providing unmatched expertise, affordable prices, and the fastest turnaround time to help entrepreneurs like you start your business journey smoothly and confidently.",
+                      "LaunchCode removes the hurdles of starting from scratch. Our platform offers ready-made, high-quality software tools you can deploy instantly. Whether you're a freelancer, startup, or agency — focus on growth, not building everything yourself.",
                       style: TextStyle(fontSize: 16, color: Colors.black87),
                     ),
                     const SizedBox(height: 30),
-                    featureItem(Icons.workspace_premium_outlined, 'Expert guidance since 2019'),
-                    featureItem(Icons.attach_money_outlined, 'Affordable, no hidden fees'),
-                    featureItem(Icons.flash_on_outlined, 'Fast, hassle-free setup'),
+                    featureItem(Icons.extension, 'Pre-built software scripts'),
+                    featureItem(Icons.flash_on_outlined, 'Quick launch and zero setup'),
+                    featureItem(Icons.support_agent_outlined, 'Dedicated launch support'),
                   ],
                 ),
               ),
@@ -90,7 +90,7 @@ class _WhyPrivatilySectionState extends State<WhyPrivatilySection>
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
-                    'assets/images/why-privatily.png', // 👈 Replace with your actual image path
+                    'assets/images/whyLaunch.png', // replace with actual image
                     fit: BoxFit.contain,
                   ),
                 ),

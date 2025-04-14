@@ -43,7 +43,7 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
           'FREE .com domain',
           'Business bank consultation',
           '3 Business logos',
-          'Bonuses'
+          'Exclusive LaunchCode Bonuses'
         ]
       }
     },
@@ -76,7 +76,7 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
           'FREE .com domain',
           'Business bank consultation',
           '3 Business logos',
-          'Bonuses'
+          'Exclusive LaunchCode Bonuses'
         ]
       }
     },
@@ -110,7 +110,7 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
           'FREE business email inbox',
           'FREE .com domain',
           '3 Business logos',
-          'Bonuses'
+          'Exclusive LaunchCode Bonuses'
         ]
       }
     },
@@ -128,7 +128,7 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
             TextSpan(
               text: 'Transparent ',
               style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
-              children: [TextSpan(text: 'Pricing', style: TextStyle(color: Colors.deepPurple))],
+              children: [TextSpan(text: 'Pricing', style: TextStyle(color: Colors.green))],
             ),
           ),
           const SizedBox(height: 10),
@@ -164,7 +164,7 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
       width: 380,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: isPremium ? const Color(0xFF4329EF) : Colors.white,
+        color: isPremium ? const Color(0xFF043927) : Colors.white,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.grey.shade200),
       ),
@@ -228,7 +228,7 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
           const SizedBox(height: 16),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: isPremium ? Colors.pinkAccent : Colors.black,
+              backgroundColor: isPremium ? Colors.green : Colors.black,
               foregroundColor: Colors.white,
               minimumSize: const Size.fromHeight(44),
             ),
@@ -247,7 +247,7 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
                   children: [
                     Icon(
                       index == 0 && isPremium ? Icons.double_arrow_rounded : Icons.check,
-                      color: isPremium ? Colors.white : Colors.deepPurple,
+                      color: isPremium ? Colors.white : Colors.green,
                       size: 18,
                     ),
                     const SizedBox(width: 8),

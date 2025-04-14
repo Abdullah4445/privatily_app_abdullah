@@ -13,39 +13,40 @@ class _FaqSectionState extends State<FaqSection> {
 
   final List<Map<String, dynamic>> faqItems = [
     {
-      'question': 'How much time you are going to take to finish my order?',
+      'question': 'How long does it take to launch my apps?',
       'answer': [
-        'Premium orders have a processing speed 3 times faster than Basic orders.',
-        'We typically form companies within just 2 days.',
-        'Securing the EIN takes an additional 3–5 days (Note: Most other providers require at least 2 weeks for EIN acquisition).',
+        'Basic deployments take 5–7 business days.',
+        'Premium packages are prioritized and completed within 2–3 business days.',
+        'This includes launching to Play Store, App Store, and setting up hosting.',
       ]
     },
     {
-      'question': 'What documents do I need to provide?',
+      'question': 'What material do I need to provide?',
       'answer': [
-        'You only need a valid passport or national ID card and proof of address.',
-        'Some additional forms may be required depending on your country.',
+        'Your business name and logo.',
+        'App icons, splash screen (optional).',
+        'Developer account access or invitation (Google, Apple, etc.).',
       ]
     },
     {
-      'question': 'What about taxes?',
+      'question': 'Can you publish apps on both Play Store and App Store?',
       'answer': [
-        'We help you get started but we recommend consulting a US tax professional.',
-        'Our Premium plan includes a tax consultation.',
+        'Yes! LaunchCode supports publishing to both stores.',
+        'We also configure your admin panel and host it using services like Hostinger or GoDaddy.',
       ]
     },
     {
-      'question': 'Do you support my country?',
+      'question': 'Do I need coding experience to use LaunchCode?',
       'answer': [
-        'Yes! We support entrepreneurs from over 150+ countries.',
-        'You can check your eligibility on our website or contact us for help.',
+        'Nope! We handle the technical setup and launch process for you.',
+        'You just need to choose your script and provide the required content.',
       ]
     },
     {
-      'question': "Your question wasn't listed above?",
+      'question': 'What happens after the apps are live?',
       'answer': [
-        'No worries. Our support team is available to help.',
-        'Click on the live chat or email us your question anytime.',
+        'You’ll receive a handover package with credentials and links.',
+        'From there, you can start promoting and earning revenue right away!',
       ]
     },
   ];
@@ -65,9 +66,9 @@ class _FaqSectionState extends State<FaqSection> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Text(
-            'Frequently asked questions',
+            'Frequently Asked Questions',
             style: TextStyle(
-              fontSize: 26,
+              fontSize: 28,
               fontWeight: FontWeight.bold,
               color: Colors.black87,
             ),
@@ -112,40 +113,34 @@ class _FaqSectionState extends State<FaqSection> {
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
-                          color: isHovered ? Colors.deepPurple : Colors.black87,
+                          color:
+                          isHovered ? const Color(0xFF00C853) : Colors.black87,
                         ),
                         child: Text(item['question']),
                       ),
                       trailing: Icon(
                         isExpanded ? Icons.remove : Icons.add,
-                        color: Colors.deepPurple,
+                        color: const Color(0xFF00C853),
                       ),
                     ),
                     if (isExpanded)
                       Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20, right: 20, bottom: 16),
+                        padding:
+                        const EdgeInsets.only(left: 20, right: 20, bottom: 16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'For the US:',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                color: Colors.black87,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            ...item['answer'].map<Widget>((line) {
-                              return Row(
+                          children: List.generate(
+                            item['answer'].length,
+                                (i) => Padding(
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Text('• ',
                                       style: TextStyle(fontSize: 16)),
                                   Expanded(
                                     child: Text(
-                                      line,
+                                      item['answer'][i],
                                       style: const TextStyle(
                                         fontSize: 14,
                                         color: Colors.black87,
@@ -154,9 +149,9 @@ class _FaqSectionState extends State<FaqSection> {
                                     ),
                                   ),
                                 ],
-                              );
-                            }).toList(),
-                          ],
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                   ],

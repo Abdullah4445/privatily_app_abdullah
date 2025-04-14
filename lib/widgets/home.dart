@@ -1,14 +1,14 @@
+import 'package:draggable_home/draggable_home.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:privatily_app/preview/privatily_preview_image.dart';
+import 'package:privatily_app/sections/premium_bonuses_section.dart';
 import '../login_screen/logic.dart';
-import '../login_screen/view.dart';
 import '../mytextfield/custom_field.dart';
 import '../sections/FAQ_section.dart';
 import '../sections/FooterSection.dart';
 import '../sections/contact_us_seaction.dart';
+import '../sections/featuredProducts/featuredProducts.dart';
 import '../sections/home_stats_section.dart';
 import '../sections/how_much_time_section.dart';
 import '../sections/launch_any_whered_ection.dart';
@@ -18,6 +18,7 @@ import '../sections/transparent_pricing_seaction.dart';
 import '../sections/why_incorporate_us_section.dart';
 import '../sections/why_privatily_section.dart';
 import '../animations/animated_on_scrool.dart';
+import '../preview/privatily_preview_image.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -32,6 +33,8 @@ class _HomeState extends State<Home> {
 
   final GlobalKey _testimonialKey = GlobalKey();
   bool showChatBox = false;
+  bool showLoginForm = false;
+  bool showSignupForm = false;
 
   void scrollToTestimonials() {
     final RenderBox renderBox = _testimonialKey.currentContext!.findRenderObject() as RenderBox;
@@ -68,8 +71,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  bool showLoginForm = false;
-  bool showSignupForm = false;
   Widget chatPopup() {
     return Positioned(
       bottom: 100,
@@ -88,202 +89,102 @@ class _HomeState extends State<Home> {
             boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 25)],
           ),
           child: showLoginForm
-              ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Expanded(
-                    child: Text(
-                      "Login",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () {
-                      setState(() {
-                        showChatBox = false;
-                        showLoginForm = false;
-                        showSignupForm = false;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              CustomInputField(
-                controller: logic.emailC,
-                hintText: 'Email',
-              ),
-              const SizedBox(height: 12),
-              CustomInputField(
-                controller: logic.passC,
-                hintText: 'Password',
-                isPassword: true,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  logic.signIn(); // Login logic
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                  minimumSize: const Size.fromHeight(50),
-                ),
-                child: const Text("Login", style: TextStyle(color: Colors.white)),
-              ),
-            ],
-          )
+              ? buildLoginForm()
               : showSignupForm
-              ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Expanded(
-                    child: Text(
-                      "Sign Up",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () {
-                      setState(() {
-                        showChatBox = false;
-                        showLoginForm = false;
-                        showSignupForm = false;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              CustomInputField(
-                controller: logic.NameC,
-                hintText: 'User Name',
-              ),
-              const SizedBox(height: 12),
-              CustomInputField(
-                controller: logic.emailC,
-                hintText: 'Email',
-              ),
-              const SizedBox(height: 12),
-              CustomInputField(
-                controller: logic.passC,
-                hintText: 'Password',
-                isPassword: true,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  logic.createUser(); // Sign up logic
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                  minimumSize: const Size.fromHeight(50),
-                ),
-                child: const Text("Sign Up", style: TextStyle(color: Colors.white)),
-              ),
-            ],
-          )
-              : Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      showLoginForm = true;
-                      showSignupForm = false;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                  ),
-                  child: const Text(
-                    "Login",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      showSignupForm = true;
-                      showLoginForm = false;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple.shade100,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                  ),
-                  child: const Text(
-                    "Sign Up",
-                    style: TextStyle(fontSize: 16, color: Colors.deepPurple),
-                  ),
-                ),
-              ],
-            ),
-          ),
+              ? buildSignupForm()
+              : buildChatButtons(),
         )
             : const SizedBox.shrink(),
       ),
     );
   }
 
+  Widget buildLoginForm() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        buildPopupHeader("Login"),
+        const SizedBox(height: 16),
+        CustomInputField(controller: logic.emailC, hintText: 'Email'),
+        const SizedBox(height: 12),
+        CustomInputField(controller: logic.passC, hintText: 'Password', isPassword: true),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: () => logic.signIn(),
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple, minimumSize: const Size.fromHeight(50)),
+          child: const Text("Login", style: TextStyle(color: Colors.white)),
+        ),
+      ],
+    );
+  }
 
+  Widget buildSignupForm() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        buildPopupHeader("Sign Up"),
+        const SizedBox(height: 16),
+        CustomInputField(controller: logic.NameC, hintText: 'User Name'),
+        const SizedBox(height: 12),
+        CustomInputField(controller: logic.emailC, hintText: 'Email'),
+        const SizedBox(height: 12),
+        CustomInputField(controller: logic.passC, hintText: 'Password', isPassword: true),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: () => logic.createUser(),
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple, minimumSize: const Size.fromHeight(50)),
+          child: const Text("Sign Up", style: TextStyle(color: Colors.white)),
+        ),
+      ],
+    );
+  }
 
+  Widget buildPopupHeader(String title) {
+    return Row(
+      children: [
+        Expanded(child: Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+        IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => setState(() {
+            showChatBox = false;
+            showLoginForm = false;
+            showSignupForm = false;
+          }),
+        ),
+      ],
+    );
+  }
 
-
-  Widget chatBubble({required IconData icon, required String time, required String text, String? inputHint}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  Widget buildChatButtons() {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          CircleAvatar(backgroundColor: Colors.deepPurple.shade50, child: Icon(icon, color: Colors.deepPurple)),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF1F4FB),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(text, style: const TextStyle(fontSize: 14)),
-                  if (inputHint != null) ...[
-                    const SizedBox(height: 10),
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: inputHint,
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
+          ElevatedButton(
+            onPressed: () => setState(() {
+              showLoginForm = true;
+              showSignupForm = false;
+            }),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
             ),
+            child: const Text("Login", style: TextStyle(fontSize: 16, color: Colors.white)),
           ),
-          const SizedBox(width: 8),
-          Text(time, style: TextStyle(fontSize: 10, color: Colors.grey.shade500)),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () => setState(() {
+              showSignupForm = true;
+              showLoginForm = false;
+            }),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple.shade100,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+            ),
+            child: const Text("Sign Up", style: TextStyle(fontSize: 16, color: Colors.deepPurple)),
+          ),
         ],
       ),
     );
@@ -301,62 +202,136 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget _buildLaunchCodeHero(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 80),
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFFF8F9FF), Color(0xFFEDEFFF)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 20,
+            runSpacing: 16,
+            children: const [
+              Icon(Icons.rocket_launch, color: Colors.deepPurple, size: 30),
+              Text("Launch Sooner.", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+              Icon(Icons.trending_up, color: Colors.green, size: 30),
+              Text("Grow Faster.", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+            ],
+          ),
+          const Gap(40),
+          const Text(
+            "Discover Ready-to-Use Software Scripts to Power Your Business.",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, color: Colors.black54),
+          ),
+          const Gap(30),
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 16,
+            runSpacing: 16,
+            children: [
+              ElevatedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.explore, color: Colors.white),
+                label: const Text("Explore Products", style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                ),
+              ),
+              OutlinedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.code),
+                label: const Text("Browse Categories"),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.deepPurple,
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  side: const BorderSide(color: Colors.deepPurple),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
+    return DraggableHome(
+      headerExpandedHeight: 300,
+      headerBottomBar: ,
+      title: Row(
         children: [
-          SingleChildScrollView(
-            controller: _scrollController,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Gap(60),
-                Text(
-                  'Form your company\nfrom anywhere',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: screenWidth < 600 ? 28 : screenWidth < 1024 ? 40 : 50,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Gap(20),
-                Text(
-                  'Join the thousands of entrepreneurs using our platform to incorporate their\ncompanies and unlock premium payment & banking options.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: screenWidth < 600 ? 14 : 16, color: Colors.black87),
-                ),
-                const Gap(10),
-                fiveStars(screenWidth),
-                const Gap(30),
-                AnimatedOnScroll(child: const PrivatilyPreviewImage()),
-                AnimatedOnScroll(child: const HomeStatsSection()),
-                AnimatedOnScroll(child: const WhyPrivatilySection()),
-                AnimatedOnScroll(child: const HowMuchTimeSection()),
-                AnimatedOnScroll(child: const WhyIncorporateUsSection()),
-                AnimatedOnScroll(child: const TransparentPricingSection()),
-                AnimatedOnScroll(
-                  child: Container(
-                    key: _testimonialKey,
-                    child: const TestimonialSection(),
-                  ),
-                ),
-                AnimatedOnScroll(child: const OurMissionSection()),
-                AnimatedOnScroll(child: const FaqSection()),
-                AnimatedOnScroll(child: const LaunchAnywhereSection()),
-                AnimatedOnScroll(child: const ContactUsSection()),
-                AnimatedOnScroll(child: const FooterSection()),
-              ],
-            ),
-          ),
-          chatPopup(),
-          floatingMessageButton(),
+          Image.asset("assets/images/logo_white.png", height: 120),
         ],
       ),
+      headerWidget: _buildLaunchCodeHero(context),
+      body: [_myBody(context, screenWidth)],
+    );
+  }
+
+  Widget _myBody(context, screenWidth) {
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          controller: _scrollController,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Gap(10),
+              const FeaturedProductsSection(),
+              const Gap(60),
+              Text(
+                'Launch your digital product\nin just a few clicks',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: screenWidth < 600 ? 28 : screenWidth < 1024 ? 40 : 50,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Gap(20),
+              Text(
+                'Save time and skip the hassle—choose from high-converting scripts, apps, and admin panels already built for success. Just deploy and start earning!',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: screenWidth < 600 ? 14 : 16, color: Colors.black87),
+              ),
+
+              const Gap(10),
+              fiveStars(screenWidth),
+              const Gap(30),
+              const AnimatedOnScroll(child: PrivatilyPreviewImage()),
+              const AnimatedOnScroll(child: HomeStatsSection()),
+              const AnimatedOnScroll(child: WhyLaunchCodeSection()),
+              const AnimatedOnScroll(child: PremiumBonusSection()),
+              const AnimatedOnScroll(child: HowMuchTimeSection()),
+              const AnimatedOnScroll(child: WhyIncorporateUsSection()),
+              const AnimatedOnScroll(child: TransparentPricingSection()),
+              AnimatedOnScroll(
+                child: Container(key: _testimonialKey, child: const TestimonialSection()),
+              ),
+              const AnimatedOnScroll(child: OurMissionSection()),
+              const AnimatedOnScroll(child: FaqSection()),
+              const AnimatedOnScroll(child: LaunchAnywhereSection()),
+              const AnimatedOnScroll(child: ContactUsSection()),
+              const AnimatedOnScroll(child: FooterSection()),
+            ],
+          ),
+        ),
+        chatPopup(),
+        floatingMessageButton(),
+      ],
     );
   }
 }
