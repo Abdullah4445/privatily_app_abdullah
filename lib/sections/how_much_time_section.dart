@@ -55,9 +55,9 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
           _visible
               ? TweenAnimationBuilder<int>(
             tween: IntTween(begin: 0, end: endValue),
-            duration: const Duration(milliseconds: 1000),
+            duration: const Duration(milliseconds: 2000),
             builder: (context, value, _) => Text(
-              '${value}h',
+              '${value}d',
               style: const TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.w900,
@@ -102,7 +102,7 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
     final isMobile = screenWidth < 768;
 
     return VisibilityDetector(
-      key: const Key('llc-time-section'),
+      key: const Key('launchcode-time-section'),
       onVisibilityChanged: (info) {
         if (info.visibleFraction > 0.3 && !_visible) {
           setState(() => _visible = true);
@@ -118,7 +118,10 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
             padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 16),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF5238E6), Color(0xFF121B38)],
+                colors: [
+                  Color(0xFF38E652), // A bright green
+                  Color(0xFF1B3812), // A dark green
+                ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -132,10 +135,10 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
                 Expanded(
                   flex: isMobile ? 0 : 1,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Text(
-                        'How much time to get your LLC?',
+                        'How much time to deploy your product?',
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
@@ -144,11 +147,11 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
                       ),
                       const SizedBox(height: 20),
                       const Text(
-                        'At Privatily we count delivery time by business hours, not\n'
-                            'by days or weeks like others do.\n'
-                            'However, please be aware that these timelines are\n'
-                            'applicable only if you opt for LLC registration in one of our\n'
-                            'recommended US states.',
+                        'At LaunchCode, we streamline your product launch.\n'
+                            'Here’s a quick overview of the time it takes to deploy your digital product:\n'
+                            '1. Choose a script, provide all required data (logo, business name, design, etc.).\n'
+                            '2. Our team customizes your app in 15 working days for Basic clients and 5 working days for Premium clients.\n'
+                            '3. We deploy your product on App Store, Play Store, and Admin Panel within 3 days.',
                         style: TextStyle(fontSize: 16, color: Colors.white70),
                       ),
                       hourglassImage(isMobile),
@@ -168,10 +171,11 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        timeBox(24, 'LLC formation'),
-                        timeBox(24, 'Company docs delivery'),
-                        timeBox(120, 'EIN acquisition'),
-                        timeBox(165, 'Avg. order delivery time'),
+                        timeBox(15, 'Customization for Basic clients'),
+                        timeBox(5, 'Customization for Premium clients'),
+                        timeBox(2, 'App Store Deployment'),
+                        timeBox(1, 'Play Store Deployment'),
+                        timeBox(1, 'Admin Panel Deployment'),
                       ],
                     ),
                   ),

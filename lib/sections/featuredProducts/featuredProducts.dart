@@ -33,16 +33,7 @@ class FeaturedProductsSection extends StatelessWidget {
               alignment: WrapAlignment.center,
               children: products.map((product) => _buildCard(context, product, isMobile)).toList(),
             ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              child: const Text("Explore All Products", style: TextStyle(color: Colors.white)),
-            ),
+
           ],
         ),
       );

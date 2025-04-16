@@ -51,8 +51,7 @@ class ProductsController extends GetxController {
     "https://firebasestorage.googleapis.com/v0/b/billtech-6f3b1.appspot.com/o/Screenshot%202025-04-14%20at%209.53.32%E2%80%AFAM.png?alt=media&token=efd74385-6cca-4998-8ddb-7603c1024e42",
     "https://firebasestorage.googleapis.com/v0/b/billtech-6f3b1.appspot.com/o/Screenshot%202025-04-14%20at%209.55.39%E2%80%AFAM.png?alt=media&token=730eb7f6-1e7d-4b06-b5b2-b62ed8f7671c",
     "https://firebasestorage.googleapis.com/v0/b/billtech-6f3b1.appspot.com/o/Screenshot%202025-04-14%20at%209.56.16%E2%80%AFAM.png?alt=media&token=775a946f-0b2d-4858-80fc-4cf13fa5e940",
-    "https://firebasestorage.googleapis.com/v0/b/billtech-6f3b1.appspot.com/o/Screenshot%202025-04-14%20at%209.59.12%E2%80%AFAM.png?alt=media&token=5380a03f-b69b-4e15-961b-e1ec68b07944"
-  ];
+   ];
 
    Future<void> fetchTopProducts() async {
     products.clear();
@@ -68,7 +67,7 @@ class ProductsController extends GetxController {
         products.value = snapshot.docs.map((doc) => Product.fromFirestore(doc)).toList();
       } else {
         // Dummy fallback
-        products.value = List.generate(4, (i) => Product(
+        products.value = List.generate(3, (i) => Product(
           title: 'Product ${i + 1}',
           subtitle: 'Awesome software tool for startup growth',
           thumbnailUrl: imageUrls[i + 1],

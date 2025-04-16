@@ -13,104 +13,93 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
   final Map<String, Map<String, dynamic>> pricingData = {
     'us': {
       'basic': {
-        'price': '\$229',
-        'yearly': '99\$/yr',
-        'description': 'If you’re operating with a low budget.',
+        'price': '\$15/hour',
+        'description': 'Basic support during business hours (9:00 AM to 5:00 PM EST).',
         'features': [
-          'US Company Formation',
-          'US Address with Mail forwarding',
-          'Registered agent service',
-          'US business Stripe account consultation',
-          'EIN letter',
-          'Incorporation documents',
-          'Introduction to a professional accountant',
-          'Email support only'
+          '5 Days Support (9:00 AM to 5:00 PM EST)',
+          'Standard script deployment',
+          'Email support during business hours',
+          'Basic cloud configuration'
         ]
       },
       'premium': {
-        'price': '\$397',
-        'yearly': '99\$/yr',
-        'description': 'Enhanced, fast, and premium service.',
+        'price': '\$60/hour',
+        'description': 'Priority support 24/7 with enhanced response times.',
         'features': [
-          'Everything in Basic, plus:',
-          'Order priority',
-          'FREE Tax consultation',
-          'Chat and phone support',
-          'FREE US Phone number',
-          'Dedicated account manager',
-          'FREE Business website',
-          'FREE business email inbox',
-          'FREE .com domain',
-          'Business bank consultation',
-          '3 Business logos',
-          'Exclusive LaunchCode Bonuses'
+          '24/7 Priority Support (All day, every day)',
+          'Expedited script deployment',
+          'Phone, chat, and email support anytime',
+          'Advanced cloud configuration and optimization',
+          'Faster deployment to app platforms with dedicated assistance'
         ]
       }
     },
     'uk': {
       'basic': {
-        'price': '\$197',
-        'yearly': '59\$/yr',
-        'description': 'If you’re operating with a low budget.',
+        'price': '£12/hour',
+        'description': 'Affordable support during standard business hours (9:00 AM to 5:00 PM GMT).',
         'features': [
-          'Your private company in the UK',
-          'Registered office address',
-          'UK Business Stripe account consultation',
-          'Certificate of Incorporation',
-          'Company documents',
-          'Email support only'
+          '5 Days Support (9:00 AM to 5:00 PM GMT)',
+          'Standard script deployment',
+          'Email support during business hours',
+          'Basic web hosting setup'
         ]
       },
       'premium': {
-        'price': '\$297',
-        'yearly': '59\$/yr',
-        'description': 'Enhanced, fast, and exclusive service.',
+        'price': '£50/hour',
+        'description': 'Comprehensive 24/7 support with priority handling.',
         'features': [
-          'Everything in Basic, plus:',
-          'Order priority',
-          'Chat and phone support',
-          'FREE UK Phone number',
-          'Dedicated account manager',
-          'FREE Business website',
-          'FREE business email inbox',
-          'FREE .com domain',
-          'Business bank consultation',
-          '3 Business logos',
-          'Exclusive LaunchCode Bonuses'
+          '24/7 Comprehensive Support (All day, every day)',
+          'Priority script deployment and integration',
+          'Phone, chat, and email support around the clock',
+          'Advanced web hosting and domain management',
+          'Accelerated deployment to app stores with expert guidance'
         ]
       }
     },
     'canada': {
       'basic': {
-        'price': '\$247',
-        'yearly': '99\$/yr',
-        'description': 'If you’re operating with a low budget.',
+        'price': 'C\$18/hour',
+        'description': 'Reliable support during standard business hours (9:00 AM to 5:00 PM EST).',
         'features': [
-          'Registration as a Sole Proprietorship',
-          'Business address',
-          'Business Stripe account consultation',
-          'Certificate of Incorporation',
-          'Company documents',
-          'Email support only'
+          '5 Days Support (9:00 AM to 5:00 PM EST)',
+          'Standard application deployment',
+          'Email support during business hours',
+          'Basic server setup'
         ]
       },
       'premium': {
-        'price': '\$557',
-        'yearly': '99\$/yr',
-        'description': 'Enhanced, fast, and exclusive service.',
+        'price': 'C\$65/hour',
+        'description': 'Dedicated 24/7 support with rapid response and resolution.',
         'features': [
-          'Everything in Basic, plus:',
-          'Order priority',
-          'Registration as a Corporation',
-          'Chat and phone support',
-          'Canadian phone number',
-          'Dedicated account manager',
-          'FREE Business website',
-          'Bank account consultation',
-          'FREE business email inbox',
-          'FREE .com domain',
-          '3 Business logos',
-          'Exclusive LaunchCode Bonuses'
+          '24/7 Dedicated Support (All day, every day)',
+          'Priority application deployment and configuration',
+          'Phone, chat, and email support at any time',
+          'Premium server configuration and maintenance',
+          'Quicker deployment to app marketplaces with expert assistance'
+        ]
+      }
+    },
+    'world': {
+      'basic': {
+        'price': '\$13/hour',
+        'description': 'Global basic support during standard business hours (aligned with your timezone).',
+        'features': [
+          '5 Days Support (aligned with your timezone, 9:00 AM to 5:00 PM)',
+          'Standard script and application deployment',
+          'Email support during your business hours',
+          'Basic hosting and domain guidance'
+        ]
+      },
+      'premium': {
+        'price': '\$55/hour',
+        'description': 'Worldwide priority support 24/7 for critical issues.',
+        'features': [
+          '24/7 Global Priority Support (All day, every day)',
+          'Expedited script and application deployment',
+          'Phone, chat, and email support anytime, anywhere',
+          'Premium hosting and domain management globally',
+          'Faster deployment to global app stores with specialized support'
         ]
       }
     },
@@ -132,16 +121,17 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
             ),
           ),
           const SizedBox(height: 10),
-          const Text('Where do you want to Incorporate?'),
+          const Text('Where do you live?'),
           const SizedBox(height: 12),
           ToggleButtons(
             borderRadius: BorderRadius.circular(20),
-            isSelected: [selectedCountry == 'us', selectedCountry == 'uk', selectedCountry == 'canada'],
-            onPressed: (index) => setState(() => selectedCountry = ['us', 'uk', 'canada'][index]),
+            isSelected: [selectedCountry == 'us', selectedCountry == 'uk', selectedCountry == 'canada',selectedCountry == 'world'],
+            onPressed: (index) => setState(() => selectedCountry = ['us', 'uk', 'canada','world'][index]),
             children: const [
               Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text('In the US 🇺🇸')),
               Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text('In the UK 🇬🇧')),
               Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text('In Canada 🇨🇦')),
+              Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text('In World 🌎')),
             ],
           ),
           const SizedBox(height: 30),
@@ -190,7 +180,7 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: const Text(
-                    'Priority Processing',
+                    'Priority Support',
                     style: TextStyle(fontSize: 11, color: Colors.white),
                   ),
                 ),
@@ -207,7 +197,7 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
               ),
               children: [
                 TextSpan(
-                  text: ' and then ${data['yearly']}',
+                  text: ' per hour',
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.normal,

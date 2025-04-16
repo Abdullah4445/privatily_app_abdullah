@@ -26,7 +26,7 @@ class FooterSection extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset('assets/images/transperantLaunchCode.png', height: 40),
+                      // Image.asset('assets/images/transperantLaunchCode.png', height: 40),
                       const SizedBox(height: 10),
                       const Text(
                         "Empowering startups and developers globally.",

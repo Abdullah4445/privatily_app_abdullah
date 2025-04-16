@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class WhyIncorporateUsSection extends StatelessWidget {
-  const WhyIncorporateUsSection({super.key});
+class WhyLaunchCodeSection2 extends StatelessWidget {
+  const WhyLaunchCodeSection2({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class WhyIncorporateUsSection extends StatelessWidget {
         children: [
           const Text.rich(
             TextSpan(
-              text: 'Why Incorporate In ',
+              text: 'Why Choose ',
               style: TextStyle(
                 fontSize: 34,
                 fontWeight: FontWeight.bold,
@@ -33,7 +33,7 @@ class WhyIncorporateUsSection extends StatelessWidget {
               ),
               children: [
                 TextSpan(
-                  text: 'The US',
+                  text: 'LaunchCode',
                   style: TextStyle(
                     color: Color(0xFF5B3DF4),
                   ),
@@ -48,24 +48,35 @@ class WhyIncorporateUsSection extends StatelessWidget {
             runSpacing: 30,
             children: const [
               _FeatureCard(
-                icon: Icons.workspace_premium_outlined,
-                title: 'Trust',
+                icon: Icons.apps_outlined,
+                title: 'Select Your Script',
                 description:
-                'Forming a company in the US is viewed as more trustworthy by financial service providers, like Stripe, PayPal and banks due to the nation’s established business infrastructure and stringent regulatory environment.',
+                'Choose from our collection of high-converting software scripts designed for success in various industries.',
               ),
               _FeatureCard(
-                icon: Icons.security_outlined,
-                title: 'Protection',
+                icon: Icons.palette_outlined,
+                title: 'Provide Customization Details',
                 description:
-                'A US-based company provides a legal separation between a business and its owners, known as limited liability protection. This means that in the event of lawsuits or debts, personal assets of the owners are generally protected.',
+                'Provide us with your business name, logo, design preferences, and any other required details to tailor the product to your needs.',
               ),
               _FeatureCard(
-                icon: Icons.military_tech_outlined,
-                title: 'Prestige',
+                icon: Icons.launch_outlined,
+                title: 'Get Ready to Launch',
                 description:
-                'A US company can lend prestige and credibility to a business. The US is often seen as a leader in innovation and entrepreneurship, and having a US-based company can enhance the reputation of a business both domestically and internationally.',
+                'We’ll customize and deploy your app to the App Store, Play Store, and Admin Panel in as little as 3 days.',
               ),
             ],
+          ),
+          const SizedBox(height: 40),
+          const Text(
+            'With over 10 years in the industry and having served 2300+ clients, LaunchCode is the trusted partner for entrepreneurs worldwide. Our expert team ensures that your digital product is built, deployed, and live in no time!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+              height: 1.6,
+            ),
           ),
         ],
       ),
@@ -150,3 +161,5 @@ class _FeatureCardState extends State<_FeatureCard> {
     );
   }
 }
+
+

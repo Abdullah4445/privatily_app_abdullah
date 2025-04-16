@@ -204,7 +204,7 @@ class _HomeState extends State<Home> {
 
   Widget _buildLaunchCodeHero(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 80),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 60),
       width: double.infinity,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -213,64 +213,83 @@ class _HomeState extends State<Home> {
           end: Alignment.bottomRight,
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 20,
-            runSpacing: 16,
-            children: const [
-              Icon(Icons.rocket_launch, color: Colors.deepPurple, size: 30),
-              Text("Launch Sooner.", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-              Icon(Icons.trending_up, color: Colors.green, size: 30),
-              Text("Grow Faster.", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-            ],
-          ),
-          const Gap(40),
-          const Text(
-            "Discover Ready-to-Use Software Scripts to Power Your Business.",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18, color: Colors.black54),
-          ),
-          const Gap(30),
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 16,
-            runSpacing: 16,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.explore, color: Colors.white),
-                label: const Text("Explore Products", style: TextStyle(color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 20,
+              runSpacing: 16,
+              children: const [
+                Icon(Icons.rocket_launch, color: Colors.deepPurple, size: 30),
+                Text("Launch Sooner.", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                Icon(Icons.trending_up, color: Colors.green, size: 30),
+                Text("Grow Faster.", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+              ],
+            ),
+            const Gap(40),
+            const Text(
+              "Discover Ready-to-Use Software Scripts to Power Your Business.",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18, color: Colors.black54),
+            ),
+            const Gap(5),
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 16,
+              runSpacing: 16,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.explore, color: Colors.white),
+                  label: const Text("Explore Products", style: TextStyle(color: Colors.white)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  ),
                 ),
-              ),
-              OutlinedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.code),
-                label: const Text("Browse Categories"),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.deepPurple,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                  side: const BorderSide(color: Colors.deepPurple),
+                OutlinedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.code),
+                  label: const Text("Browse Categories"),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.deepPurple,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    side: const BorderSide(color: Colors.deepPurple),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+            const Gap(10),
+            const FeaturedProductsSection(),
+          ],
+        ),
       ),
     );
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final desiredExpandedHeight = 500.0; // Your desired expanded height
+
+    // Calculate a stretchMaxHeight that is larger than the fraction of screenHeight
+    // represented by desiredExpandedHeight, and less than 0.95.
+    final expandedFraction = desiredExpandedHeight / screenHeight;
+    final stretchFraction = (expandedFraction > 0.8) ? 0.9 : expandedFraction + 0.15;
+    final safeStretchFraction = stretchFraction < 0.95 ? stretchFraction : 0.9;
     final screenWidth = MediaQuery.of(context).size.width;
     return DraggableHome(
-      headerExpandedHeight: 300,
-      headerBottomBar: ,
+       // stretchMaxHeight: 500,
+      // headerExpandedHeight: 400,
+      // stretch: true, // Enable stretching beyond headerExpandedHeight (optional)
+      // stretch: true,
+      stretchMaxHeight: 0.8, // Example: 80% of screen height
+      headerExpandedHeight: 0.7,
+
       title: Row(
         children: [
           Image.asset("assets/images/logo_white.png", height: 120),
@@ -290,8 +309,7 @@ class _HomeState extends State<Home> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Gap(10),
-              const FeaturedProductsSection(),
+
               const Gap(60),
               Text(
                 'Launch your digital product\nin just a few clicks',
@@ -316,7 +334,7 @@ class _HomeState extends State<Home> {
               const AnimatedOnScroll(child: WhyLaunchCodeSection()),
               const AnimatedOnScroll(child: PremiumBonusSection()),
               const AnimatedOnScroll(child: HowMuchTimeSection()),
-              const AnimatedOnScroll(child: WhyIncorporateUsSection()),
+              const AnimatedOnScroll(child: WhyLaunchCodeSection2()),
               const AnimatedOnScroll(child: TransparentPricingSection()),
               AnimatedOnScroll(
                 child: Container(key: _testimonialKey, child: const TestimonialSection()),

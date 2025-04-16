@@ -9,7 +9,7 @@ class AnimatedOnScroll extends StatefulWidget {
   const AnimatedOnScroll({
     super.key,
     required this.child,
-    this.duration = const Duration(milliseconds: 800),
+    this.duration = const Duration(milliseconds: 500),
     this.offsetY = 0.2,
   });
 
