@@ -93,9 +93,7 @@ class _PremiumBonusSectionState extends State<PremiumBonusSection>
                   ],
                 ),
               ),
-
               const SizedBox(width: 40, height: 40),
-
               // Right Side Image
               Expanded(
                 flex: isMobile ? 0 : 1,

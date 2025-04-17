@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
-import '../chat_page/view.dart';
+import '../chatting_page/chatting_page_view.dart';
 import '../models/students.dart';
 
 class HomeLogic extends GetxController {
