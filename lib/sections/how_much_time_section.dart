@@ -150,7 +150,7 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
                         'At LaunchCode, we streamline your product launch.\n'
                             'Here’s a quick overview of the time it takes to deploy your digital product:\n'
                             '1. Choose a script, provide all required data (logo, business name, design, etc.).\n'
-                            '2. Our team customizes your app in 15 working days for Basic clients and 5 working days for Premium clients.\n'
+                            '2. Our team customizes your app in 15 business days for Basic clients and 5 working days for Premium clients.\n'
                             '3. We deploy your product on App Store, Play Store, and Admin Panel within 3 days.',
                         style: TextStyle(fontSize: 16, color: Colors.white70),
                       ),
@@ -163,6 +163,7 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
                 Expanded(
                   flex: isMobile ? 0 : 1,
                   child: Container(
+                    alignment: Alignment.center,
                     padding: const EdgeInsets.symmetric(horizontal: 32),
                     decoration: BoxDecoration(
                       color: Colors.white.withOpacity(0.07),

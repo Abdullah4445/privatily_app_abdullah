@@ -15,8 +15,8 @@ class _FaqSectionState extends State<FaqSection> {
     {
       'question': 'How long does it take to launch my apps?',
       'answer': [
-        'Basic deployments take 5–7 business days.',
-        'Premium packages are prioritized and completed within 2–3 business days.',
+        'Basic deployments take 13–15 business days.',
+        'Premium packages are prioritized and completed within 4–7 business days.',
         'This includes launching to Play Store, App Store, and setting up hosting.',
       ]
     },
