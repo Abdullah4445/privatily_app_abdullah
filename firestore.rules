@@ -1,0 +1,49 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+   
+       match /projects/{document=**} {
+      allow read; 
+      allow create, update: if isUserSignedIn();
+      allow delete: if isUserSignedIn() ;
+    }
+      match /Students/{document=**} {
+      allow read; 
+      allow create, update;
+      allow delete;
+    }
+     match /ChatsRoomId/{document=**} {
+      allow read; 
+      allow create, update;
+      allow delete;
+    }
+     match /Chats/{document=**} {
+      allow read; 
+      allow create, update;
+      allow delete;
+    }
+     match /Chatting/{document=**} {
+      allow read; 
+      allow create, update;
+      allow delete;
+    }
+     match /Messages/{document=**} {
+      allow read; 
+      allow create, update;
+      allow delete;
+    }
+    match /reviews/{document=**} {
+      allow read; 
+      allow create, update: if isUserSignedIn();
+      allow delete: if isUserSignedIn() ;
+    }
+      function isUserSignedIn (){
+    	return request.auth != null;
+    }
+    
+    function isAdmin (){
+    	return "admin" in get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+  }
+}
