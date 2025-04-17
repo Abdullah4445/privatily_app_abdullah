@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 
 class LaunchCodeHeroSection extends StatelessWidget {
   const LaunchCodeHeroSection({super.key});
@@ -25,24 +26,24 @@ class LaunchCodeHeroSection extends StatelessWidget {
             alignment: WrapAlignment.center,
             spacing: 20,
             runSpacing: 16,
-            children: const [
-              Icon(Icons.rocket_launch, color: Colors.deepPurple, size: 30),
+            children: [
+              const Icon(Icons.rocket_launch, color: Colors.deepPurple, size: 30),
               Text(
-                "Launch Sooner.",
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                'launch_sooner'.tr,
+                style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
               ),
-              Icon(Icons.trending_up, color: Colors.green, size: 30),
+              const Icon(Icons.trending_up, color: Colors.green, size: 30),
               Text(
-                "Grow Faster.",
-                style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                'grow_faster'.tr,
+                style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
               ),
             ],
           ),
           const Gap(40),
-          const Text(
-            "Discover Ready-to-Use Software Scripts to Power Your Business.",
+          Text(
+            'discover_software'.tr,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18, color: Colors.black54),
+            style: const TextStyle(fontSize: 18, color: Colors.black54),
           ),
           const Gap(30),
           Wrap(
@@ -53,7 +54,7 @@ class LaunchCodeHeroSection extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: () {},
                 icon: const Icon(Icons.explore),
-                label: const Text("Explore Products"),
+                label: Text('explore_products'.tr),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
@@ -62,7 +63,7 @@ class LaunchCodeHeroSection extends StatelessWidget {
               OutlinedButton.icon(
                 onPressed: () {},
                 icon: const Icon(Icons.code),
-                label: const Text("Browse Categories"),
+                label: Text('browse_categories'.tr),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.deepPurple,
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),

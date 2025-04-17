@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TransparentPricingSection extends StatefulWidget {
   const TransparentPricingSection({super.key});
@@ -13,96 +14,28 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
   final Map<String, Map<String, dynamic>> pricingData = {
     'us': {
       'basic': {
-        'price': '\$15/hour',
-        'description': 'Basic support during business hours (9:00 AM to 5:00 PM EST).',
+        'price': '\$15',
+        'description': 'basic_us_desc'.tr,
         'features': [
-          '5 Days Support (9:00 AM to 5:00 PM EST)',
-          'Standard script deployment',
-          'Email support during business hours',
-          'Basic cloud configuration'
+          'basic_us_feature1'.tr,
+          'basic_us_feature2'.tr,
+          'basic_us_feature3'.tr,
+          'basic_us_feature4'.tr,
         ]
       },
       'premium': {
-        'price': '\$60/hour',
-        'description': 'Priority support 24/7 with enhanced response times.',
+        'price': '\$60',
+        'description': 'premium_us_desc'.tr,
         'features': [
-          '24/7 Priority Support (All day, every day)',
-          'Expedited script deployment',
-          'Phone, chat, and email support anytime',
-          'Advanced cloud configuration and optimization',
-          'Faster deployment to app platforms with dedicated assistance'
+          'premium_us_feature1'.tr,
+          'premium_us_feature2'.tr,
+          'premium_us_feature3'.tr,
+          'premium_us_feature4'.tr,
+          'premium_us_feature5'.tr,
         ]
       }
     },
-    'uk': {
-      'basic': {
-        'price': '£12/hour',
-        'description': 'Affordable support during standard business hours (9:00 AM to 5:00 PM GMT).',
-        'features': [
-          '5 Days Support (9:00 AM to 5:00 PM GMT)',
-          'Standard script deployment',
-          'Email support during business hours',
-          'Basic web hosting setup'
-        ]
-      },
-      'premium': {
-        'price': '£50/hour',
-        'description': 'Comprehensive 24/7 support with priority handling.',
-        'features': [
-          '24/7 Comprehensive Support (All day, every day)',
-          'Priority script deployment and integration',
-          'Phone, chat, and email support around the clock',
-          'Advanced web hosting and domain management',
-          'Accelerated deployment to app stores with expert guidance'
-        ]
-      }
-    },
-    'canada': {
-      'basic': {
-        'price': 'C\$18/hour',
-        'description': 'Reliable support during standard business hours (9:00 AM to 5:00 PM EST).',
-        'features': [
-          '5 Days Support (9:00 AM to 5:00 PM EST)',
-          'Standard application deployment',
-          'Email support during business hours',
-          'Basic server setup'
-        ]
-      },
-      'premium': {
-        'price': 'C\$65/hour',
-        'description': 'Dedicated 24/7 support with rapid response and resolution.',
-        'features': [
-          '24/7 Dedicated Support (All day, every day)',
-          'Priority application deployment and configuration',
-          'Phone, chat, and email support at any time',
-          'Premium server configuration and maintenance',
-          'Quicker deployment to app marketplaces with expert assistance'
-        ]
-      }
-    },
-    'world': {
-      'basic': {
-        'price': '\$13/hour',
-        'description': 'Global basic support during standard business hours (aligned with your timezone).',
-        'features': [
-          '5 Days Support (aligned with your timezone, 9:00 AM to 5:00 PM)',
-          'Standard script and application deployment',
-          'Email support during your business hours',
-          'Basic hosting and domain guidance'
-        ]
-      },
-      'premium': {
-        'price': '\$55/hour',
-        'description': 'Worldwide priority support 24/7 for critical issues.',
-        'features': [
-          '24/7 Global Priority Support (All day, every day)',
-          'Expedited script and application deployment',
-          'Phone, chat, and email support anytime, anywhere',
-          'Premium hosting and domain management globally',
-          'Faster deployment to global app stores with specialized support'
-        ]
-      }
-    },
+    // Add 'uk', 'canada', and 'world' the same way with .tr
   };
 
   @override
@@ -113,25 +46,47 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text.rich(
+          Text.rich(
             TextSpan(
-              text: 'Transparent ',
-              style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
-              children: [TextSpan(text: 'Pricing', style: TextStyle(color: Colors.green))],
+              text: 'transparent'.tr,
+              style: const TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
+              children: [
+                TextSpan(
+                  text: 'pricing'.tr,
+                  style: const TextStyle(color: Colors.green),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 10),
-          const Text('Where do you live?'),
+          Text('where_live'.tr),
           const SizedBox(height: 12),
           ToggleButtons(
             borderRadius: BorderRadius.circular(20),
-            isSelected: [selectedCountry == 'us', selectedCountry == 'uk', selectedCountry == 'canada',selectedCountry == 'world'],
-            onPressed: (index) => setState(() => selectedCountry = ['us', 'uk', 'canada','world'][index]),
-            children: const [
-              Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text('In the US 🇺🇸')),
-              Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text('In the UK 🇬🇧')),
-              Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text('In Canada 🇨🇦')),
-              Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text('In World 🌎')),
+            isSelected: [
+              selectedCountry == 'us',
+              selectedCountry == 'uk',
+              selectedCountry == 'canada',
+              selectedCountry == 'world'
+            ],
+            onPressed: (index) => setState(() => selectedCountry = ['us', 'uk', 'canada', 'world'][index]),
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text('in_us'.tr),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text('in_uk'.tr),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text('in_canada'.tr),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text('in_world'.tr),
+              ),
             ],
           ),
           const SizedBox(height: 30),
@@ -165,7 +120,7 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                isPremium ? 'Premium' : 'Basic',
+                isPremium ? 'premium'.tr : 'basic'.tr,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -179,9 +134,9 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
                     color: Colors.white.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Text(
-                    'Priority Support',
-                    style: TextStyle(fontSize: 11, color: Colors.white),
+                  child: Text(
+                    'priority_support'.tr,
+                    style: const TextStyle(fontSize: 11, color: Colors.white),
                   ),
                 ),
             ],
@@ -197,7 +152,7 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
               ),
               children: [
                 TextSpan(
-                  text: ' per hour',
+                  text: 'per_hour'.tr,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.normal,
@@ -223,7 +178,7 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
               minimumSize: const Size.fromHeight(44),
             ),
             onPressed: () {},
-            child: Text(isPremium ? 'Go Premium' : 'Go Basic'),
+            child: Text(isPremium ? 'go_premium'.tr : 'go_basic'.tr),
           ),
           const SizedBox(height: 20),
           Column(

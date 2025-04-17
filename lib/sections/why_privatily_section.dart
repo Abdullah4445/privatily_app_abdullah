@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class WhyLaunchCodeSection extends StatefulWidget {
   const WhyLaunchCodeSection({super.key});
@@ -41,8 +42,8 @@ class _WhyLaunchCodeSectionState extends State<WhyLaunchCodeSection>
     super.dispose();
   }
 
-  Widget featureItem(IconData icon, String text) {
-    return _HoverableFeatureItem(icon: icon, text: text);
+  Widget featureItem(IconData icon, String textKey) {
+    return _HoverableFeatureItem(icon: icon, textKey: textKey);
   }
 
   @override
@@ -64,23 +65,23 @@ class _WhyLaunchCodeSectionState extends State<WhyLaunchCodeSection>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Why LaunchCode?',
-                      style: TextStyle(
+                    Text(
+                      'why_launchcode_heading'.tr,
+                      style: const TextStyle(
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Text(
-                      "LaunchCode removes the hurdles of starting from scratch. Our platform offers ready-made, high-quality software tools you can deploy instantly. Whether you're a freelancer, startup, or agency — focus on growth, not building everything yourself.",
-                      style: TextStyle(fontSize: 16, color: Colors.black87),
+                    Text(
+                      'why_launchcode_subtext'.tr,
+                      style: const TextStyle(fontSize: 16, color: Colors.black87),
                     ),
                     const SizedBox(height: 30),
-                    featureItem(Icons.extension, 'Pre-built software scripts'),
-                    featureItem(Icons.flash_on_outlined, 'Quick launch and zero setup'),
-                    featureItem(Icons.support_agent_outlined, 'Dedicated launch support'),
+                    featureItem(Icons.extension, 'feature_prebuilt'),
+                    featureItem(Icons.flash_on_outlined, 'feature_quicklaunch'),
+                    featureItem(Icons.support_agent_outlined, 'feature_support'),
                   ],
                 ),
               ),
@@ -90,7 +91,7 @@ class _WhyLaunchCodeSectionState extends State<WhyLaunchCodeSection>
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
-                    'assets/images/whyLaunch.png', // replace with actual image
+                    'assets/images/whyLaunch.png',
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -105,11 +106,11 @@ class _WhyLaunchCodeSectionState extends State<WhyLaunchCodeSection>
 
 class _HoverableFeatureItem extends StatefulWidget {
   final IconData icon;
-  final String text;
+  final String textKey;
 
   const _HoverableFeatureItem({
     required this.icon,
-    required this.text,
+    required this.textKey,
   });
 
   @override
@@ -147,7 +148,7 @@ class _HoverableFeatureItemState extends State<_HoverableFeatureItem> {
             const SizedBox(width: 12),
             Flexible(
               child: Text(
-                widget.text,
+                widget.textKey.tr,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 15,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LaunchAnywhereSection extends StatelessWidget {
   const LaunchAnywhereSection({super.key});
@@ -31,18 +32,18 @@ class LaunchAnywhereSection extends StatelessWidget {
                   children: [
                     RichText(
                       text: TextSpan(
-                        text: 'Launch your digital business\nfrom ',
+                        text: 'launch_anywhere_title_1'.tr,
                         style: TextStyle(
                           fontSize: isMobile ? 22 : 30,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                           height: 1.3,
                         ),
-                        children: const [
+                        children: [
                           TextSpan(
-                            text: '→ anywhere',
-                            style: TextStyle(
-                              color: Color(0xFF00C853), // Green for LaunchCode
+                            text: 'launch_anywhere_title_2'.tr,
+                            style: const TextStyle(
+                              color: Color(0xFF00C853),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -51,7 +52,7 @@ class LaunchAnywhereSection extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      "Choose a ready-to-launch script, provide your assets, and let us deploy it across app stores, domains, and hosting platforms. No coding. No stress. Just results.",
+                      'launch_anywhere_desc'.tr,
                       style: TextStyle(
                         color: Colors.black54,
                         fontSize: isMobile ? 13 : 14,
@@ -71,7 +72,7 @@ class LaunchAnywhereSection extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.asset(
-                  'assets/images/img.png', // ✅ Update this with LaunchCode-themed image if needed
+                  'assets/images/img.png',
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),

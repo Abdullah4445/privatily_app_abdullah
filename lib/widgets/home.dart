@@ -39,6 +39,8 @@ class _HomeState extends State<Home> {
   bool showChatBox = false;
   bool showLoginForm = false;
   bool showSignupForm = false;
+  RxString selectedLang = 'en'.obs;
+
 
   void scrollToTestimonials() {
     final RenderBox renderBox =
@@ -72,8 +74,11 @@ class _HomeState extends State<Home> {
             ),
             const SizedBox(width: 12),
             Text(
-              'Rated 4.2+ stars by entrepreneurs worldwide',
-              style: TextStyle(fontSize: iconSize * 0.6, fontWeight: FontWeight.bold),
+              'rated_stars'.tr,
+              style: TextStyle(
+                fontSize: iconSize * 0.6,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -87,28 +92,7 @@ class _HomeState extends State<Home> {
       right: 24,
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
-        child:
-            showChatBox
-                ? ToAdminChat()
-
-            // Container(
-            //       key: const ValueKey('chatbox'),
-            //       width: 360,
-            //       height: 480,
-            //       padding: const EdgeInsets.all(16),
-            //       decoration: BoxDecoration(
-            //         color: Colors.white,
-            //         borderRadius: BorderRadius.circular(20),
-            //         boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 25)],
-            //       ),
-            //       child:
-            //           showLoginForm
-            //               ? buildLoginForm()
-            //               : showSignupForm
-            //               ? buildSignupForm()
-            //               : buildChatButtons(),
-            //     )
-                : const SizedBox.shrink(),
+        child: showChatBox ? ToAdminChat() : const SizedBox.shrink(),
       ),
     );
   }
@@ -117,11 +101,15 @@ class _HomeState extends State<Home> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        buildPopupHeader("Login"),
+        buildPopupHeader("login_title".tr),
         const SizedBox(height: 16),
-        CustomInputField(controller: logic.emailC, hintText: 'Email'),
+        CustomInputField(controller: logic.emailC, hintText: 'email'.tr),
         const SizedBox(height: 12),
-        CustomInputField(controller: logic.passC, hintText: 'Password', isPassword: true),
+        CustomInputField(
+          controller: logic.passC,
+          hintText: 'password'.tr,
+          isPassword: true,
+        ),
         const SizedBox(height: 20),
         ElevatedButton(
           onPressed: () => logic.signIn(),
@@ -129,7 +117,10 @@ class _HomeState extends State<Home> {
             backgroundColor: Colors.deepPurple,
             minimumSize: const Size.fromHeight(50),
           ),
-          child: const Text("Login", style: TextStyle(color: Colors.white)),
+          child: Text(
+            "login_btn".tr,
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
       ],
     );
@@ -139,13 +130,17 @@ class _HomeState extends State<Home> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        buildPopupHeader("Sign Up"),
+        buildPopupHeader("signup_title".tr),
         const SizedBox(height: 16),
-        CustomInputField(controller: logic.NameC, hintText: 'User Name'),
+        CustomInputField(controller: logic.NameC, hintText: 'user_name'.tr),
         const SizedBox(height: 12),
-        CustomInputField(controller: logic.emailC, hintText: 'Email'),
+        CustomInputField(controller: logic.emailC, hintText: 'email'.tr),
         const SizedBox(height: 12),
-        CustomInputField(controller: logic.passC, hintText: 'Password', isPassword: true),
+        CustomInputField(
+          controller: logic.passC,
+          hintText: 'password'.tr,
+          isPassword: true,
+        ),
         const SizedBox(height: 20),
         ElevatedButton(
           onPressed: () => logic.createUser(),
@@ -153,7 +148,10 @@ class _HomeState extends State<Home> {
             backgroundColor: Colors.deepPurple,
             minimumSize: const Size.fromHeight(50),
           ),
-          child: const Text("Sign Up", style: TextStyle(color: Colors.white)),
+          child: Text(
+            "signup_btn".tr,
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
       ],
     );
@@ -194,12 +192,14 @@ class _HomeState extends State<Home> {
                 }),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.deepPurple,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
             ),
-            child: const Text(
-              "Login",
-              style: TextStyle(fontSize: 16, color: Colors.white),
+            child: Text(
+              "login_btn".tr,
+              style: const TextStyle(fontSize: 16, color: Colors.white),
             ),
           ),
           const SizedBox(height: 16),
@@ -211,12 +211,14 @@ class _HomeState extends State<Home> {
                 }),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.deepPurple.shade100,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
             ),
-            child: const Text(
-              "Sign Up",
-              style: TextStyle(fontSize: 16, color: Colors.deepPurple),
+            child: Text(
+              "signup_btn".tr,
+              style: const TextStyle(fontSize: 16, color: Colors.deepPurple),
             ),
           ),
         ],
@@ -254,24 +256,56 @@ class _HomeState extends State<Home> {
               alignment: WrapAlignment.center,
               spacing: 5,
               runSpacing: 5,
-              children: const [
-                Icon(Icons.rocket_launch, color: Colors.deepPurple, size: 30),
-                Text(
-                  "Launch Sooner.",
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              children: [
+                const Icon(
+                  Icons.rocket_launch,
+                  color: Colors.deepPurple,
+                  size: 30,
                 ),
-                Icon(Icons.trending_up, color: Colors.green, size: 30),
                 Text(
-                  "Grow Faster.",
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  "launch_sooner".tr,
+                  style: const TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
+                const Icon(Icons.trending_up, color: Colors.green, size: 30),
+                Text(
+                  "grow_faster".tr,
+                  style: const TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                DropdownButton<String>(
+                  value: selectedLang.value,
+                  items: [
+                    DropdownMenuItem(value: 'en', child: Text('English')),
+                    DropdownMenuItem(value: 'fr', child: Text('Français')),
+                    DropdownMenuItem(value: 'es', child: Text('Español')),
+                    DropdownMenuItem(value: 'ar', child: Text('عربي')),
+                  ],
+                  onChanged: (value) {
+                    selectedLang.value = value!;
+                    if (value == 'en') {
+                      Get.updateLocale(const Locale('en', 'US'));
+                    } else if (value == 'fr') {
+                      Get.updateLocale(const Locale('fr', 'FR'));
+                    } else if (value == 'es') {
+                      Get.updateLocale(const Locale('es', 'ES'));
+                    } else if (value == 'ar') {
+                      Get.updateLocale(const Locale('ar', 'AR'));
+                    }
+                  },
+                )
+
               ],
             ),
             const Gap(10),
-            const Text(
-              "Discover Ready-to-Use Software Scripts to Power Your Business.",
+            Text(
+              'discover_software'.tr,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18, color: Colors.black54),
+              style: const TextStyle(fontSize: 18, color: Colors.black54),
             ),
             const Gap(15),
             Wrap(
@@ -282,22 +316,28 @@ class _HomeState extends State<Home> {
                 ElevatedButton.icon(
                   onPressed: () {},
                   icon: const Icon(Icons.explore, color: Colors.white),
-                  label: const Text(
-                    "Explore Products",
-                    style: TextStyle(color: Colors.white),
+                  label: Text(
+                    "explore_products".tr,
+                    style: const TextStyle(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.deepPurple,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 16,
+                    ),
                   ),
                 ),
                 OutlinedButton.icon(
                   onPressed: () {},
                   icon: const Icon(Icons.code),
-                  label: const Text("Browse Categories"),
+                  label: Text("browse_categories".tr),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.deepPurple,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 16,
+                    ),
                     side: const BorderSide(color: Colors.deepPurple),
                   ),
                 ),
@@ -319,7 +359,8 @@ class _HomeState extends State<Home> {
     // Calculate a stretchMaxHeight that is larger than the fraction of screenHeight
     // represented by desiredExpandedHeight, and less than 0.95.
     final expandedFraction = desiredExpandedHeight / screenHeight;
-    final stretchFraction = (expandedFraction > 0.8) ? 0.9 : expandedFraction + 0.15;
+    final stretchFraction =
+        (expandedFraction > 0.8) ? 0.9 : expandedFraction + 0.15;
     final safeStretchFraction = stretchFraction < 0.95 ? stretchFraction : 0.9;
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -328,7 +369,6 @@ class _HomeState extends State<Home> {
     print("myHeight is: $myHeightIs");
     print("myHeight2 is: $myHeightIs2");
     return Stack(
-
       children: [
         DraggableHome(
           // stretchMaxHeight: 500,
@@ -340,7 +380,11 @@ class _HomeState extends State<Home> {
           // headerExpandedHeight:   0.8,
           headerExpandedHeight: kIsWeb ? 0.7 : 0.8,
 
-          title: Row(children: [Image.asset("assets/images/logo_white.png", height: 120)]),
+          title: Row(
+            children: [
+              Image.asset("assets/images/logo_white.png", height: 120),
+            ],
+          ),
           headerWidget: _buildLaunchCodeHero(context),
           body: [_myBody(context, screenWidth)],
           floatingActionButton: floatingMessageButton(),
@@ -359,7 +403,7 @@ class _HomeState extends State<Home> {
         children: [
           const Gap(60),
           Text(
-            'Ready-to-Launch Digital Assets for Immediate Impact',
+            'Ready-to-Launch Digital Assets for Immediate Impact'.tr,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize:
@@ -373,7 +417,8 @@ class _HomeState extends State<Home> {
           ),
           const Gap(20),
           Text(
-            'Leverage our expertly crafted scripts, applications, and admin panels, designed for optimal conversion and efficiency. Deploy seamlessly and start realizing your revenue potential faster.',
+            'Leverage our expertly crafted scripts, applications, and admin panels, designed for optimal conversion and efficiency. Deploy seamlessly and start realizing your revenue potential faster.'
+                .tr,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: screenWidth < 600 ? 14 : 16,
@@ -392,7 +437,10 @@ class _HomeState extends State<Home> {
           const AnimatedOnScroll(child: WhyLaunchCodeSection2()),
           const AnimatedOnScroll(child: TransparentPricingSection()),
           AnimatedOnScroll(
-            child: Container(key: _testimonialKey, child: const TestimonialSection()),
+            child: Container(
+              key: _testimonialKey,
+              child: const TestimonialSection(),
+            ),
           ),
           const AnimatedOnScroll(child: OurMissionSection()),
           const AnimatedOnScroll(child: FaqSection()),
@@ -404,7 +452,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-
-
-

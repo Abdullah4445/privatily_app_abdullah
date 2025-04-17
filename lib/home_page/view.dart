@@ -15,9 +15,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Users",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22, color: Colors.white),
+        title: Text(
+          "home_title".tr,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22, color: Colors.white),
         ),
         backgroundColor: Colors.red,
         actions: [
@@ -42,13 +42,16 @@ class HomePage extends StatelessWidget {
                 } else if (snapshot.hasError) {
                   return Center(
                     child: Text(
-                      'Error: ${snapshot.error}',
+                      '${'error_label'.tr} ${snapshot.error}',
                       style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                     ),
                   );
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(
-                    child: Text("No users found", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  return Center(
+                    child: Text(
+                      "home_no_users".tr,
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
                   );
                 }
                 return ListView.builder(
@@ -85,9 +88,6 @@ class HomePage extends StatelessWidget {
               },
             ),
           ),
-
-          // Groups List
-
         ],
       ),
     );

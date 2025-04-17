@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TestimonialSection extends StatefulWidget {
   const TestimonialSection({super.key});
@@ -15,22 +16,19 @@ class _TestimonialSectionState extends State<TestimonialSection>
 
   final List<Map<String, String>> testimonials = [
     {
-      'message':
-      'LaunchCode made it incredibly easy to get my app live. Within days, my app was on the Play Store and I was receiving real customer traffic. 100% recommend!',
-      'name': 'Johan ',
-      'country': 'From USA 🇺🇸'
+      'message': 'testimonial_msg_1'.tr,
+      'name': 'testimonial_name_1'.tr,
+      'country': 'testimonial_country_1'.tr,
     },
     {
-      'message':
-      'Their dashboard, support, and deployment process is seamless. LaunchCode is perfect for developers looking to scale fast.',
-      'name': 'Faizal Khan',
-      'country': 'From UK 🇬🇧'
+      'message': 'testimonial_msg_2'.tr,
+      'name': 'testimonial_name_2'.tr,
+      'country': 'testimonial_country_2'.tr,
     },
     {
-      'message':
-      'From selecting the script to launching my brand online, LaunchCode handled everything! Now my store is running and earning.',
-      'name': 'Omar',
-      'country': 'From Egypt 🇪🇬'
+      'message': 'testimonial_msg_3'.tr,
+      'name': 'testimonial_name_3'.tr,
+      'country': 'testimonial_country_3'.tr,
     },
   ];
 
@@ -84,10 +82,10 @@ class _TestimonialSectionState extends State<TestimonialSection>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(
-            'Loved by global entrepreneurs powered by LaunchCode',
+          Text(
+            'testimonial_heading'.tr,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
               color: Colors.black,
@@ -98,7 +96,6 @@ class _TestimonialSectionState extends State<TestimonialSection>
           Stack(
             alignment: Alignment.center,
             children: [
-              // Green gradient background for LaunchCode
               Container(
                 height: 280,
                 width: 980,
@@ -113,7 +110,7 @@ class _TestimonialSectionState extends State<TestimonialSection>
                       Color(0xFF32CD32),
                     ],
                   ),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Colors.black12,
                       blurRadius: 60,

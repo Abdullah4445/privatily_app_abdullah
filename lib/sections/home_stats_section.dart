@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-
-import 'package:flutter/material.dart';
-import 'package:visibility_detector/visibility_detector.dart';
+import 'package:get/get.dart';
 
 class HomeStatsSection extends StatefulWidget {
   const HomeStatsSection({super.key});
@@ -24,9 +22,7 @@ class _HomeStatsSectionState extends State<HomeStatsSection> {
       key: const Key('home-stats-section'),
       onVisibilityChanged: (info) {
         if (info.visibleFraction > 0.3 && !_visible) {
-          setState(() {
-            _visible = true;
-          });
+          setState(() => _visible = true);
         }
       },
       child: Container(
@@ -34,9 +30,9 @@ class _HomeStatsSectionState extends State<HomeStatsSection> {
         color: const Color(0xFFF9F9FF),
         child: Column(
           children: [
-            const Text(
-              'LaunchCode by Numbers',
-              style: TextStyle(
+            Text(
+              'stats_title'.tr,
+              style: const TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
@@ -49,10 +45,10 @@ class _HomeStatsSectionState extends State<HomeStatsSection> {
                 spacing: horizontalSpacing,
                 runSpacing: 30,
                 children: [
-                  _StatItem(title: 'Clients', endValue: 2300, animate: _visible),
-                  _StatItem(title: 'Projects Delivered', endValue: 2800, animate: _visible),
-                  _StatItem(title: 'Countries Reached', endValue: 150, animate: _visible),
-                  _StatItem(title: 'Years in Industry', endValue: 6, animate: _visible),
+                  _StatItem(titleKey: 'stats_clients', endValue: 2300, animate: _visible),
+                  _StatItem(titleKey: 'stats_projects', endValue: 2800, animate: _visible),
+                  _StatItem(titleKey: 'stats_countries', endValue: 150, animate: _visible),
+                  _StatItem(titleKey: 'stats_years', endValue: 6, animate: _visible),
                 ],
               ),
             ),
@@ -64,12 +60,12 @@ class _HomeStatsSectionState extends State<HomeStatsSection> {
 }
 
 class _StatItem extends StatefulWidget {
-  final String title;
+  final String titleKey;
   final int endValue;
   final bool animate;
 
   const _StatItem({
-    required this.title,
+    required this.titleKey,
     required this.endValue,
     required this.animate,
   });
@@ -112,7 +108,7 @@ class _StatItemState extends State<_StatItem> with SingleTickerProviderStateMixi
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 20,
@@ -132,7 +128,7 @@ class _StatItemState extends State<_StatItem> with SingleTickerProviderStateMixi
           ),
           const SizedBox(height: 8),
           Text(
-            widget.title,
+            widget.titleKey.tr,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 16,

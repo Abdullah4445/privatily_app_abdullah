@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:get/get.dart';
 
 class HowMuchTimeSection extends StatefulWidget {
   const HowMuchTimeSection({super.key});
@@ -42,7 +43,7 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
     super.dispose();
   }
 
-  Widget timeBox(int endValue, String label) {
+  Widget timeBox(int endValue, String labelKey) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 30),
       decoration: BoxDecoration(
@@ -75,7 +76,7 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
           ),
           const SizedBox(height: 8),
           Text(
-            label,
+            labelKey.tr,
             style: const TextStyle(
               color: Colors.white70,
               fontSize: 15,
@@ -119,8 +120,8 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Color(0xFF38E652), // A bright green
-                  Color(0xFF1B3812), // A dark green
+                  Color(0xFF38E652),
+                  Color(0xFF1B3812),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -131,35 +132,32 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Left side
                 Expanded(
                   flex: isMobile ? 0 : 1,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text(
-                        'How much time to deploy your product?',
-                        style: TextStyle(
+                      Text(
+                        'how_time_title'.tr,
+                        style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
                       ),
                       const SizedBox(height: 20),
-                      const Text(
-                        'At LaunchCode, we streamline your product launch.\n'
-                            'Here’s a quick overview of the time it takes to deploy your digital product:\n'
-                            '1. Choose a script, provide all required data (logo, business name, design, etc.).\n'
-                            '2. Our team customizes your app in 15 business days for Basic clients and 5 working days for Premium clients.\n'
-                            '3. We deploy your product on App Store, Play Store, and Admin Panel within 3 days.',
-                        style: TextStyle(fontSize: 16, color: Colors.white70),
+                      Text(
+                        'how_time_description'.tr,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.white70,
+                        ),
                       ),
                       hourglassImage(isMobile),
                     ],
                   ),
                 ),
                 const SizedBox(width: 40, height: 40),
-                // Right side
                 Expanded(
                   flex: isMobile ? 0 : 1,
                   child: Container(
@@ -172,11 +170,11 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        timeBox(15, 'Customization for Basic clients'),
-                        timeBox(5, 'Customization for Premium clients'),
-                        timeBox(2, 'App Store Deployment'),
-                        timeBox(1, 'Play Store Deployment'),
-                        timeBox(1, 'Admin Panel Deployment'),
+                        timeBox(15, 'time_basic'),
+                        timeBox(5, 'time_premium'),
+                        timeBox(2, 'time_appstore'),
+                        timeBox(1, 'time_playstore'),
+                        timeBox(1, 'time_adminpanel'),
                       ],
                     ),
                   ),

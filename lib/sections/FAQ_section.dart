@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class FaqSection extends StatefulWidget {
   const FaqSection({super.key});
@@ -11,44 +12,20 @@ class _FaqSectionState extends State<FaqSection> {
   int? _activeIndex;
   int? _hoveredIndex;
 
-  final List<Map<String, dynamic>> faqItems = [
-    {
-      'question': 'How long does it take to launch my apps?',
-      'answer': [
-        'Basic deployments take 13–15 business days.',
-        'Premium packages are prioritized and completed within 4–7 business days.',
-        'This includes launching to Play Store, App Store, and setting up hosting.',
-      ]
-    },
-    {
-      'question': 'What material do I need to provide?',
-      'answer': [
-        'Your business name and logo.',
-        'App icons, splash screen (optional).',
-        'Developer account access or invitation (Google, Apple, etc.).',
-      ]
-    },
-    {
-      'question': 'Can you publish apps on both Play Store and App Store?',
-      'answer': [
-        'Yes! LaunchCode supports publishing to both stores.',
-        'We also configure your admin panel and host it using services like Hostinger or GoDaddy.',
-      ]
-    },
-    {
-      'question': 'Do I need coding experience to use LaunchCode?',
-      'answer': [
-        'Nope! We handle the technical setup and launch process for you.',
-        'You just need to choose your script and provide the required content.',
-      ]
-    },
-    {
-      'question': 'What happens after the apps are live?',
-      'answer': [
-        'You’ll receive a handover package with credentials and links.',
-        'From there, you can start promoting and earning revenue right away!',
-      ]
-    },
+  final List<String> faqKeys = [
+    'faq_q1',
+    'faq_q2',
+    'faq_q3',
+    'faq_q4',
+    'faq_q5',
+  ];
+
+  final List<List<String>> faqAnswers = [
+    ['faq_q1_a1', 'faq_q1_a2', 'faq_q1_a3'],
+    ['faq_q2_a1', 'faq_q2_a2', 'faq_q2_a3'],
+    ['faq_q3_a1', 'faq_q3_a2'],
+    ['faq_q4_a1', 'faq_q4_a2'],
+    ['faq_q5_a1', 'faq_q5_a2'],
   ];
 
   void _toggleIndex(int index) {
@@ -65,17 +42,16 @@ class _FaqSectionState extends State<FaqSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(
-            'Frequently Asked Questions',
-            style: TextStyle(
+          Text(
+            'faq_heading'.tr,
+            style: const TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
               color: Colors.black87,
             ),
           ),
           const SizedBox(height: 30),
-          ...List.generate(faqItems.length, (index) {
-            final item = faqItems[index];
+          ...List.generate(faqKeys.length, (index) {
             final isExpanded = _activeIndex == index;
             final isHovered = _hoveredIndex == index;
 
@@ -113,10 +89,11 @@ class _FaqSectionState extends State<FaqSection> {
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
-                          color:
-                          isHovered ? const Color(0xFF00C853) : Colors.black87,
+                          color: isHovered
+                              ? const Color(0xFF00C853)
+                              : Colors.black87,
                         ),
-                        child: Text(item['question']),
+                        child: Text(faqKeys[index].tr),
                       ),
                       trailing: Icon(
                         isExpanded ? Icons.remove : Icons.add,
@@ -125,12 +102,12 @@ class _FaqSectionState extends State<FaqSection> {
                     ),
                     if (isExpanded)
                       Padding(
-                        padding:
-                        const EdgeInsets.only(left: 20, right: 20, bottom: 16),
+                        padding: const EdgeInsets.only(
+                            left: 20, right: 20, bottom: 16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: List.generate(
-                            item['answer'].length,
+                            faqAnswers[index].length,
                                 (i) => Padding(
                               padding: const EdgeInsets.only(bottom: 8),
                               child: Row(
@@ -140,7 +117,7 @@ class _FaqSectionState extends State<FaqSection> {
                                       style: TextStyle(fontSize: 16)),
                                   Expanded(
                                     child: Text(
-                                      item['answer'][i],
+                                      faqAnswers[index][i].tr,
                                       style: const TextStyle(
                                         fontSize: 14,
                                         color: Colors.black87,

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -15,7 +14,6 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   final Login_pageLogic logic = Get.put(Login_pageLogic());
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,62 +26,32 @@ class _SignUpState extends State<SignUp> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  "Sign-Up Page",
-                  style: TextStyle(
+                Text(
+                  "signup_title".tr,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 32,
                     color: Colors.red,
                   ),
                 ),
                 const Gap(20),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: TextField(
-                    controller: logic.NameC,
-                    decoration: InputDecoration(
-                      hintText: "Enter name",
-                      border: InputBorder.none,
-                      prefixIcon: Icon(Icons.person, color: Colors.red),
-                    ),
-                  ),
+                _inputField(
+                  controller: logic.NameC,
+                  hint: 'signup_name_hint'.tr,
+                  icon: Icons.person,
                 ),
                 const Gap(20),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: TextField(
-                    controller: logic.emailC,
-                    decoration: InputDecoration(
-                      hintText: "Enter Email",
-                      border: InputBorder.none,
-                      prefixIcon: Icon(Icons.email, color: Colors.red),
-                    ),
-                  ),
+                _inputField(
+                  controller: logic.emailC,
+                  hint: 'signup_email_hint'.tr,
+                  icon: Icons.email,
                 ),
                 const Gap(20),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: TextField(
-                    controller: logic.passC,
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      hintText: "Enter password",
-                      border: InputBorder.none,
-                      prefixIcon: Icon(Icons.lock, color: Colors.red),
-                    ),
-                  ),
+                _inputField(
+                  controller: logic.passC,
+                  hint: 'signup_password_hint'.tr,
+                  icon: Icons.lock,
+                  obscure: true,
                 ),
                 const Gap(30),
                 SizedBox(
@@ -97,23 +65,51 @@ class _SignUpState extends State<SignUp> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text(
-                      "Sign Up",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                    child: Text(
+                      "signup_button".tr,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
                 const Gap(20),
                 TextButton(
                   onPressed: () => Get.to(SignIn_page()),
-                  child: const Text(
-                    "Already have an account? Sign In",
-                    style: TextStyle(fontSize: 16, color: Colors.red),
+                  child: Text(
+                    "signup_login_prompt".tr,
+                    style: const TextStyle(fontSize: 16, color: Colors.red),
                   ),
                 ),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _inputField({
+    required TextEditingController controller,
+    required String hint,
+    required IconData icon,
+    bool obscure = false,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: TextField(
+        controller: controller,
+        obscureText: obscure,
+        decoration: InputDecoration(
+          hintText: hint,
+          border: InputBorder.none,
+          prefixIcon: Icon(icon, color: Colors.red),
         ),
       ),
     );

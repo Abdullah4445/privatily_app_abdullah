@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 
 class OurMissionSection extends StatelessWidget {
   const OurMissionSection({super.key});
@@ -57,17 +58,17 @@ class OurMissionSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         RichText(
-          text: const TextSpan(
-            text: 'Our Mission at ',
-            style: TextStyle(
+          text: TextSpan(
+            text: 'mission_heading_1'.tr,
+            style: const TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
             children: [
               TextSpan(
-                text: 'LaunchCode',
-                style: TextStyle(
+                text: 'mission_heading_2'.tr,
+                style: const TextStyle(
                   color: Color(0xFF00C853),
                 ),
               )
@@ -75,13 +76,9 @@ class OurMissionSection extends StatelessWidget {
           ),
         ),
         const Gap(20),
-        const Text(
-          "LaunchCode’s mission is to simplify and speed up tech business launches\n"
-              "worldwide. We provide ready-to-deploy software solutions and full-stack\n"
-              "support—from branding and configuration to hosting and store submission.\n"
-              "Our goal is to empower startups, freelancers, and agencies with automation\n"
-              "and simplicity so they can focus on revenue instead of development.",
-          style: TextStyle(
+        Text(
+          'mission_description'.tr,
+          style: const TextStyle(
             fontSize: 16,
             height: 1.7,
             color: Colors.black87,

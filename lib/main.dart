@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:privatily_app/sections/featuredProducts/productController.dart';
+import 'package:privatily_app/translation/app_translations.dart';
 
 import 'firebase_options.dart';
 import 'widgets/home.dart';
@@ -24,6 +25,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      translations: AppTranslations(), // custom class
+      locale: const Locale('en', 'US'), // default locale
+      fallbackLocale: const Locale('en', 'US'),
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('fr', 'FR'),
+        Locale('es', 'ES'),
+        Locale('ar', 'AR'),
+      ],
+      // localizationsDelegates: const [
+      //   GlobalMaterialLocalizations.delegate,
+      //   GlobalWidgetsLocalizations.delegate,
+      //   GlobalCupertinoLocalizations.delegate,
+      // ],
       debugShowCheckedModeBanner: false,
       title: 'LaunchCode',
       home: const Home(),

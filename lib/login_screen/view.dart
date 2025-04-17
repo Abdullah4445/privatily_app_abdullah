@@ -47,63 +47,43 @@ class _SignIn_pageState extends State<SignIn_page> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   height: 200,
                   width: 200,
                   child: Lottie.network(
                     'https://lottie.host/230db473-bae4-4f7b-b597-5466e1072f60/74TD71RDUh.json',
                   ),
                 ),
-                const Text(
-                  "Sign-In",
-                  style: TextStyle(
+                Text(
+                  "signin_title".tr,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 32,
                     color: Colors.red,
                   ),
                 ),
                 const Gap(20),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: TextField(
-                    controller: logic.emailC,
-                    decoration: InputDecoration(
-                      hintText: "Enter Email",
-                      border: InputBorder.none,
-                      prefixIcon: Icon(Icons.email, color: Colors.red),
-                    ),
-                  ),
+                _inputField(
+                  controller: logic.emailC,
+                  hint: "signin_email_hint".tr,
+                  icon: Icons.email,
                 ),
                 const Gap(20),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: TextField(
-                    controller: logic.passC,
-                    obscureText: _isObscure,
-                    decoration: InputDecoration(
-                      hintText: "Enter Password",
-                      border: InputBorder.none,
-                      prefixIcon: Icon(Icons.lock, color: Colors.red),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _isObscure ? Icons.visibility : Icons.visibility_off,
-                          color: Colors.red,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _isObscure = !_isObscure;
-                          });
-                        },
-                      ),
+                _inputField(
+                  controller: logic.passC,
+                  hint: "signin_password_hint".tr,
+                  icon: Icons.lock,
+                  obscure: _isObscure,
+                  suffix: IconButton(
+                    icon: Icon(
+                      _isObscure ? Icons.visibility : Icons.visibility_off,
+                      color: Colors.red,
                     ),
+                    onPressed: () {
+                      setState(() {
+                        _isObscure = !_isObscure;
+                      });
+                    },
                   ),
                 ),
                 const Gap(30),
@@ -118,9 +98,9 @@ class _SignIn_pageState extends State<SignIn_page> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text(
-                      "Sign In",
-                      style: TextStyle(
+                    child: Text(
+                      "signin_button".tr,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -131,14 +111,40 @@ class _SignIn_pageState extends State<SignIn_page> {
                 const Gap(20),
                 TextButton(
                   onPressed: () => Get.to(SignUp()),
-                  child: const Text(
-                    "Don't have an account? Sign Up",
-                    style: TextStyle(fontSize: 16, color: Colors.red),
+                  child: Text(
+                    "signin_signup_prompt".tr,
+                    style: const TextStyle(fontSize: 16, color: Colors.red),
                   ),
                 ),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _inputField({
+    required TextEditingController controller,
+    required String hint,
+    required IconData icon,
+    bool obscure = false,
+    Widget? suffix,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: TextField(
+        controller: controller,
+        obscureText: obscure,
+        decoration: InputDecoration(
+          hintText: hint,
+          border: InputBorder.none,
+          prefixIcon: Icon(icon, color: Colors.red),
+          suffixIcon: suffix,
         ),
       ),
     );

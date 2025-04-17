@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ContactUsSection extends StatelessWidget {
   const ContactUsSection({super.key});
@@ -11,7 +12,6 @@ class ContactUsSection extends StatelessWidget {
 
         return Stack(
           children: [
-            // ✅ LaunchCode green background
             Container(
               height: 300,
               width: double.infinity,
@@ -23,15 +23,13 @@ class ContactUsSection extends StatelessWidget {
                 ),
               ),
             ),
-
-            // ✉️ Main content
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
                   const SizedBox(height: 40),
                   Text(
-                    "Got questions? Let's talk!",
+                    'contact_heading'.tr,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: isMobile ? 22 : 28,
@@ -41,7 +39,7 @@ class ContactUsSection extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    "Drop your details and our LaunchCode experts will assist you in launching your dream product, hassle-free.",
+                    'contact_subheading'.tr,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white70,
@@ -49,8 +47,6 @@ class ContactUsSection extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 40),
-
-                  // 🧾 Form + Image
                   Center(
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 1200),
@@ -64,24 +60,23 @@ class ContactUsSection extends StatelessWidget {
                           direction: isMobile ? Axis.vertical : Axis.horizontal,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // ✅ Form
                             Expanded(
                               flex: isMobile ? 0 : 1,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    'Talk to a LaunchCode expert',
-                                    style: TextStyle(
+                                  Text(
+                                    'contact_form_title'.tr,
+                                    style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                   const SizedBox(height: 20),
-                                  _buildInput('Full Name'),
-                                  _buildInput('Email Address'),
-                                  _buildInput('Your Business Idea'),
-                                  _buildInput('Additional Notes', maxLines: 4),
+                                  _buildInput('contact_name'.tr),
+                                  _buildInput('contact_email'.tr),
+                                  _buildInput('contact_idea'.tr),
+                                  _buildInput('contact_notes'.tr, maxLines: 4),
                                   const SizedBox(height: 20),
                                   SizedBox(
                                     width: double.infinity,
@@ -95,41 +90,29 @@ class ContactUsSection extends StatelessWidget {
                                         ),
                                       ),
                                       onPressed: () {},
-                                      child: const Text('Get in touch'),
+                                      child: Text('contact_button'.tr),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-
                             if (!isMobile) const SizedBox(width: 40),
-
-                            // ✅ Image side
                             if (!isMobile)
                               Expanded(
                                 flex: 1,
                                 child: Stack(
                                   clipBehavior: Clip.none,
                                   children: [
-                                    Image.asset(
-                                      'assets/images/contact_team.png',
-                                      fit: BoxFit.contain,
-                                    ),
+                                    Image.asset('assets/images/contact_team.png', fit: BoxFit.contain),
                                     Positioned(
                                       top: 0,
                                       left: 0,
-                                      child: Image.asset(
-                                        'assets/images/banner_1.png',
-                                        width: 260,
-                                      ),
+                                      child: Image.asset('assets/images/banner_1.png', width: 260),
                                     ),
                                     Positioned(
                                       top: 80,
                                       left: 10,
-                                      child: Image.asset(
-                                        'assets/images/banner_2.png',
-                                        width: 240,
-                                      ),
+                                      child: Image.asset('assets/images/banner_2.png', width: 240),
                                     ),
                                   ],
                                 ),
@@ -139,7 +122,6 @@ class ContactUsSection extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 60),
                 ],
               ),

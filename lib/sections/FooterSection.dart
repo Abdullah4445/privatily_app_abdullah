@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 class FooterSection extends StatelessWidget {
   const FooterSection({super.key});
@@ -10,7 +11,7 @@ class FooterSection extends StatelessWidget {
       final isMobile = constraints.maxWidth < 800;
 
       return Container(
-        color: const Color(0xFF1B5E20), // LaunchCode dark green
+        color: const Color(0xFF1B5E20),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -20,23 +21,22 @@ class FooterSection extends StatelessWidget {
               runSpacing: 30,
               alignment: WrapAlignment.spaceBetween,
               children: [
-                // 🔰 Brand & Contact Info
+                // Brand & Contact Info
                 SizedBox(
                   width: isMobile ? double.infinity : 300,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Image.asset('assets/images/transperantLaunchCode.png', height: 40),
                       const SizedBox(height: 10),
-                      const Text(
-                        "Empowering startups and developers globally.",
-                        style: TextStyle(color: Colors.white),
+                      Text(
+                        'footer_tagline'.tr,
+                        style: const TextStyle(color: Colors.white),
                       ),
                       const SizedBox(height: 16),
-                      _contactRow(Icons.email, "support@launchcode.shop"),
-                      _contactRow(Icons.phone, "+1 (507) 410-4666"),
-                      _contactRow(Icons.article, "Launch guides & docs"),
-                      _contactRow(Icons.help_outline, "Live Chat & Support"),
+                      _contactRow(Icons.email, 'support@launchcode.shop'),
+                      _contactRow(Icons.phone, '+1 (507) 410-4666'),
+                      _contactRow(Icons.article, 'footer_guides'.tr),
+                      _contactRow(Icons.help_outline, 'footer_support'.tr),
                       const SizedBox(height: 16),
                       Row(
                         children: const [
@@ -53,30 +53,30 @@ class FooterSection extends StatelessWidget {
                   ),
                 ),
 
-                // 🔗 Links Section
+                // Links Section
                 SizedBox(
                   width: isMobile ? double.infinity : 400,
                   child: Wrap(
                     spacing: 50,
                     runSpacing: 20,
                     children: [
-                      _linkColumn("Explore", [
-                        "Home",
-                        "Pricing",
-                        "FAQs",
-                        "Testimonials"
+                      _linkColumn('footer_explore'.tr, [
+                        'footer_home'.tr,
+                        'footer_pricing'.tr,
+                        'footer_faqs'.tr,
+                        'footer_testimonials'.tr
                       ]),
-                      _linkColumn("Legal", [
-                        "Terms of Service",
-                        "Privacy Policy",
-                        "Refund Policy",
-                        "Licensing Info"
+                      _linkColumn('footer_legal'.tr, [
+                        'footer_terms'.tr,
+                        'footer_privacy'.tr,
+                        'footer_refund'.tr,
+                        'footer_license'.tr
                       ]),
                     ],
                   ),
                 ),
 
-                // 👨‍💻 Footer Person Image
+                // Footer Image
                 SizedBox(
                   width: isMobile ? double.infinity : 250,
                   child: Image.asset(
@@ -92,12 +92,10 @@ class FooterSection extends StatelessWidget {
             const Divider(color: Colors.white30),
             const SizedBox(height: 10),
 
-            // ⚖️ Disclaimer
-            const Text(
-              '© 2024–2025 LaunchCode. All rights reserved.\n'
-                  'LaunchCode is a platform offering digital products & deployment services. We do not provide legal advice or act as a legal entity.\n'
-                  'Use of our platform signifies agreement with our Terms, Privacy Policy, and Refund Policy. Please consult a legal or tax advisor where necessary.',
-              style: TextStyle(color: Colors.white70, fontSize: 12, height: 1.5),
+            // Disclaimer
+            Text(
+              'footer_disclaimer'.tr,
+              style: const TextStyle(color: Colors.white70, fontSize: 12, height: 1.5),
             ),
           ],
         ),

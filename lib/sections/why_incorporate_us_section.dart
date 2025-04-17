@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class WhyLaunchCodeSection2 extends StatelessWidget {
   const WhyLaunchCodeSection2({super.key});
@@ -23,18 +24,18 @@ class WhyLaunchCodeSection2 extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text.rich(
+          Text.rich(
             TextSpan(
-              text: 'Why Choose ',
-              style: TextStyle(
+              text: 'why_choose'.tr,
+              style: const TextStyle(
                 fontSize: 34,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
               children: [
                 TextSpan(
-                  text: 'LaunchCode',
-                  style: TextStyle(
+                  text: ' LaunchCode',
+                  style: const TextStyle(
                     color: Color(0xFF5B3DF4),
                   ),
                 ),
@@ -49,29 +50,26 @@ class WhyLaunchCodeSection2 extends StatelessWidget {
             children: const [
               _FeatureCard(
                 icon: Icons.apps_outlined,
-                title: 'Select Your Script',
-                description:
-                'Choose from our collection of high-converting software scripts designed for success in various industries.',
+                title: 'select_script',
+                description: 'select_script_desc',
               ),
               _FeatureCard(
                 icon: Icons.palette_outlined,
-                title: 'Provide Customization Details',
-                description:
-                'Provide us with your business name, logo, design preferences, and any other required details to tailor the product to your needs.',
+                title: 'customization_details',
+                description: 'customization_details_desc',
               ),
               _FeatureCard(
                 icon: Icons.launch_outlined,
-                title: 'Get Ready to Launch',
-                description:
-                'We’ll customize and deploy your app to the App Store, Play Store, and Admin Panel in as little as 3 days.',
+                title: 'get_ready_launch',
+                description: 'get_ready_launch_desc',
               ),
             ],
           ),
           const SizedBox(height: 40),
-          const Text(
-            'With over 10 years in the industry and having served 2300+ clients, LaunchCode is the trusted partner for entrepreneurs worldwide. Our expert team ensures that your digital product is built, deployed, and live in no time!',
+          Text(
+            'trusted_text'.tr,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.black87,
@@ -140,7 +138,7 @@ class _FeatureCardState extends State<_FeatureCard> {
             ),
             const SizedBox(height: 18),
             Text(
-              widget.title,
+              widget.title.tr,
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -149,7 +147,7 @@ class _FeatureCardState extends State<_FeatureCard> {
             ),
             const SizedBox(height: 10),
             Text(
-              widget.description,
+              widget.description.tr,
               style: const TextStyle(
                 fontSize: 15,
                 color: Colors.black54,
@@ -161,5 +159,3 @@ class _FeatureCardState extends State<_FeatureCard> {
     );
   }
 }
-
-

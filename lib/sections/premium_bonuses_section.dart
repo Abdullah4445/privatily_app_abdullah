@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PremiumBonusSection extends StatefulWidget {
   const PremiumBonusSection({super.key});
@@ -61,30 +62,27 @@ class _PremiumBonusSectionState extends State<PremiumBonusSection>
                 flex: isMobile ? 0 : 1,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text.rich(
                       TextSpan(
-                        text: 'Bonuses',
-                        style: TextStyle(
+                        text: 'bonus_title_prefix'.tr,
+                        style: const TextStyle(
                           color: Colors.deepPurple,
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
                         ),
                         children: [
                           TextSpan(
-                            text: ' for Premium\nclients only',
-                            style: TextStyle(color: Colors.black),
+                            text: 'bonus_title_suffix'.tr,
+                            style: const TextStyle(color: Colors.black),
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Text(
-                      'As a Premium client, we’ll assist you in setting up all the\n'
-                          'financial services available to you. You’ll have a dedicated\n'
-                          'account manager and our exceptional support team, ready\n'
-                          'to assist you via chat, email, and phone.',
-                      style: TextStyle(
+                      'bonus_description'.tr,
+                      style: const TextStyle(
                         color: Colors.black87,
                         fontSize: 15,
                         height: 1.6,
