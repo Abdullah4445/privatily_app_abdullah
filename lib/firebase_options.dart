@@ -41,48 +41,51 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDPMv_Et2d_vbvoc99SzCvXAHhcY5nHWJI',
-    appId: '1:458397158619:web:7bf3bfc9263c009dec10fe',
-    messagingSenderId: '458397158619',
-    projectId: 'food-delivery-c58af',
-    authDomain: 'food-delivery-c58af.firebaseapp.com',
-    storageBucket: 'food-delivery-c58af.appspot.com',
-    measurementId: 'G-RDBRWZM7M0',
+    apiKey: 'AIzaSyCAOmgMUPlUTh4KE7y0Li5ZKH_0S038OBs',
+    appId: '1:935975375761:web:615968393e85598fb74030',
+    messagingSenderId: '935975375761',
+    projectId: 'billtech-6f3b1',
+    authDomain: 'billtech-6f3b1.firebaseapp.com',
+    storageBucket: 'billtech-6f3b1.appspot.com',
+    measurementId: 'G-1Q147Q9MVC',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA3PVTY58nq70vARSsdCDd9zrmQmnNMYdE',
-    appId: '1:458397158619:android:6a944fdab99a520eec10fe',
-    messagingSenderId: '458397158619',
-    projectId: 'food-delivery-c58af',
-    storageBucket: 'food-delivery-c58af.appspot.com',
+    apiKey: 'AIzaSyD3HGQ8AtMYDkEEsHbBmC2MNF9eg-mwA2c',
+    appId: '1:935975375761:android:89a5ecfbe03e70b5b74030',
+    messagingSenderId: '935975375761',
+    projectId: 'billtech-6f3b1',
+    storageBucket: 'billtech-6f3b1.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDYA4zMqJ0OC_5BBgQvfd7Jl6JI5mnkQd0',
-    appId: '1:458397158619:ios:0f660660aa2385a7ec10fe',
-    messagingSenderId: '458397158619',
-    projectId: 'food-delivery-c58af',
-    storageBucket: 'food-delivery-c58af.appspot.com',
+    apiKey: 'AIzaSyBQyrLDO1opmeYvKLDpIZJI9OPwZybMMV0',
+    appId: '1:935975375761:ios:c6ae1772e6366f65b74030',
+    messagingSenderId: '935975375761',
+    projectId: 'billtech-6f3b1',
+    storageBucket: 'billtech-6f3b1.appspot.com',
+    iosClientId: '935975375761-di7muenjlpd62539g8h0cabnunt4f6ms.apps.googleusercontent.com',
     iosBundleId: 'com.example.privatilyApp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDYA4zMqJ0OC_5BBgQvfd7Jl6JI5mnkQd0',
-    appId: '1:458397158619:ios:0f660660aa2385a7ec10fe',
-    messagingSenderId: '458397158619',
-    projectId: 'food-delivery-c58af',
-    storageBucket: 'food-delivery-c58af.appspot.com',
+    apiKey: 'AIzaSyBQyrLDO1opmeYvKLDpIZJI9OPwZybMMV0',
+    appId: '1:935975375761:ios:c6ae1772e6366f65b74030',
+    messagingSenderId: '935975375761',
+    projectId: 'billtech-6f3b1',
+    storageBucket: 'billtech-6f3b1.appspot.com',
+    iosClientId: '935975375761-di7muenjlpd62539g8h0cabnunt4f6ms.apps.googleusercontent.com',
     iosBundleId: 'com.example.privatilyApp',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyDPMv_Et2d_vbvoc99SzCvXAHhcY5nHWJI',
-    appId: '1:458397158619:web:ec1a6818c395ff89ec10fe',
-    messagingSenderId: '458397158619',
-    projectId: 'food-delivery-c58af',
-    authDomain: 'food-delivery-c58af.firebaseapp.com',
-    storageBucket: 'food-delivery-c58af.appspot.com',
-    measurementId: 'G-909M2GC638',
+    apiKey: 'AIzaSyCAOmgMUPlUTh4KE7y0Li5ZKH_0S038OBs',
+    appId: '1:935975375761:web:576a03f4d3b68774b74030',
+    messagingSenderId: '935975375761',
+    projectId: 'billtech-6f3b1',
+    authDomain: 'billtech-6f3b1.firebaseapp.com',
+    storageBucket: 'billtech-6f3b1.appspot.com',
+    measurementId: 'G-FPTK59SV62',
   );
+
 }
