@@ -102,31 +102,50 @@ class _HomeState extends State<Home> {
       right: 24,
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
+        transitionBuilder: (child, animation) {
+          return FadeTransition(
+            opacity: animation,
+            child: SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0, 0.2),
+                end: Offset.zero,
+              ).animate(animation),
+              child: child,
+            ),
+          );
+        },
         child: showChatBox
-            ? Container(
-          key: const ValueKey('chatbox'),
-          width: 360,
-          height: 480,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: const [
-              BoxShadow(color: Colors.black26, blurRadius: 25)
-            ],
+            ? Material( // ✅ FIXED: Add Material wrapper
+          borderRadius: BorderRadius.circular(20),
+          elevation: 8,
+          color: Colors.transparent,
+          child: Container(
+            key: const ValueKey('chatbox'),
+            width: 360,
+            height: 480,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: const [
+                BoxShadow(color: Colors.black26, blurRadius: 25),
+              ],
+            ),
+            child: Obx(() => logic.showChatScreen.value
+                ? ChattingPage(
+              chatRoomId: logic.chatRoomIdForPopup.value,
+              receiverId: logic.receiverIdForPopup.value,
+              receiverName: logic.receiverNameForPopup.value,
+            )
+                : const Center(child: CircularProgressIndicator())),
           ),
-          child: Obx(() => logic.showChatScreen.value
-              ? ChattingPage(
-            chatRoomId: logic.chatRoomIdForPopup.value,
-            receiverId: logic.receiverIdForPopup.value,
-            receiverName: logic.receiverNameForPopup.value,
-          )
-              : Center(child: CircularProgressIndicator())),
         )
             : const SizedBox.shrink(),
       ),
     );
   }
+
+
 
 
   Widget buildChatButtons() {
