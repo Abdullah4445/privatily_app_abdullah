@@ -17,7 +17,7 @@ class _ContactUsSectionState extends State<ContactUsSection> {
   final notesC = TextEditingController();
 
   Future<void> sendEmail() async {
-    const serviceId = 'service_it33gkb';
+    const serviceId = 'service_2sxmasf';
     const templateId = 'template_m13d8vd';
     const userId = 'F-HN-DXZHU9uQ66dD';
 

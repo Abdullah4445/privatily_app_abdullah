@@ -68,8 +68,9 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
     return Obx(() {
       final products = controller.products;
 
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 60),
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 30),
+        // height: 400,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -80,22 +81,24 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 4),
             SizedBox(
-              height: 420, // matches your card height
+              height: 520, // matches your card height
               child: ScrollConfiguration(
-                behavior: _NoGlowScrollBehavior(), // Use the simplified behavior
+                behavior: _NoGlowScrollBehavior(),
                 child: NotificationListener<ScrollNotification>(
                   onNotification: (notification) {
                     _onUserScroll(notification);
                     return false;
                   },
                   child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
+                    scrollDirection: isMobile?Axis.vertical:Axis.horizontal,
                     controller: _scrollController,
                     itemCount: products.length,
-                    padding: const EdgeInsets.only(right: 16),
-                    separatorBuilder: (_, __) => const SizedBox(width: 16),
+                    padding: const EdgeInsets.only(right: 16,bottom: 36),
+
+                    separatorBuilder: (_, __) => SizedBox(height: isMobile ? 16 : 16,
+                    width: isMobile? 16:16,),
                     itemBuilder: (context, index) {
                       final product = products[index];
                       return SizedBox(
@@ -116,6 +119,7 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
   Widget _buildCard(BuildContext context, product) {
     return Container(
       height: 430,
+
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
@@ -194,11 +198,17 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
   }
 }
 
-// A ScrollBehavior that removes the glow effect.  You can customize this further if needed.
 class _NoGlowScrollBehavior extends ScrollBehavior {
   @override
   Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
+
+  @override
+  Widget buildScrollbar(
+      BuildContext context, Widget child, ScrollableDetails details) {
+    // Hide the scrollbar
     return child;
   }
 }

@@ -34,7 +34,7 @@ class Login_pageLogic extends GetxController {
         }
 
         Get.to(() => HomePage());
-        print("saim");
+
       }
     } on FirebaseAuthException catch (e) {
       Get.snackbar('Error', e.message ?? 'An error occurred');
@@ -51,7 +51,7 @@ class Login_pageLogic extends GetxController {
       try {
         await fbAu.signInWithEmailAndPassword(email: emailC.text, password: passC.text);
         Get.to(() => HomePage());
-        print("saim");
+
       } on FirebaseAuthException catch (e) {
         Get.snackbar('Error', e.message ?? 'An error occurred');
       } catch (e) {
