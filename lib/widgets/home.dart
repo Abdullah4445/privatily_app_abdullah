@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:privatily_app/chatToAdmin/chatpops.dart';
 import 'package:privatily_app/sections/premium_bonuses_section.dart';
 import 'package:privatily_app/widgets/translationsController.dart';
-import '../login_screen/logic.dart';
-import '../mytextfield/custom_field.dart';
 import '../animations/animated_on_scrool.dart';
 import '../chat_page/view.dart';
-import '../home_page/logic.dart';
 import '../preview/privatily_preview_image.dart';
 import '../sections/FAQ_section.dart';
 import '../sections/FooterSection.dart';
@@ -22,8 +18,6 @@ import '../sections/testimonial_section.dart';
 import '../sections/transparent_pricing_seaction.dart';
 import '../sections/why_incorporate_us_section.dart';
 import '../sections/why_privatily_section.dart';
-import '../animations/animated_on_scrool.dart';
-import '../preview/privatily_preview_image.dart';
 import 'homellogic.dart';
 
 class Home extends StatefulWidget {
@@ -101,26 +95,32 @@ class _HomeState extends State<Home> {
       bottom: 100,
       right: 24,
       child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 500),
         transitionBuilder: (child, animation) {
           return FadeTransition(
             opacity: animation,
-            child: SlideTransition(
-              position: Tween<Offset>(
-                begin: const Offset(0, 0.2),
-                end: Offset.zero,
-              ).animate(animation),
-              child: child,
+            child: ScaleTransition(
+              scale: CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeOutBack,
+              ),
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, 0.2),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              ),
             ),
           );
         },
         child: showChatBox
-            ? Material( // ✅ FIXED: Add Material wrapper
+            ? Material(
+          key: const ValueKey('chatbox'),
           borderRadius: BorderRadius.circular(20),
           elevation: 8,
           color: Colors.transparent,
           child: Container(
-            key: const ValueKey('chatbox'),
             width: 360,
             height: 480,
             padding: const EdgeInsets.all(16),
@@ -144,6 +144,7 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
 
 
 
