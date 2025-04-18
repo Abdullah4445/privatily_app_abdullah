@@ -26,7 +26,6 @@ import '../animations/animated_on_scrool.dart';
 import '../preview/privatily_preview_image.dart';
 import 'homellogic.dart';
 
-
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -36,8 +35,10 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final ScrollController _scrollController = ScrollController();
-  final HomeLogic logic = Get.put(HomeLogic()); // Logic to manage chat and guest user
-  final Login_pageLogic logic = Get.put(Login_pageLogic());
+  final HomeLogic logic = Get.put(
+    HomeLogic(),
+  ); // Logic to manage chat and guest user
+  // final Login_pageLogic logic = Get.put(Login_pageLogic());
 
   //keys
   final ScrollController _faqKey = ScrollController();
@@ -60,7 +61,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-    // Create guest user in Firestore
+  // Create guest user in Firestore
   Widget fiveStars(double screenWidth) {
     double iconSize =
         screenWidth < 600
@@ -83,7 +84,10 @@ class _HomeState extends State<Home> {
             const SizedBox(width: 12),
             Text(
               'rated_stars'.tr,
-              style: TextStyle(fontSize: iconSize * 0.6, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: iconSize * 0.6,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -91,95 +95,33 @@ class _HomeState extends State<Home> {
     );
   }
 
-
   // Function to show chat popup
   Widget chatPopup() {
     return Positioned(
       bottom: 100,
       right: 24,
       child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 500),
-        transitionBuilder: (Widget child, Animation<double> animation) {
-          // ✅ Combined Fade + Scale + Slide
-          return FadeTransition(
-            opacity: animation,
-            child: ScaleTransition(
-              scale: CurvedAnimation(parent: animation, curve: Curves.easeOutBack),
-              child: SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0, 0.2),
-                  end: Offset.zero,
-                ).animate(animation),
-                child: child,
-              ),
-            ),
-          );
-        },
+        duration: const Duration(milliseconds: 300),
         child: showChatBox
             ? Container(
           key: const ValueKey('chatbox'),
           width: 360,
           height: 480,
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
             boxShadow: const [
-              BoxShadow(
-                color: Colors.black26,
-                blurRadius: 25,
-                offset: Offset(0, 8),
-              ),
+              BoxShadow(color: Colors.black26, blurRadius: 25)
             ],
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Column(
-              children: [
-                // 🔷 Header
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0xFF4B2EDF), Color(0xFF7B5CFF)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "💬 Chat with us",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => setState(() => showChatBox = false),
-                        child: const Icon(Icons.close, color: Colors.white),
-                      )
-                    ],
-                  ),
-                ),
-
-                // 🔄 Chat Content
-                Expanded(
-                  child: Container(
-                    color: const Color(0xFFF7F7FB),
-                    child: Obx(() => logic.showChatScreen.value
-                        ? ChattingPage(
-                      chatRoomId: logic.chatRoomIdForPopup.value,
-                      receiverId: logic.receiverIdForPopup.value,
-                      receiverName: logic.receiverNameForPopup.value,
-                    )
-                        : const Center(child: CircularProgressIndicator())),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: Obx(() => logic.showChatScreen.value
+              ? ChattingPage(
+            chatRoomId: logic.chatRoomIdForPopup.value,
+            receiverId: logic.receiverIdForPopup.value,
+            receiverName: logic.receiverNameForPopup.value,
+          )
+              : Center(child: CircularProgressIndicator())),
         )
             : const SizedBox.shrink(),
       ),
@@ -187,11 +129,53 @@ class _HomeState extends State<Home> {
   }
 
 
+  Widget buildChatButtons() {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ElevatedButton(
+            onPressed:
+                () => setState(() {
+                  showLoginForm = true;
+                  showSignupForm = false;
+                }),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+            ),
+            child: Text(
+              "login_btn".tr,
+              style: const TextStyle(fontSize: 16, color: Colors.white),
+            ),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed:
+                () => setState(() {
+                  showSignupForm = true;
+                  showLoginForm = false;
+                }),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple.shade100,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+            ),
+            child: Text(
+              "signup_btn".tr,
+              style: const TextStyle(fontSize: 16, color: Colors.deepPurple),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-  // Initial buttons for starting chat as guest
-
-
-  // Floating action button to toggle chat
   Widget floatingMessageButton() {
     return Positioned(
       bottom: 24,
@@ -213,45 +197,103 @@ class _HomeState extends State<Home> {
   }
 
 
-  // Scroll to testimonials
-  void scrollToTestimonials() {
-    final RenderBox renderBox = _testimonialKey.currentContext!.findRenderObject() as RenderBox;
-    final position = renderBox.localToGlobal(Offset.zero, ancestor: null).dy;
-    _scrollController.animateTo(
-      position + _scrollController.offset,
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.easeInOut,
-    );
-  }
-
-  // Five-star rating section
-  Widget fiveStars(double screenWidth) {
-    double iconSize = screenWidth < 600 ? 18 : screenWidth < 1024 ? 22 : 26;
-    return GestureDetector(
-      onTap: scrollToTestimonials,
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              children: List.generate(5, (index) {
-                return Icon(Icons.star, color: Colors.orange, size: iconSize);
-              }),
-            ),
-            const SizedBox(width: 12),
-            Text(
-              'Rated 4.2+ stars by entrepreneurs worldwide',
-              style: TextStyle(fontSize: iconSize * 0.6, fontWeight: FontWeight.bold),
-            )
-          ],
+  Widget _buildLaunchCodeHero(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 30),
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFFF8F9FF), Color(0xFFEDEFFF)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            // mainAxisAlignment: MainAxisAlignment.start,
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 5,
+                runSpacing: 5,
+                children: [
+                  const Icon(
+                    Icons.rocket_launch,
+                    color: Colors.deepPurple,
+                    size: 30,
+                  ),
+                  Text(
+                    "launch_sooner".tr,
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Icon(Icons.trending_up, color: Colors.green, size: 30),
+                  Text(
+                    "grow_faster".tr,
+                    style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              const Gap(10),
+              Text(
+                'discover_software'.tr,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 18, color: Colors.black54),
+              ),
+            ],
+          ),
+          const Gap(6),
+          const FeaturedProductsSection(),
+          const Gap(5),
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 16,
+            runSpacing: 16,
+            children: [
+              ElevatedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.explore, color: Colors.white),
+                label: Text(
+                  "explore_products".tr,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 16,
+                  ),
+                ),
+              ),
+              OutlinedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.code),
+                label: Text("browse_categories".tr),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.deepPurple,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 16,
+                  ),
+                  side: const BorderSide(color: Colors.deepPurple),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
-
-  // Widget for displaying testimonial section
-  final GlobalKey _testimonialKey = GlobalKey();
 
   final GlobalKey _sectionFiveKey = GlobalKey();
 
@@ -264,7 +306,8 @@ class _HomeState extends State<Home> {
     // Calculate a stretchMaxHeight that is larger than the fraction of screenHeight
     // represented by desiredExpandedHeight, and less than 0.95.
     final expandedFraction = desiredExpandedHeight / screenHeight;
-    final stretchFraction = (expandedFraction > 0.8) ? 0.9 : expandedFraction + 0.15;
+    final stretchFraction =
+        (expandedFraction > 0.8) ? 0.9 : expandedFraction + 0.15;
     final safeStretchFraction = stretchFraction < 0.95 ? stretchFraction : 0.9;
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -325,10 +368,22 @@ class _HomeState extends State<Home> {
                               value: selectedLang.value,
                               underline: Container(),
                               items: const [
-                                DropdownMenuItem(value: 'en', child: Text('English')),
-                                DropdownMenuItem(value: 'fr', child: Text('Français')),
-                                DropdownMenuItem(value: 'es', child: Text('Español')),
-                                DropdownMenuItem(value: 'ar', child: Text('عربي')),
+                                DropdownMenuItem(
+                                  value: 'en',
+                                  child: Text('English'),
+                                ),
+                                DropdownMenuItem(
+                                  value: 'fr',
+                                  child: Text('Français'),
+                                ),
+                                DropdownMenuItem(
+                                  value: 'es',
+                                  child: Text('Español'),
+                                ),
+                                DropdownMenuItem(
+                                  value: 'ar',
+                                  child: Text('عربي'),
+                                ),
                               ],
                               onChanged: (value) {
                                 selectedLang.value = value!;
