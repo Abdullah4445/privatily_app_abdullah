@@ -17,15 +17,16 @@ class _ContactUsSectionState extends State<ContactUsSection> {
   final notesC = TextEditingController();
 
   Future<void> sendEmail() async {
-    const serviceId = 'service_2sxmasf';
-    const templateId = 'template_m13d8vd';
-    const userId = 'F-HN-DXZHU9uQ66dD';
+    const serviceId = 'service_0d6qpba'; // ✅ Your SMTP service ID
+    const templateId = 'template_udo45eh'; // ✅ Template ID from EmailJS
+    const userId = 'TK04rHsB5x7lbPwpx'; // ✅ Your Public Key from API settings
 
     final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+
     final response = await http.post(
       url,
       headers: {
-        'origin': 'http://localhost',
+        'origin': 'http://localhost', // required header
         'Content-Type': 'application/json',
       },
       body: json.encode({
@@ -33,7 +34,7 @@ class _ContactUsSectionState extends State<ContactUsSection> {
         'template_id': templateId,
         'user_id': userId,
         'template_params': {
-          'from_name': nameC.text,
+          'from_name': nameC.text, // must match template variable
           'from_email': emailC.text,
           'business_idea': ideaC.text,
           'additional_notes': notesC.text,
@@ -54,11 +55,12 @@ class _ContactUsSectionState extends State<ContactUsSection> {
     } else {
       Get.snackbar(
         'Error',
-        'Failed to send email',
+        'Failed to send email: ${response.body}',
         snackPosition: SnackPosition.BOTTOM,
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
