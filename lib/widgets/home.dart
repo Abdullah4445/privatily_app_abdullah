@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:privatily_app/preview/privatily_preview_image.dart';
-import '../login_screen/logic.dart';
-import '../login_screen/view.dart';
-import '../mytextfield/custom_field.dart';
+import '../animations/animated_on_scrool.dart';
+import '../chat_page/view.dart';
+import '../home_page/logic.dart';
+import '../preview/privatily_preview_image.dart';
 import '../sections/FAQ_section.dart';
 import '../sections/FooterSection.dart';
 import '../sections/contact_us_seaction.dart';
@@ -17,7 +16,8 @@ import '../sections/testimonial_section.dart';
 import '../sections/transparent_pricing_seaction.dart';
 import '../sections/why_incorporate_us_section.dart';
 import '../sections/why_privatily_section.dart';
-import '../animations/animated_on_scrool.dart';
+import 'homellogic.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -28,11 +28,136 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final ScrollController _scrollController = ScrollController();
-  final Login_pageLogic logic = Get.put(Login_pageLogic());
-
-  final GlobalKey _testimonialKey = GlobalKey();
+  final HomeLogic logic = Get.put(HomeLogic()); // Logic to manage chat and guest user
   bool showChatBox = false;
 
+  // Name for guest user
+
+    // Create guest user in Firestore
+
+
+  // Function to show chat popup
+  Widget chatPopup() {
+    return Positioned(
+      bottom: 100,
+      right: 24,
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 500),
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          // ✅ Combined Fade + Scale + Slide
+          return FadeTransition(
+            opacity: animation,
+            child: ScaleTransition(
+              scale: CurvedAnimation(parent: animation, curve: Curves.easeOutBack),
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0, 0.2),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              ),
+            ),
+          );
+        },
+        child: showChatBox
+            ? Container(
+          key: const ValueKey('chatbox'),
+          width: 360,
+          height: 480,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 25,
+                offset: Offset(0, 8),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Column(
+              children: [
+                // 🔷 Header
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF4B2EDF), Color(0xFF7B5CFF)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "💬 Chat with us",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => setState(() => showChatBox = false),
+                        child: const Icon(Icons.close, color: Colors.white),
+                      )
+                    ],
+                  ),
+                ),
+
+                // 🔄 Chat Content
+                Expanded(
+                  child: Container(
+                    color: const Color(0xFFF7F7FB),
+                    child: Obx(() => logic.showChatScreen.value
+                        ? ChattingPage(
+                      chatRoomId: logic.chatRoomIdForPopup.value,
+                      receiverId: logic.receiverIdForPopup.value,
+                      receiverName: logic.receiverNameForPopup.value,
+                    )
+                        : const Center(child: CircularProgressIndicator())),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )
+            : const SizedBox.shrink(),
+      ),
+    );
+  }
+
+
+
+  // Initial buttons for starting chat as guest
+
+
+  // Floating action button to toggle chat
+  Widget floatingMessageButton() {
+    return Positioned(
+      bottom: 24,
+      right: 24,
+      child: FloatingActionButton(
+        backgroundColor: Colors.deepPurple,
+        onPressed: () async {
+          setState(() => showChatBox = !showChatBox);
+          if (showChatBox) {
+            await logic.initGuestChat();
+          }
+        },
+        child: Icon(
+          showChatBox ? Icons.close : Icons.chat_bubble_outline,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
+
+  // Scroll to testimonials
   void scrollToTestimonials() {
     final RenderBox renderBox = _testimonialKey.currentContext!.findRenderObject() as RenderBox;
     final position = renderBox.localToGlobal(Offset.zero, ancestor: null).dy;
@@ -43,6 +168,7 @@ class _HomeState extends State<Home> {
     );
   }
 
+  // Five-star rating section
   Widget fiveStars(double screenWidth) {
     double iconSize = screenWidth < 600 ? 18 : screenWidth < 1024 ? 22 : 26;
     return GestureDetector(
@@ -68,238 +194,8 @@ class _HomeState extends State<Home> {
     );
   }
 
-  bool showLoginForm = false;
-  bool showSignupForm = false;
-  Widget chatPopup() {
-    return Positioned(
-      bottom: 100,
-      right: 24,
-      child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        child: showChatBox
-            ? Container(
-          key: const ValueKey('chatbox'),
-          width: 360,
-          height: 480,
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 25)],
-          ),
-          child: showLoginForm
-              ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Expanded(
-                    child: Text(
-                      "Login",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () {
-                      setState(() {
-                        showChatBox = false;
-                        showLoginForm = false;
-                        showSignupForm = false;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              CustomInputField(
-                controller: logic.emailC,
-                hintText: 'Email',
-              ),
-              const SizedBox(height: 12),
-              CustomInputField(
-                controller: logic.passC,
-                hintText: 'Password',
-                isPassword: true,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  logic.signIn(); // Login logic
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                  minimumSize: const Size.fromHeight(50),
-                ),
-                child: const Text("Login", style: TextStyle(color: Colors.white)),
-              ),
-            ],
-          )
-              : showSignupForm
-              ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Expanded(
-                    child: Text(
-                      "Sign Up",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () {
-                      setState(() {
-                        showChatBox = false;
-                        showLoginForm = false;
-                        showSignupForm = false;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              CustomInputField(
-                controller: logic.NameC,
-                hintText: 'User Name',
-              ),
-              const SizedBox(height: 12),
-              CustomInputField(
-                controller: logic.emailC,
-                hintText: 'Email',
-              ),
-              const SizedBox(height: 12),
-              CustomInputField(
-                controller: logic.passC,
-                hintText: 'Password',
-                isPassword: true,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  logic.createUser(); // Sign up logic
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
-                  minimumSize: const Size.fromHeight(50),
-                ),
-                child: const Text("Sign Up", style: TextStyle(color: Colors.white)),
-              ),
-            ],
-          )
-              : Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      showLoginForm = true;
-                      showSignupForm = false;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                  ),
-                  child: const Text(
-                    "Login",
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      showSignupForm = true;
-                      showLoginForm = false;
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple.shade100,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                  ),
-                  child: const Text(
-                    "Sign Up",
-                    style: TextStyle(fontSize: 16, color: Colors.deepPurple),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        )
-            : const SizedBox.shrink(),
-      ),
-    );
-  }
-
-
-
-
-
-  Widget chatBubble({required IconData icon, required String time, required String text, String? inputHint}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(backgroundColor: Colors.deepPurple.shade50, child: Icon(icon, color: Colors.deepPurple)),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF1F4FB),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(text, style: const TextStyle(fontSize: 14)),
-                  if (inputHint != null) ...[
-                    const SizedBox(height: 10),
-                    TextField(
-                      decoration: InputDecoration(
-                        hintText: inputHint,
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Text(time, style: TextStyle(fontSize: 10, color: Colors.grey.shade500)),
-        ],
-      ),
-    );
-  }
-
-  Widget floatingMessageButton() {
-    return Positioned(
-      bottom: 24,
-      right: 24,
-      child: FloatingActionButton(
-        backgroundColor: Colors.deepPurple,
-        onPressed: () => setState(() => showChatBox = !showChatBox),
-        child: Icon(showChatBox ? Icons.close : Icons.chat_bubble_outline, color: Colors.white),
-      ),
-    );
-  }
+  // Widget for displaying testimonial section
+  final GlobalKey _testimonialKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
