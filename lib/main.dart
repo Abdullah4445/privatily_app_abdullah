@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart'; // ✅ Needed for Material localization
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:privatily_app/sections/featuredProducts/productController.dart';
 import 'package:privatily_app/translation/app_translations.dart';
@@ -25,22 +26,26 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      translations: AppTranslations(), // custom class
-      locale: const Locale('en', 'US'), // default locale
+      title: 'LaunchCode',
+      debugShowCheckedModeBanner: false,
+      translations: AppTranslations(),
+      locale: const Locale('en', 'US'),
       fallbackLocale: const Locale('en', 'US'),
+
+      // ✅ FIXED: Provide MaterialLocalizations
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       supportedLocales: const [
         Locale('en', 'US'),
-        Locale('fr', 'FR'),
         Locale('es', 'ES'),
+        Locale('fr', 'FR'),
         Locale('ar', 'AR'),
       ],
-      // localizationsDelegates: const [
-      //   GlobalMaterialLocalizations.delegate,
-      //   GlobalWidgetsLocalizations.delegate,
-      //   GlobalCupertinoLocalizations.delegate,
-      // ],
-      debugShowCheckedModeBanner: false,
-      title: 'LaunchCode',
+
+      // ✅ Home screen
       home: const Home(),
     );
   }

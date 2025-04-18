@@ -1,8 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class ContactUsSection extends StatelessWidget {
+class ContactUsSection extends StatefulWidget {
   const ContactUsSection({super.key});
+
+  @override
+  State<ContactUsSection> createState() => _ContactUsSectionState();
+}
+
+class _ContactUsSectionState extends State<ContactUsSection> {
+  final nameC = TextEditingController();
+  final emailC = TextEditingController();
+  final ideaC = TextEditingController();
+  final notesC = TextEditingController();
+
+  Future<void> sendEmail() async {
+    const serviceId = 'service_it33gkb';
+    const templateId = 'template_m13d8vd';
+    const userId = 'F-HN-DXZHU9uQ66dD';
+
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response = await http.post(
+      url,
+      headers: {
+        'origin': 'http://localhost',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'service_id': serviceId,
+        'template_id': templateId,
+        'user_id': userId,
+        'template_params': {
+          'from_name': nameC.text,
+          'from_email': emailC.text,
+          'business_idea': ideaC.text,
+          'additional_notes': notesC.text,
+        },
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      Get.snackbar(
+        'Success',
+        'Email sent successfully!',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      nameC.clear();
+      emailC.clear();
+      ideaC.clear();
+      notesC.clear();
+    } else {
+      Get.snackbar(
+        'Error',
+        'Failed to send email',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,23 +129,42 @@ class ContactUsSection extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(height: 20),
-                                  _buildInput('contact_name'.tr),
-                                  _buildInput('contact_email'.tr),
-                                  _buildInput('contact_idea'.tr),
-                                  _buildInput('contact_notes'.tr, maxLines: 4),
+                                  _buildInput(
+                                    controller: nameC,
+                                    hint: 'contact_name'.tr,
+                                  ),
+                                  _buildInput(
+                                    controller: emailC,
+                                    hint: 'contact_email'.tr,
+                                  ),
+                                  _buildInput(
+                                    controller: ideaC,
+                                    hint: 'contact_idea'.tr,
+                                  ),
+                                  _buildInput(
+                                    controller: notesC,
+                                    hint: 'contact_notes'.tr,
+                                    maxLines: 4,
+                                  ),
                                   const SizedBox(height: 20),
                                   SizedBox(
                                     width: double.infinity,
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color(0xFF00C853),
+                                        backgroundColor: const Color(
+                                          0xFF00C853,
+                                        ),
                                         foregroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(vertical: 16),
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 16,
+                                        ),
                                         shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
                                         ),
                                       ),
-                                      onPressed: () {},
+                                      onPressed: sendEmail,
                                       child: Text('contact_button'.tr),
                                     ),
                                   ),
@@ -103,16 +178,25 @@ class ContactUsSection extends StatelessWidget {
                                 child: Stack(
                                   clipBehavior: Clip.none,
                                   children: [
-                                    Image.asset('assets/images/contact_team.png', fit: BoxFit.contain),
+                                    Image.asset(
+                                      'assets/images/contact_team.png',
+                                      fit: BoxFit.contain,
+                                    ),
                                     Positioned(
                                       top: 0,
                                       left: 0,
-                                      child: Image.asset('assets/images/banner_1.png', width: 260),
+                                      child: Image.asset(
+                                        'assets/images/banner_1.png',
+                                        width: 260,
+                                      ),
                                     ),
                                     Positioned(
                                       top: 80,
                                       left: 10,
-                                      child: Image.asset('assets/images/banner_2.png', width: 240),
+                                      child: Image.asset(
+                                        'assets/images/banner_2.png',
+                                        width: 240,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -132,16 +216,24 @@ class ContactUsSection extends StatelessWidget {
     );
   }
 
-  Widget _buildInput(String hint, {int maxLines = 1}) {
+  Widget _buildInput({
+    required TextEditingController controller,
+    required String hint,
+    int maxLines = 1,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: TextField(
+        controller: controller,
         maxLines: maxLines,
         decoration: InputDecoration(
           hintText: hint,
           filled: true,
           fillColor: const Color(0xFFF3F6FD),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 14,
+          ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,

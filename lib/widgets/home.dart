@@ -41,7 +41,6 @@ class _HomeState extends State<Home> {
   bool showSignupForm = false;
   RxString selectedLang = 'en'.obs;
 
-
   void scrollToTestimonials() {
     final RenderBox renderBox =
         _testimonialKey.currentContext!.findRenderObject() as RenderBox;
@@ -297,8 +296,7 @@ class _HomeState extends State<Home> {
                       Get.updateLocale(const Locale('ar', 'AR'));
                     }
                   },
-                )
-
+                ),
               ],
             ),
             const Gap(10),
@@ -403,7 +401,7 @@ class _HomeState extends State<Home> {
         children: [
           const Gap(60),
           Text(
-            'Ready-to-Launch Digital Assets for Immediate Impact'.tr,
+            'ready_to_launch'.tr,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize:
@@ -417,8 +415,7 @@ class _HomeState extends State<Home> {
           ),
           const Gap(20),
           Text(
-            'Leverage our expertly crafted scripts, applications, and admin panels, designed for optimal conversion and efficiency. Deploy seamlessly and start realizing your revenue potential faster.'
-                .tr,
+            'leverage_scripts'.tr,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: screenWidth < 600 ? 14 : 16,
