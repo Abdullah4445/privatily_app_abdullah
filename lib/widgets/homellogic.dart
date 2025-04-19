@@ -29,6 +29,9 @@ class HomeLogic extends GetxController {
       final guestId = auth.currentUser!.uid;
       final adminId = fixedAdminId;
 
+      // Create guest user in Firestore
+      await _createGuestUser(guestId);
+
       // Consistent chatRoomId
       String chatRoomId = guestId.hashCode <= adminId.hashCode
           ? "$guestId-$adminId"
@@ -53,6 +56,27 @@ class HomeLogic extends GetxController {
       showChatScreen.value = true;
     } catch (e) {
       Get.snackbar("Error", "❌ Failed to create chat room: $e");
+    }
+  }
+
+  // Create guest user in Firestore under "Guests" collection
+  Future<void> _createGuestUser(String guestId) async {
+    try {
+      DocumentSnapshot guestDoc = await firestore.collection("Guests").doc(guestId).get();
+
+      // If the guest user does not exist, create a new document
+      if (!guestDoc.exists) {
+        await firestore.collection("Guests").doc(guestId).set({
+          'name': 'Guest $guestId',  // You can replace this with the actual guest name
+          'id': guestId,
+          'createdAt': FieldValue.serverTimestamp(),  // Use the server timestamp
+        });
+        print("Guest user created with ID: $guestId");
+      } else {
+        print("Guest user already exists.");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "❌ Failed to create guest user: $e");
     }
   }
 

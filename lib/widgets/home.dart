@@ -114,40 +114,42 @@ class _HomeState extends State<Home> {
             ),
           );
         },
-        child: showChatBox
-            ? Material(
-          key: const ValueKey('chatbox'),
-          borderRadius: BorderRadius.circular(20),
-          elevation: 8,
-          color: Colors.transparent,
-          child: Container(
-            width: 360,
-            height: 480,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: const [
-                BoxShadow(color: Colors.black26, blurRadius: 25),
-              ],
-            ),
-            child: Obx(() => logic.showChatScreen.value
-                ? ChattingPage(
-              chatRoomId: logic.chatRoomIdForPopup.value,
-              receiverId: logic.receiverIdForPopup.value,
-              receiverName: logic.receiverNameForPopup.value,
-            )
-                : const Center(child: CircularProgressIndicator())),
-          ),
-        )
-            : const SizedBox.shrink(),
+        child:
+            showChatBox
+                ? Material(
+                  key: const ValueKey('chatbox'),
+                  borderRadius: BorderRadius.circular(20),
+                  elevation: 8,
+                  color: Colors.transparent,
+                  child: Container(
+                    width: 360,
+                    height: 480,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black26, blurRadius: 25),
+                      ],
+                    ),
+                    child: Obx(
+                      () =>
+                          logic.showChatScreen.value
+                              ? ChattingPage(
+                                chatRoomId: logic.chatRoomIdForPopup.value,
+                                receiverId: logic.receiverIdForPopup.value,
+                                receiverName: logic.receiverNameForPopup.value,
+                              )
+                              : const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                    ),
+                  ),
+                )
+                : const SizedBox.shrink(),
       ),
     );
   }
-
-
-
-
 
   Widget buildChatButtons() {
     return Center(
@@ -215,7 +217,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
 
   Widget _buildLaunchCodeHero(BuildContext context) {
     return Container(
