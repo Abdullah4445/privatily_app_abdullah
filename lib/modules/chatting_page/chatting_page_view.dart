@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../models/messages.dart';
+import '../../models/messages.dart';
 import 'chatting_page_logic.dart';
 
 class ChattingPage extends StatefulWidget {

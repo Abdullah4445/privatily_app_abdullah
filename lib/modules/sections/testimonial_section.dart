@@ -16,19 +16,19 @@ class _TestimonialSectionState extends State<TestimonialSection>
 
   final List<Map<String, String>> testimonials = [
     {
-      'message': 'testimonial_msg_1'.tr,
-      'name': 'testimonial_name_1'.tr,
-      'country': 'testimonial_country_1'.tr,
+      'message': 'testimonial_msg_1',
+      'name': 'testimonial_name_1',
+      'country': 'testimonial_country_1',
     },
     {
-      'message': 'testimonial_msg_2'.tr,
-      'name': 'testimonial_name_2'.tr,
-      'country': 'testimonial_country_2'.tr,
+      'message': 'testimonial_msg_2',
+      'name': 'testimonial_name_2',
+      'country': 'testimonial_country_2',
     },
     {
-      'message': 'testimonial_msg_3'.tr,
-      'name': 'testimonial_name_3'.tr,
-      'country': 'testimonial_country_3'.tr,
+      'message': 'testimonial_msg_3',
+      'name': 'testimonial_name_3',
+      'country': 'testimonial_country_3',
     },
   ];
 
@@ -178,7 +178,7 @@ class _TestimonialCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            message,
+            message.tr,
             style: const TextStyle(
               fontSize: 15,
               color: Colors.black87,
@@ -187,7 +187,7 @@ class _TestimonialCard extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Text(
-            name,
+            name.tr,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14,
@@ -196,7 +196,7 @@ class _TestimonialCard extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            country,
+            country.tr,
             style: const TextStyle(
               fontSize: 13,
               color: Colors.black54,

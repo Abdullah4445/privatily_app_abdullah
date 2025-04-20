@@ -14,95 +14,95 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
   final Map<String, Map<String, dynamic>> pricingData = {
     'us': {
       'basic': {
-        'price': '\$15/hour',
-        'description': 'Basic support during business hours (9:00 AM to 5:00 PM EST).',
+        'price': 'us_basic_price',
+        'description': 'us_basic_description',
         'features': [
-          '5 Days Support (9:00 AM to 5:00 PM EST)',
-          'Standard script deployment',
-          'Email support during business hours',
-          'Basic cloud configuration'
-        ]
+          'us_basic_feature1',
+          'us_basic_feature2',
+          'us_basic_feature3',
+          'us_basic_feature4',
+        ],
       },
       'premium': {
-        'price': '\$60/hour',
-        'description': 'Priority support 24/7 with enhanced response times.',
+        'price': 'us_premium_price',
+        'description': 'us_premium_description',
         'features': [
-          '24/7 Priority Support (All day, every day)',
-          'Expedited script deployment',
-          'Phone, chat, and email support anytime',
-          'Advanced cloud configuration and optimization',
-          'Faster deployment to app platforms with dedicated assistance'
-        ]
-      }
+          'us_premium_feature1',
+          'us_premium_feature2',
+          'us_premium_feature3',
+          'us_premium_feature4',
+          'us_premium_feature5',
+        ],
+      },
     },
     'uk': {
       'basic': {
-        'price': '£12/hour',
-        'description': 'Affordable support during standard business hours (9:00 AM to 5:00 PM GMT).',
+        'price': 'uk_basic_price',
+        'description': 'uk_basic_description',
         'features': [
-          '5 Days Support (9:00 AM to 5:00 PM GMT)',
-          'Standard script deployment',
-          'Email support during business hours',
-          'Basic web hosting setup'
-        ]
+          'uk_basic_feature1',
+          'uk_basic_feature2',
+          'uk_basic_feature3',
+          'uk_basic_feature4',
+        ],
       },
       'premium': {
-        'price': '£50/hour',
-        'description': 'Comprehensive 24/7 support with priority handling.',
+        'price': 'uk_premium_price',
+        'description': 'uk_premium_description',
         'features': [
-          '24/7 Comprehensive Support (All day, every day)',
-          'Priority script deployment and integration',
-          'Phone, chat, and email support around the clock',
-          'Advanced web hosting and domain management',
-          'Accelerated deployment to app stores with expert guidance'
-        ]
-      }
+          'uk_premium_feature1',
+          'uk_premium_feature2',
+          'uk_premium_feature3',
+          'uk_premium_feature4',
+          'uk_premium_feature5',
+        ],
+      },
     },
     'canada': {
       'basic': {
-        'price': 'C\$18/hour',
-        'description': 'Reliable support during standard business hours (9:00 AM to 5:00 PM EST).',
+        'price': 'canada_basic_price',
+        'description': 'canada_basic_description',
         'features': [
-          '5 Days Support (9:00 AM to 5:00 PM EST)',
-          'Standard application deployment',
-          'Email support during business hours',
-          'Basic server setup'
-        ]
+          'canada_basic_feature1',
+          'canada_basic_feature2',
+          'canada_basic_feature3',
+          'canada_basic_feature4',
+        ],
       },
       'premium': {
-        'price': 'C\$65/hour',
-        'description': 'Dedicated 24/7 support with rapid response and resolution.',
+        'price': 'canada_premium_price',
+        'description': 'canada_premium_description',
         'features': [
-          '24/7 Dedicated Support (All day, every day)',
-          'Priority application deployment and configuration',
-          'Phone, chat, and email support at any time',
-          'Premium server configuration and maintenance',
-          'Quicker deployment to app marketplaces with expert assistance'
-        ]
-      }
+          'canada_premium_feature1',
+          'canada_premium_feature2',
+          'canada_premium_feature3',
+          'canada_premium_feature4',
+          'canada_premium_feature5',
+        ],
+      },
     },
     'world': {
       'basic': {
-        'price': '\$13/hour',
-        'description': 'Global basic support during standard business hours (aligned with your timezone).',
+        'price': 'world_basic_price',
+        'description': 'world_basic_description',
         'features': [
-          '5 Days Support (aligned with your timezone, 9:00 AM to 5:00 PM)',
-          'Standard script and application deployment',
-          'Email support during your business hours',
-          'Basic hosting and domain guidance'
-        ]
+          'world_basic_feature1',
+          'world_basic_feature2',
+          'world_basic_feature3',
+          'world_basic_feature4',
+        ],
       },
       'premium': {
-        'price': '\$55/hour',
-        'description': 'Worldwide priority support 24/7 for critical issues.',
+        'price': 'world_premium_price',
+        'description': 'world_premium_description',
         'features': [
-          '24/7 Global Priority Support (All day, every day)',
-          'Expedited script and application deployment',
-          'Phone, chat, and email support anytime, anywhere',
-          'Premium hosting and domain management globally',
-          'Faster deployment to global app stores with specialized support'
-        ]
-      }
+          'world_premium_feature1',
+          'world_premium_feature2',
+          'world_premium_feature3',
+          'world_premium_feature4',
+          'world_premium_feature5',
+        ],
+      },
     },
   };
 
@@ -213,7 +213,7 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
           const SizedBox(height: 12),
           RichText(
             text: TextSpan(
-              text: data['price'],
+              text: '${data['price']}'.tr,
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
@@ -233,7 +233,7 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
           ),
           const SizedBox(height: 6),
           Text(
-            data['description'],
+            '${data['description']}'.tr,
             style: TextStyle(
               color: isPremium ? Colors.white70 : Colors.black54,
               fontSize: 13,
@@ -267,7 +267,7 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        data['features'][index],
+                        '${data['features'][index]}'.tr,
                         style: TextStyle(
                           color: isPremium ? Colors.white : Colors.black87,
                           fontSize: 14,

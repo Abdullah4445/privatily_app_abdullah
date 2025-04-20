@@ -1,23 +1,28 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:privatily_app/sections/premium_bonuses_section.dart';
 import 'package:privatily_app/widgets/translationsController.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import '../animations/animated_on_scrool.dart';
-import '../chat_page/view.dart';
-import '../preview/privatily_preview_image.dart';
-import '../sections/FAQ_section.dart';
-import '../sections/FooterSection.dart';
-import '../sections/contact_us_seaction.dart';
-import '../sections/featuredProducts/featuredProducts.dart';
-import '../sections/home_stats_section.dart';
-import '../sections/how_much_time_section.dart';
-import '../sections/launch_any_whered_ection.dart';
-import '../sections/our_mission_section.dart';
-import '../sections/testimonial_section.dart';
-import '../sections/transparent_pricing_seaction.dart';
-import '../sections/why_incorporate_us_section.dart';
-import '../sections/why_privatily_section.dart';
+import '../modules/cart/cart_logic.dart';
+import '../modules/cart/cart_view.dart';
+import '../modules/chat_page/view.dart';
+import '../modules/preview/privatily_preview_image.dart';
+import '../modules/sections/FAQ_section.dart';
+import '../modules/sections/FooterSection.dart';
+import '../modules/sections/contact_us_seaction.dart';
+import '../modules/sections/featuredProducts/featuredProducts.dart';
+import '../modules/sections/home_stats_section.dart';
+import '../modules/sections/how_much_time_section.dart';
+import '../modules/sections/launch_any_whered_ection.dart';
+import '../modules/sections/our_mission_section.dart';
+import '../modules/sections/premium_bonuses_section.dart';
+import '../modules/sections/testimonial_section.dart';
+import '../modules/sections/transparent_pricing_seaction.dart';
+import '../modules/sections/why_incorporate_us_section.dart';
+import '../modules/sections/why_privatily_section.dart';
 import 'homellogic.dart';
 
 class Home extends StatefulWidget {
@@ -197,21 +202,17 @@ class _HomeState extends State<Home> {
   }
 
   Widget floatingMessageButton() {
-    return Positioned(
-      bottom: 24,
-      right: 24,
-      child: FloatingActionButton(
-        backgroundColor: Colors.deepPurple,
-        onPressed: () async {
-          setState(() => showChatBox = !showChatBox);
-          if (showChatBox) {
-            await logic.initGuestChat();
-          }
-        },
-        child: Icon(
-          showChatBox ? Icons.close : Icons.chat_bubble_outline,
-          color: Colors.white,
-        ),
+    return FloatingActionButton(
+      backgroundColor: Colors.deepPurple,
+      onPressed: () async {
+        setState(() => showChatBox = !showChatBox);
+        if (showChatBox) {
+          await logic.initGuestChat();
+        }
+      },
+      child: Icon(
+        showChatBox ? Icons.close : Icons.chat_bubble_outline,
+        color: Colors.white,
       ),
     );
   }
@@ -316,6 +317,8 @@ class _HomeState extends State<Home> {
   }
 
   final GlobalKey _sectionFiveKey = GlobalKey();
+  final GlobalKey _sectionWhyUs = GlobalKey();
+  final GlobalKey _sectionContactUs = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -345,92 +348,134 @@ class _HomeState extends State<Home> {
               // // headerExpandedHeight:   0.8,
               // headerExpandedHeight: kIsWeb ? 0.7 : 0.8,
               appBar: AppBar(
-                title: Row(
-                  children: [
-                    Image.asset("assets/images/logo_white.png", height: 120),
-                    Gap(30),
-                    TextButton(
-                      child: Text('FAQ'.tr),
-                      onPressed: () {
-                        // Animate to the FAQ section
-                        scrollToSection(_sectionFiveKey);
-                      },
-                    ),
-                  ],
-                ),
-                actions: [
-                  Row(
-                    children: [
-                      Container(
-                        // margin: const EdgeInsets.only(right: 18.0),
-                        // padding: const EdgeInsets.only(left: 12, right: 5.0),
-                        // height: 50,
-                        width: 100,
+                title:
+                    Image.asset("assets/images/logo_white.png", height: 120,),
 
-                        decoration: BoxDecoration(
-                          // border: Border.all(color: Colors.grey[300]!, width: 1.0),
-                          borderRadius: BorderRadius.circular(8.0),
-                          color: Colors.transparent,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: DecoratedBox(
-                            // Using DecoratedBox to style the dropdown's background and potentially influence its container
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              // Set the dropdown background color here as well
-                              borderRadius: BorderRadius.circular(
-                                12.0,
-                              ), // Try adding rounded corners here
-                            ),
-                            child: DropdownButton<String>(
-                              focusColor: Colors.transparent,
-                              value: selectedLang.value,
-                              underline: Container(),
-                              items: const [
-                                DropdownMenuItem(
-                                  value: 'en',
-                                  child: Text('English'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 'fr',
-                                  child: Text('Français'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 'es',
-                                  child: Text('Español'),
-                                ),
-                                DropdownMenuItem(
-                                  value: 'ar',
-                                  child: Text('عربي'),
-                                ),
-                              ],
-                              onChanged: (value) {
-                                selectedLang.value = value!;
-                                var myCont = Get.put(TranslationController());
-                                if (value == 'en') {
-                                  myCont.changeLanguage('en');
-                                } else if (value == 'fr') {
-                                  myCont.changeLanguage('fr');
-                                } else if (value == 'es') {
-                                  myCont.changeLanguage('es');
-                                } else if (value == 'ar') {
-                                  myCont.changeLanguage('ar');
-                                }
-                              },
-                              icon: Icon(Icons.translate),
-                              // Add an icon to indicate it's a dropdown
-                              isExpanded: true,
-                              // Allows the dropdown to take the full width of its parent
-                              style: const TextStyle(
-                                color: Colors.black,
-                              ), // Style the text inside the button
+
+
+                backgroundColor: Colors.transparent,
+                actions: [
+                  !ResponsiveBreakpoints.of(context).largerThan(MOBILE) ? Container() :TextButton(
+                    child: Text('Why Us?'.tr),
+                    onPressed: () {
+                      // Animate to the FAQ section
+                      scrollToSection(_sectionWhyUs);
+                    },
+                  ),
+                  TextButton(
+                    child: Text('Contact Us!'.tr),
+                    onPressed: () {
+                      // Animate to the FAQ section
+                      scrollToSection(_sectionContactUs);
+                    },
+                  ),
+                  !ResponsiveBreakpoints.of(context).largerThan(MOBILE)?Container():TextButton(
+                    child: Text('FAQ'.tr),
+                    onPressed: () {
+                      // Animate to the FAQ section
+                      scrollToSection(_sectionFiveKey);
+                    },
+                  ),
+
+                  Gap(10),
+                  Obx(() { // Wrap with Obx to make it reactive
+                    final cartController = Get.find<CartLogic>(); // Find controller inside Obx scope if needed
+                    return Badge(
+                      label: Text(cartController.itemCount.toString()), // Use controller's getter
+                      isLabelVisible: cartController.itemCount > 0,
+                      child: IconButton(
+                        icon: const Icon(Icons.shopping_cart),
+                        onPressed: () {
+                          Get.toNamed(CartPage.routeName); // GetX navigation
+                        },
+                      ),
+                    );
+                  }),
+                  Container(
+                    height: 30,
+                    padding: EdgeInsets.only(left: 10, right: 10),
+                    margin: EdgeInsets.only( right: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(
+                        color: Colors.grey.shade200,
+                      )
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          // margin: const EdgeInsets.only(right: 18.0),
+                          // padding: const EdgeInsets.only(left: 12, right: 5.0),
+                          // height: 50,
+                          width: 80,
+
+                          decoration: BoxDecoration(
+                            // border: Border.all(color: Colors.grey[300]!, width: 1.0),
+                            borderRadius: BorderRadius.circular(8.0),
+                            color: Colors.transparent,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: DecoratedBox(
+                              // Using DecoratedBox to style the dropdown's background and potentially influence its container
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                // Set the dropdown background color here as well
+                                borderRadius: BorderRadius.circular(
+                                  12.0,
+                                ), // Try adding rounded corners here
+                              ),
+                              child: DropdownButton<String>(
+                                focusColor: Colors.transparent,
+                                value: selectedLang.value,
+                                underline: Container(),
+                                items: const [
+                                  DropdownMenuItem(
+                                    value: 'en',
+                                    child: Text('English'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'fr',
+                                    child: Text('Français'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'es',
+                                    child: Text('Español'),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: 'ar',
+                                    child: Text('عربي'),
+                                  ),
+                                ],
+                                onChanged: (value) {
+                                  selectedLang.value = value!;
+                                  var myCont = Get.put(TranslationController());
+                                  if (value == 'en') {
+                                    myCont.changeLanguage('en');
+                                  } else if (value == 'fr') {
+                                    myCont.changeLanguage('fr');
+                                  } else if (value == 'es') {
+                                    myCont.changeLanguage('es');
+                                  } else if (value == 'ar') {
+                                    myCont.changeLanguage('ar');
+                                  }
+                                },
+                                icon: Icon(Icons.arrow_drop_down_outlined),
+                                // Add an icon to indicate it's a dropdown
+                                isExpanded: true,
+                                // Allows the dropdown to take the full width of its parent
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                ), // Style the text inside the button
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+
                 ],
               ),
               // headerWidget: _buildLaunchCodeHero(context),
@@ -480,7 +525,7 @@ class _HomeState extends State<Home> {
 
           AnimatedOnScroll(
             child: Text(
-              'Ready-to-Launch Digital Assets for Immediate Impact'.tr,
+              'ready_to_launch'.tr,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize:
@@ -496,7 +541,7 @@ class _HomeState extends State<Home> {
           const Gap(20),
           AnimatedOnScroll(
             child: Text(
-              'Leverage our expertly crafted scripts, applications, and admin panels, designed for optimal conversion and efficiency. Deploy seamlessly and start realizing your revenue potential faster.'
+              'leverageOur'.tr
                   .tr,
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -511,7 +556,7 @@ class _HomeState extends State<Home> {
           const Gap(30),
           const AnimatedOnScroll(child: PrivatilyPreviewImage()),
           const AnimatedOnScroll(child: HomeStatsSection()),
-          const AnimatedOnScroll(child: WhyLaunchCodeSection()),
+         AnimatedOnScroll(child: WhyLaunchCodeSection(key: _sectionWhyUs,)),
           AnimatedOnScroll(child: PremiumBonusSection()),
           const AnimatedOnScroll(child: HowMuchTimeSection()),
           const AnimatedOnScroll(child: WhyLaunchCodeSection2()),
@@ -520,7 +565,7 @@ class _HomeState extends State<Home> {
           const AnimatedOnScroll(child: OurMissionSection()),
           AnimatedOnScroll(child: FaqSection(key: _sectionFiveKey)),
           const AnimatedOnScroll(child: LaunchAnywhereSection()),
-          const AnimatedOnScroll(child: ContactUsSection()),
+            AnimatedOnScroll(child: ContactUsSection(key: _sectionContactUs,)),
           const AnimatedOnScroll(child: FooterSection()),
         ],
       ),
