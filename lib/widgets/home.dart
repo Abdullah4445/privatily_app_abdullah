@@ -138,16 +138,13 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                     child: Obx(
-                      () =>
-                          logic.showChatScreen.value
-                              ? ChattingPage(
-                                chatRoomId: logic.chatRoomIdForPopup.value,
-                                receiverId: logic.receiverIdForPopup.value,
-                                receiverName: logic.receiverNameForPopup.value,
-                              )
-                              : const Center(
-                                child: CircularProgressIndicator(),
-                              ),
+                          () => logic.showChatScreen.value
+                          ? ChattingPage(
+                        chatRoomId: logic.chatRoomIdForPopup.value,
+                        receiverId: logic.receiverIdForPopup.value,
+                        receiverName: logic.receiverNameForPopup.value,
+                      )
+                          : const Center(child: CircularProgressIndicator()),
                     ),
                   ),
                 )
@@ -209,7 +206,7 @@ class _HomeState extends State<Home> {
       onPressed: () async {
         setState(() => showChatBox = !showChatBox);
         if (showChatBox) {
-          await logic.initGuestChat();
+          await logic.initGuestChat(); // 💥 This will create Guests + ChatRoom
         }
       },
       child: Icon(
@@ -218,6 +215,7 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
 
   Widget _buildLaunchCodeHero(BuildContext context) {
     return Container(

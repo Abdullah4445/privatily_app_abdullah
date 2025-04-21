@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
+import '../../models/students.dart';
 import '../chat_page/view.dart';
-import '../models/students.dart';
 
 class HomeLogic extends GetxController {
   List<Students> getStudents = [];
@@ -17,7 +17,9 @@ class HomeLogic extends GetxController {
   Future<List<Students>> getUserOnFirebase() async {
     try {
       QuerySnapshot data = await firestore.collection("Students").get();
+      print("My Students length is: ${data.docs.length}");
       for (var element in data.docs) {
+
         Students students =
         Students.fromJson(element.data() as Map<String, dynamic>);
         getStudents.add(students);

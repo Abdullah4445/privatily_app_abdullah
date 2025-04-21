@@ -2,25 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
-
 class HomeLogic extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  // Admin Config
   final String fixedAdminId = 'bnS6fNg9srhKktTSufF2AA9tdQZ2';
   final String adminName = 'Admin';
 
-  // Chat Popup Reactive States
   var showChatScreen = false.obs;
   var chatRoomIdForPopup = ''.obs;
   var receiverIdForPopup = ''.obs;
   var receiverNameForPopup = ''.obs;
 
-  // 🔁 Initialize chat between guest & admin
+  // 🔁 Called from Floating Button
   Future<void> initGuestChat() async {
     try {
-      // Anonymous login if not already
       if (auth.currentUser == null) {
         await auth.signInAnonymously();
       }
@@ -28,18 +24,16 @@ class HomeLogic extends GetxController {
       final guestId = auth.currentUser!.uid;
       final adminId = fixedAdminId;
 
-      // Create guest user in Firestore
+      // ✅ Create Guest in Firestore
       await _createGuestUser(guestId);
 
-      // Consistent chatRoomId
+      // ✅ Generate chatRoomId
       String chatRoomId = guestId.hashCode <= adminId.hashCode
           ? "$guestId-$adminId"
           : "$adminId-$guestId";
 
-      // Create chatRoom if not exists
-      DocumentSnapshot chatRoomDoc =
-      await firestore.collection("ChatsRoomId").doc(chatRoomId).get();
-
+      // ✅ Create chatroom if not exists
+      DocumentSnapshot chatRoomDoc = await firestore.collection("ChatsRoomId").doc(chatRoomId).get();
       if (!chatRoomDoc.exists) {
         await firestore.collection("ChatsRoomId").doc(chatRoomId).set({
           'chatRoomId': chatRoomId,
@@ -48,7 +42,7 @@ class HomeLogic extends GetxController {
         });
       }
 
-      // Set reactive state for popup
+      // ✅ Update state
       chatRoomIdForPopup.value = chatRoomId;
       receiverIdForPopup.value = adminId;
       receiverNameForPopup.value = adminName;
@@ -58,24 +52,23 @@ class HomeLogic extends GetxController {
     }
   }
 
-  // Create guest user in Firestore under "Guests" collection
+  // ✅ Create "Guests" Collection Entry
   Future<void> _createGuestUser(String guestId) async {
     try {
       DocumentSnapshot guestDoc = await firestore.collection("Guests").doc(guestId).get();
 
-      // If the guest user does not exist, create a new document
       if (!guestDoc.exists) {
         await firestore.collection("Guests").doc(guestId).set({
-          'name': 'Guest $guestId',  // You can replace this with the actual guest name
+          'name': 'Guest $guestId',
           'id': guestId,
-          'createdAt': FieldValue.serverTimestamp(),  // Use the server timestamp
+          'createdAt': FieldValue.serverTimestamp(),
         });
-        print("Guest user created with ID: $guestId");
+        print("✅ Guest created: $guestId");
       } else {
-        print("Guest user already exists.");
+        print("ℹ️ Guest already exists: $guestId");
       }
     } catch (e) {
-      Get.snackbar("Error", "❌ Failed to create guest user: $e");
+      Get.snackbar("Error", "❌ Failed to create guest: $e");
     }
   }
 
