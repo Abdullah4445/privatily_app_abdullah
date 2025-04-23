@@ -58,6 +58,7 @@ dependencies:
   flutter_native_splash: ^2.4.6
   cached_network_image: ^3.4.1
   shimmer: ^3.0.0
+  seo: ^0.0.10
 
 dev_dependencies:
   flutter_test:

@@ -9,18 +9,26 @@ import 'modules/cart/cart_view.dart';
 import 'modules/checkout/checkout_view.dart';
 import 'modules/project_details/project_details_view.dart';
 import 'modules/sections/featuredProducts/productController.dart';
-import 'package:flutter_localization/flutter_localization.dart';
 import 'widgets/home.dart';
+
+// SEO imports for Flutter Web
+import 'package:seo/seo.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Use clean URLs (no hash) for SEO-friendly paths
+  // setUrlStrategy(PathUrlStrategy());
+  usePathUrlStrategy();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // ✅ Register controllers before runApp
-  Get.put(ProductsController()); // 🔥 Makes ProductsController globally available
+  // Register controllers before runApp
+  Get.put(ProductsController());
 
+  // Launch the app
   runApp(const MyApp());
 }
 
@@ -29,50 +37,44 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'LaunchCode',
-      debugShowCheckedModeBanner: false,
-      translations: AppTranslations(),
-      locale: const Locale('en', 'US'),
-      fallbackLocale: const Locale('en', 'US'),
-      initialRoute: '/', // Or your home route name
-      getPages: [ // Define routes for Get.toNamed
-        GetPage(name: '/', page: () => const Home()),
-        GetPage(name: CartPage.routeName, page: () => const CartPage()),
-        GetPage(name: CheckoutPage.routeName, page: () => const CheckoutPage()),
-        GetPage(
-          name: '/product-detail/:projectId', // <--- ADD Parameter placeholder here
-          page: () => const ProjectDetailsPage(), // The view remains the same
-          // Optional: Define bindings if you prefer over Get.put/find in view/logic
-          // binding: ProjectDetailsBinding(),
-        ),
-        // Add other GetPage entries
-      ],
-
-      // ✅ FIXED: Provide MaterialLocalizations
-      // localizationsDelegates: [
-      //   GlobalMaterialLocalizations.delegate,
-      //   GlobalWidgetsLocalizations.delegate,
-      //   GlobalCupertinoLocalizations.delegate,
+    // Wrap the entire app in SeoController within a BuildContext
+    return SeoController(
+      enabled: true,
+      // Provide default meta tags
+      // tags: [
+      //   MetaTag(name: 'viewport', content: 'width=device-width, initial-scale=1'),
+      //   MetaTag(charset: 'utf-8'),
       // ],
-      // supportedLocales: const [
-      //   Locale('en', 'US'),
-      //   Locale('es', 'ES'),
-      //   Locale('fr', 'FR'),
-      //   Locale('ar', 'AR'),
-      // ],
-
-      // ✅ Home screen
-      builder: (context, child) => ResponsiveBreakpoints.builder(
-        child: child!,
-        breakpoints: [
-          const Breakpoint(start: 0, end: 520, name: MOBILE),
-          const Breakpoint(start: 451, end: 800, name: TABLET),
-          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
-          const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+      // Pass the context to generate <head> and <body> tree
+      tree: WidgetTree(context: context),
+      child: GetMaterialApp(
+        title: 'LaunchCode',
+        debugShowCheckedModeBanner: false,
+        translations: AppTranslations(),
+        locale: const Locale('en', 'US'),
+        fallbackLocale: const Locale('en', 'US'),
+        initialRoute: '/',
+        getPages: [
+          GetPage(name: '/', page: () => const Home()),
+          GetPage(name: CartPage.routeName, page: () => const CartPage()),
+          GetPage(name: CheckoutPage.routeName, page: () => const CheckoutPage()),
+          GetPage(
+            name: '/product-detail/:projectId',
+            page: () => const ProjectDetailsPage(),
+          ),
         ],
+        builder: (context, child) => ResponsiveBreakpoints.builder(
+          child: child!,
+          breakpoints: [
+            const Breakpoint(start: 0, end: 520, name: MOBILE),
+            const Breakpoint(start: 451, end: 800, name: TABLET),
+            const Breakpoint(start: 801, end: 1920, name: DESKTOP),
+            const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+          ],
+        ),
+        // Remove `home` when using initialRoute
+        // home: const Home(),
       ),
-      home: const Home(),
     );
   }
 }

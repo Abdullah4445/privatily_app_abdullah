@@ -37,7 +37,7 @@ class ChattingPageLogic extends GetxController {
         .orderBy('timestamp', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs
-        .map((doc) => Messages.fromJson(doc.data() as Map<String, dynamic>, doc.id))
+        .map((doc) => Messages.fromJson(doc.data(), doc.id))
         .toList());
   }
 

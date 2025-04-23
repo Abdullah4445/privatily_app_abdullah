@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:seo/seo.dart'; // SEO package for semantic text and images
 
 class OurMissionSection extends StatelessWidget {
   const OurMissionSection({super.key});
@@ -32,7 +33,7 @@ class OurMissionSection extends StatelessWidget {
                     const Gap(60),
                     Expanded(flex: 1, child: _textPart()),
                   ],
-                )
+                ),
             ],
           ),
         );
@@ -44,10 +45,14 @@ class OurMissionSection extends StatelessWidget {
     return Center(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: Image.asset(
-          'assets/images/girl_mission_image.png',
-          width: 420,
-          fit: BoxFit.contain,
+        child: Seo.image(
+          src: 'assets/images/girl_mission_image.png',
+          alt: 'Illustration of our mission – empowering developers',
+          child: Image.asset(
+            'assets/images/girl_mission_image.png',
+            width: 420,
+            fit: BoxFit.contain,
+          ),
         ),
       ),
     );
@@ -57,31 +62,37 @@ class OurMissionSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        RichText(
-          text: TextSpan(
-            text: 'mission_heading_1'.tr,
-            style: const TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-            children: [
-              TextSpan(
-                text: 'mission_heading_2'.tr,
-                style: const TextStyle(
-                  color: Color(0xFF00C853),
+        Seo.text(
+          text: '${'mission_heading_1'.tr} ${'mission_heading_2'.tr}',
+          style: TextTagStyle.h2,
+          child: RichText(
+            text: TextSpan(
+              text: 'mission_heading_1'.tr,
+              style: const TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+              children: [
+                TextSpan(
+                  text: ' mission_heading_2'.tr,
+                  style: const TextStyle(color: Color(0xFF00C853)),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
         ),
         const Gap(20),
-        Text(
-          'mission_description'.tr,
-          style: const TextStyle(
-            fontSize: 16,
-            height: 1.7,
-            color: Colors.black87,
+        Seo.text(
+          text: 'mission_description'.tr,
+          style: TextTagStyle.p,
+          child: Text(
+            'mission_description'.tr,
+            style: const TextStyle(
+              fontSize: 16,
+              height: 1.7,
+              color: Colors.black87,
+            ),
           ),
         ),
       ],

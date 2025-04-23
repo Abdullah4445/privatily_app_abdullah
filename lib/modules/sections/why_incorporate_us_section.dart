@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:seo/seo.dart'; // SEO package for semantic text
 
+/// Secondary "Why LaunchCode" section with SEO semantics
 class WhyLaunchCodeSection2 extends StatelessWidget {
   const WhyLaunchCodeSection2({super.key});
 
@@ -15,31 +17,31 @@ class WhyLaunchCodeSection2 extends StatelessWidget {
         gradient: RadialGradient(
           center: Alignment.topCenter,
           radius: 2,
-          colors: [
-            Color(0xFFF2F7FF),
-            Color(0xFFFFFFFF),
-          ],
+          colors: [Color(0xFFF2F7FF), Color(0xFFFFFFFF)],
         ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text.rich(
-            TextSpan(
-              text: 'why_choose'.tr,
-              style: const TextStyle(
-                fontSize: 34,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-              children: [
-                TextSpan(
-                  text: ' LaunchCode',
-                  style: const TextStyle(
-                    color: Color(0xFF5B3DF4),
-                  ),
+          // Heading wrapped in SEO-enhanced h2
+          Seo.text(
+            text: '${'why_choose'.tr} LaunchCode',
+            style: TextTagStyle.h2,
+            child: Text.rich(
+              TextSpan(
+                text: 'why_choose'.tr,
+                style: const TextStyle(
+                  fontSize: 34,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
-              ],
+                children: [
+                  TextSpan(
+                    text: ' LaunchCode',
+                    style: const TextStyle(color: Color(0xFF5B3DF4)),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 50),
@@ -47,7 +49,7 @@ class WhyLaunchCodeSection2 extends StatelessWidget {
             alignment: WrapAlignment.center,
             spacing: 30,
             runSpacing: 30,
-            children: const [
+            children: [
               _FeatureCard(
                 icon: Icons.apps_outlined,
                 title: 'select_script',
@@ -66,14 +68,19 @@ class WhyLaunchCodeSection2 extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 40),
-          Text(
-            'trusted_text'.tr,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-              height: 1.6,
+          // Trust statement as SEO-enhanced paragraph
+          Seo.text(
+            text: 'trusted_text'.tr,
+            style: TextTagStyle.p,
+            child: Text(
+              'trusted_text'.tr,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+                height: 1.6,
+              ),
             ),
           ),
         ],
@@ -137,20 +144,30 @@ class _FeatureCardState extends State<_FeatureCard> {
               ),
             ),
             const SizedBox(height: 18),
-            Text(
-              widget.title.tr,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+            // Feature title as SEO-enhanced h3
+            Seo.text(
+              text: widget.title.tr,
+              style: TextTagStyle.h3,
+              child: Text(
+                widget.title.tr,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
             ),
             const SizedBox(height: 10),
-            Text(
-              widget.description.tr,
-              style: const TextStyle(
-                fontSize: 15,
-                color: Colors.black54,
+            // Description as SEO-enhanced paragraph
+            Seo.text(
+              text: widget.description.tr,
+              style: TextTagStyle.p,
+              child: Text(
+                widget.description.tr,
+                style: const TextStyle(
+                  fontSize: 15,
+                  color: Colors.black54,
+                ),
               ),
             ),
           ],

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:seo/seo.dart'; // SEO package for semantic text
 
+/// Transparent Pricing section with full region data and SEO semantics
 class TransparentPricingSection extends StatefulWidget {
   const TransparentPricingSection({super.key});
 
@@ -108,27 +110,36 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
 
   @override
   Widget build(BuildContext context) {
-    print("selectedCountry $selectedCountry");
-    final selected = pricingData[selectedCountry];
+    final selected = pricingData[selectedCountry]!;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text.rich(
-            TextSpan(
-              text: 'transparent'.tr,
-              style: const TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
-              children: [
-                TextSpan(
-                  text: 'pricing'.tr,
-                  style: const TextStyle(color: Colors.green),
-                ),
-              ],
+          // Section title as SEO-enhanced h2
+          Seo.text(
+            text: '${'transparent'.tr} ${'pricing'.tr}',
+            style: TextTagStyle.h2,
+            child: Text.rich(
+              TextSpan(
+                text: 'transparent'.tr,
+                style: const TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
+                children: [
+                  TextSpan(
+                    text: ' ${'pricing'.tr}',
+                    style: const TextStyle(color: Colors.green),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 10),
-          Text('where_live'.tr),
+          // Country toggle label as SEO-enhanced p
+          Seo.text(
+            text: 'where_live'.tr,
+            style: TextTagStyle.p,
+            child: Text('where_live'.tr),
+          ),
           const SizedBox(height: 12),
           ToggleButtons(
             borderRadius: BorderRadius.circular(20),
@@ -136,9 +147,11 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
               selectedCountry == 'us',
               selectedCountry == 'uk',
               selectedCountry == 'canada',
-              selectedCountry == 'world'
+              selectedCountry == 'world',
             ],
-            onPressed: (index) => setState(() => selectedCountry = ['us', 'uk', 'canada', 'world'][index]),
+            onPressed: (index) => setState(
+                  () => selectedCountry = ['us', 'uk', 'canada', 'world'][index],
+            ),
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -164,16 +177,24 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
             runSpacing: 24,
             alignment: WrapAlignment.center,
             children: [
-              _buildCard(selected!['basic']!, isPremium: false),
-              _buildCard(selected!['premium']!, isPremium: true),
+              _PricingCard(data: selected['basic']!, isPremium: false),
+              _PricingCard(data: selected['premium']!, isPremium: true),
             ],
-          )
+          ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildCard(Map<String, dynamic> data, {required bool isPremium}) {
+class _PricingCard extends StatelessWidget {
+  final Map<String, dynamic> data;
+  final bool isPremium;
+
+  const _PricingCard({required this.data, required this.isPremium, super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: 380,
       padding: const EdgeInsets.all(24),
@@ -185,100 +206,112 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                isPremium ? 'premium'.tr : 'basic'.tr,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: isPremium ? Colors.white : Colors.black,
-                ),
-              ),
-              if (isPremium)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    'priority_support'.tr,
-                    style: const TextStyle(fontSize: 11, color: Colors.white),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          RichText(
-            text: TextSpan(
-              text: '${data['price']}'.tr,
+          // Plan name as SEO-enhanced h3
+          Seo.text(
+            text: isPremium ? 'premium'.tr : 'basic'.tr,
+            style: TextTagStyle.h3,
+            child: Text(
+              isPremium ? 'premium'.tr : 'basic'.tr,
               style: TextStyle(
-                fontSize: 30,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: isPremium ? Colors.white : Colors.black,
               ),
-              children: [
-                TextSpan(
-                  text: 'per_hour'.tr,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                    color: isPremium ? Colors.white70 : Colors.grey,
-                  ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          // Price as SEO-enhanced h2
+          Seo.text(
+            text: '${data['price']}'.tr,
+            style: TextTagStyle.h2,
+            child: RichText(
+              text: TextSpan(
+                text: '${data['price']}'.tr,
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: isPremium ? Colors.white : Colors.black,
                 ),
-              ],
+                children: [
+                  TextSpan(
+                    text: ' per_hour'.tr,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: isPremium ? Colors.white70 : Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 6),
-          Text(
-            '${data['description']}'.tr,
-            style: TextStyle(
-              color: isPremium ? Colors.white70 : Colors.black54,
-              fontSize: 13,
+          // Description as SEO-enhanced paragraph
+          Seo.text(
+            text: '${data['description']}'.tr,
+            style: TextTagStyle.p,
+            child: Text(
+              '${data['description']}'.tr,
+              style: TextStyle(
+                color: isPremium ? Colors.white70 : Colors.black54,
+                fontSize: 13,
+              ),
             ),
           ),
           const SizedBox(height: 16),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: isPremium ? Colors.green : Colors.black,
-              foregroundColor: Colors.white,
-              minimumSize: const Size.fromHeight(44),
+          // CTA button as SEO link
+          Seo.link(
+            href: '#',
+            anchor: isPremium ? 'go_premium'.tr : 'go_basic'.tr,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isPremium ? Colors.green : Colors.black,
+                foregroundColor: Colors.white,
+                minimumSize: const Size.fromHeight(44),
+              ),
+              onPressed: () {},
+              child: Text(isPremium ? 'go_premium'.tr : 'go_basic'.tr),
             ),
-            onPressed: () {},
-            child: Text(isPremium ? 'go_premium'.tr : 'go_basic'.tr),
           ),
           const SizedBox(height: 20),
+          // Features list as SEO-enhanced list items
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(
-              data['features'].length,
-                  (index) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      index == 0 && isPremium ? Icons.double_arrow_rounded : Icons.check,
-                      color: isPremium ? Colors.white : Colors.green,
-                      size: 18,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        '${data['features'][index]}'.tr,
-                        style: TextStyle(
-                          color: isPremium ? Colors.white : Colors.black87,
-                          fontSize: 14,
+              (data['features'] as List).length,
+                  (index) {
+                final featureKey = data['features'][index];
+                return Seo.text(
+                  text: featureKey.tr,
+                  style: TextTagStyle.h1,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          index == 0 && isPremium
+                              ? Icons.double_arrow_rounded
+                              : Icons.check,
+                          color: isPremium ? Colors.white : Colors.green,
+                          size: 18,
                         ),
-                      ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            featureKey.tr,
+                            style: TextStyle(
+                              color: isPremium ? Colors.white : Colors.black87,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              },
             ),
-          )
+          ),
         ],
       ),
     );

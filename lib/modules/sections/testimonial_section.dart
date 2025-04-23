@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:visibility_detector/visibility_detector.dart';
+import 'package:seo/seo.dart'; // SEO package for semantic text
 
+/// Testimonial section with animated entries and SEO semantics
 class TestimonialSection extends StatefulWidget {
   const TestimonialSection({super.key});
 
@@ -82,14 +85,19 @@ class _TestimonialSectionState extends State<TestimonialSection>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            'testimonial_heading'.tr,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-              height: 1.3,
+          // Section heading as SEO-enhanced h2
+          Seo.text(
+            text: 'testimonial_heading'.tr,
+            style: TextTagStyle.h2,
+            child: Text(
+              'testimonial_heading'.tr,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                height: 1.3,
+              ),
             ),
           ),
           const SizedBox(height: 40),
@@ -177,29 +185,44 @@ class _TestimonialCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            message.tr,
-            style: const TextStyle(
-              fontSize: 15,
-              color: Colors.black87,
-              height: 1.6,
+          // Testimonial message as SEO-enhanced paragraph
+          Seo.text(
+            text: message.tr,
+            style: TextTagStyle.p,
+            child: Text(
+              message.tr,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black87,
+                height: 1.6,
+              ),
             ),
           ),
           const SizedBox(height: 20),
-          Text(
-            name.tr,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-              color: Colors.black,
+          // Testimonial author as SEO-enhanced h3
+          Seo.text(
+            text: name.tr,
+            style: TextTagStyle.h3,
+            child: Text(
+              name.tr,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+                color: Colors.black,
+              ),
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            country.tr,
-            style: const TextStyle(
-              fontSize: 13,
-              color: Colors.black54,
+          // Country as SEO-enhanced paragraph
+          Seo.text(
+            text: country.tr,
+            style: TextTagStyle.p,
+            child: Text(
+              country.tr,
+              style: const TextStyle(
+                fontSize: 13,
+                color: Colors.black54,
+              ),
             ),
           ),
         ],

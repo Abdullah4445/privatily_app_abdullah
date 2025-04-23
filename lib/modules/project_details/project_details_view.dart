@@ -1,19 +1,183 @@
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:seo/seo.dart'; // SEO package for head tags and semantic markup
+
 import '../../models/products.dart';
 import '../../widgets/myProgressIndicator.dart';
 import 'project_details_logic.dart';
 
 class ProjectDetailsPage extends StatelessWidget {
-  const ProjectDetailsPage({Key? key}) : super(key: key);
+  const ProjectDetailsPage({super.key});
 
   static const _horizontalPadding = 16.0;
   static const _accentColor = Color(0xFF00E676);
 
+  @override
+  Widget build(BuildContext context) {
+    final logic = Get.put(ProjectDetailsLogic());
 
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Obx(() {
+        if (!logic.isProductLoaded) {
+          return const Center(child: MyLoader());
+        }
+        final product = logic.product.value;
+        if (product == null) {
+          return const Center(child: Text('Product not found.'));
+        }
 
+        // Inject dynamic SEO head tags for each product
+        return Seo.head(
+          tags: [
+            MetaTag(name: 'description', content: product.projectDesc ?? ''),
+            LinkTag(
+              rel: 'canonical',
+              href: 'https://launchcode.shop/product-detail/${product.projectId}',
+            ),
+          ],
+          child: CustomScrollView(
+            slivers: [
+              _buildSliverAppBar(context, logic),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 24),
 
+                      // Product title as SEO-enhanced h1
+                      Seo.text(
+                        text: product.title ?? '',
+                        style: TextTagStyle.h1,
+                        child: Text(
+                          product.title ?? '',
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+
+                      if (product.subtitle?.isNotEmpty ?? false)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Seo.text(
+                            text: product.subtitle!,
+                            style: TextTagStyle.h2,
+                            child: Text(
+                              product.subtitle!,
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(color: Colors.grey[600]),
+                            ),
+                          ),
+                        ),
+
+                      const SizedBox(height: 12),
+
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 6, horizontal: 16),
+                            decoration: BoxDecoration(
+                              color: _accentColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Seo.text(
+                              text: '\$${product.price?.toStringAsFixed(2) ?? 'N/A'}',
+                              style: TextTagStyle.h2,
+                              child: Text(
+                                '\$${product.price?.toStringAsFixed(2) ?? 'N/A'}',
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.copyWith(
+                                  color: _accentColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          if ((product.soldCount ?? 0) > 0)
+                            Seo.text(
+                              text: 'Sold: ${product.soldCount}',
+                              style: TextTagStyle.p,
+                              child: Text(
+                                'Sold: ${product.soldCount}',
+                                style: Theme
+                                    .of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(color: Colors.grey[600]),
+                              ),
+                            ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Action buttons remain unchanged
+                      _buildActionButtons(context, logic),
+
+                      const SizedBox(height: 32),
+
+                      // Section heading and description
+                      _buildSectionTitle(context, 'Description', isSeo: true),
+                      const SizedBox(height: 8),
+                      _buildDescription(context, product, isSeo: true),
+
+                      // Gallery sections with SEO-wrapped section titles
+                      if (product.adminPanelScreenshots.isNotEmpty) ...[
+                        const SizedBox(height: 32),
+                        _buildGallerySection(
+                          context,
+                          title: 'Admin Panel Screenshots',
+                          images: product.adminPanelScreenshots,
+                          logic: logic,
+                          isSeo: true,
+                        ),
+                      ],
+
+                      if (product.apkDemoScreenshots.isNotEmpty) ...[
+                        const SizedBox(height: 32),
+                        _buildGallerySection(
+                          context,
+                          title: 'APK Demo Screenshots',
+                          images: product.apkDemoScreenshots,
+                          logic: logic,
+                          isSeo: true,
+                        ),
+                      ],
+
+                      if (_hasDemos(product)) ...[
+                        const SizedBox(height: 32),
+                        _buildSectionTitle(context, 'Live Demos', isSeo: true),
+                        _buildDemoLinks(context, logic, product),
+                      ],
+
+                      const SizedBox(height: 48),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
+    );
+  }
 
   Widget _buildActionButtons(BuildContext c, ProjectDetailsLogic logic) {
     final link = logic.product.value?.projectLink;
@@ -47,36 +211,68 @@ class ProjectDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionTitle(BuildContext c, String text) {
-    return Row(
+  /// Section title builder now supports wrapping in SEO.text
+  Widget _buildSectionTitle(BuildContext c, String text, {bool isSeo = false}) {
+    final row = Row(
       children: [
         Container(width: 4, height: 24, color: _accentColor),
         const SizedBox(width: 8),
-        Text(text, style: Theme.of(c).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+        Text(
+          text,
+          style: Theme
+              .of(c)
+              .textTheme
+              .titleMedium
+              ?.copyWith(fontWeight: FontWeight.bold),
+        ),
       ],
     );
+    if (isSeo) {
+      return Seo.text(
+        text: text,
+        style: TextTagStyle.h2,
+        child: row,
+      );
+    }
+    return row;
   }
 
-  Widget _buildDescription(BuildContext c, Project p) {
-    return Text(
+  /// Description builder with optional SEO wrapping
+  Widget _buildDescription(BuildContext c, Project p, {bool isSeo = false}) {
+    final desc = Text(
       p.projectDesc ?? '',
-      style: Theme.of(c)
+      style: Theme
+          .of(c)
           .textTheme
           .bodyMedium
           ?.copyWith(height: 1.6, color: Colors.grey[800]),
     );
+    if (isSeo) {
+      return Seo.text(
+        text: p.projectDesc ?? '',
+        style: TextTagStyle.p,
+        child: desc,
+      );
+    }
+    return desc;
   }
 
-  Widget _buildGallerySection(
-      BuildContext c, {
-        required String title,
-        required List<String> images,
-        required ProjectDetailsLogic logic,
-      }) {
+  /// Gallery section with SEO-wrapped heading
+  Widget _buildGallerySection(BuildContext c, {
+    required String title,
+    required List<String> images,
+    required ProjectDetailsLogic logic,
+    bool isSeo = false,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionTitle(c, title),
+        if (isSeo) ...[
+          _buildSectionTitle(c, title, isSeo: true),
+        ] else
+          ...[
+            _buildSectionTitle(c, title),
+          ],
         const SizedBox(height: 12),
         SizedBox(
           height: 180,
@@ -91,11 +287,15 @@ class ProjectDetailsPage extends StatelessWidget {
                   elevation: 8,
                   borderRadius: BorderRadius.circular(16),
                   clipBehavior: Clip.hardEdge,
-                  child: Image.network(
-                    images[i],
-                    width: 150,
-                    height: 180,
-                    fit: BoxFit.cover,
+                  child: Seo.image(
+                    src: images[i],
+                    alt: 'Screenshot ${i + 1} of $title',
+                    child: Image.network(
+                      images[i],
+                      width: 150,
+                      height: 180,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               );
@@ -106,101 +306,65 @@ class ProjectDetailsPage extends StatelessWidget {
     );
   }
 
-  void _openImageViewer(
-      BuildContext context,
+  void _openImageViewer(BuildContext context,
       List<String> images,
-      int initialIndex,
-      ) {
+      int initialIndex,) {
     final controller = CarouselSliderController();
     showDialog(
       context: context,
       barrierColor: Colors.black87,
-      builder: (_) => Dialog(
-        insetPadding: EdgeInsets.zero,
-        backgroundColor: Colors.transparent,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            CarouselSlider.builder(
-              controller: controller,
-              itemCount: images.length,
-              itemBuilder: (ctx, idx, realIdx) => GestureDetector(
-                onTap: () => Navigator.of(context).pop(),
-                child: InteractiveViewer(
-                  child: Center(
-                    child: Image.network(
-                      images[idx],
-                      fit: BoxFit.contain,
-                    ),
+      builder: (_) =>
+          Dialog(
+            insetPadding: EdgeInsets.zero,
+            backgroundColor: Colors.transparent,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                CarouselSlider.builder(
+                  controller: controller,
+                  itemCount: images.length,
+                  itemBuilder: (ctx, idx, realIdx) =>
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: InteractiveViewer(
+                          child: Seo.image(
+                            src: images[idx],
+                            alt: 'Full-screen screenshot',
+                            child: Center(
+                              child: Image.network(
+                                images[idx],
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                  options: CarouselOptions(
+                    initialPage: initialIndex,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.9,
+                    viewportFraction: 1,
+                    enableInfiniteScroll: false,
+                    enlargeCenterPage: true,
                   ),
                 ),
-              ),
-              options: CarouselOptions(
-                initialPage: initialIndex,
-                height: MediaQuery.of(context).size.height * 0.9,
-                viewportFraction: 1,
-                enableInfiniteScroll: false,
-                enlargeCenterPage: true,
-              ),
+              ],
             ),
-
-            // ← Previous
-            Positioned(
-              left: 16,
-              child:IconButton(
-                onPressed: () => controller.previousPage(),
-                icon: Container(
-                  padding: const EdgeInsets.all(4),                   // space between icon & border
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.black, width: 1), // black border
-                  ),
-                  child: const Icon(
-                    Icons.arrow_back_ios,
-                    size: 32,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-
-            // → Next
-            Positioned(
-              right: 16,
-              child: IconButton(
-                onPressed: () => controller.nextPage(),
-                icon: Container(
-                  padding: const EdgeInsets.all(4),                   // space between icon & border
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.black, width: 1), // black border
-                  ),
-                  child: const Icon(
-                    Icons.arrow_forward_ios,
-                    size: 32,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-
-            // ✕ Close
-            Positioned(
-              top: 40,
-              right: 20,
-              child: IconButton(
-                icon: const Icon(Icons.close, size: 30, color: Colors.white),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
     );
   }
 
+  bool _hasDemos(Project p) {
+    return p.demoAdminPanelLinks!.isNotEmpty ||
+        p.demoApkLinks!.isNotEmpty ||
+        (p.demoVideoUrl?.isNotEmpty ?? false);
+  }
 
-  Widget _buildDemoLinks(BuildContext c, ProjectDetailsLogic logic, Project p) {
+  Widget _buildDemoLinks(BuildContext c,
+      ProjectDetailsLogic logic,
+      Project p,) {
     return Column(
       children: [
         for (final d in [
@@ -218,7 +382,11 @@ class ProjectDetailsPage extends StatelessWidget {
                   d.key.contains('Video') ? Icons.play_circle_rounded : Icons.link,
                   color: _accentColor,
                 ),
-                title: Text(d.key),
+                title: Seo.link(
+                  href: d.value.toString(),
+                  anchor: d.key,
+                  child: Text(d.key),
+                ),
                 trailing: const Icon(Icons.open_in_new),
                 onTap: () => logic.launchUrlExternal(d.value),
               ),
@@ -226,78 +394,6 @@ class ProjectDetailsPage extends StatelessWidget {
           ),
       ],
     );
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    final logic = Get.put(ProjectDetailsLogic());
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Obx(() {
-        if (!logic.isProductLoaded) {
-          return const Center(child: MyLoader());
-        }
-        final product = logic.product.value;
-        if (product == null) {
-          return const Center(child: Text('Product not found.'));
-        }
-
-        return CustomScrollView(
-          slivers: [
-            _buildSliverAppBar(context, logic),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 24),
-                    _buildBasicInfo(context, product),
-                    const SizedBox(height: 24),
-                    _buildActionButtons(context, logic),
-                    const SizedBox(height: 32),
-                    _buildSectionTitle(context, 'Description'),
-                    _buildDescription(context, product),
-                    if (product.adminPanelScreenshots.isNotEmpty) ...[
-                      const SizedBox(height: 32),
-                      _buildGallerySection(
-                        context,
-                        title: 'Admin Panel Screenshots',
-                        images: product.adminPanelScreenshots,
-                        logic: logic,
-                      ),
-                    ],
-                    if (product.apkDemoScreenshots.isNotEmpty) ...[
-                      const SizedBox(height: 32),
-                      _buildGallerySection(
-                        context,
-                        title: 'APK Demo Screenshots',
-                        images: product.apkDemoScreenshots,
-                        logic: logic,
-                      ),
-                    ],
-                    if (_hasDemos(product)) ...[
-                      const SizedBox(height: 32),
-                      _buildSectionTitle(context, 'Live Demos'),
-                      _buildDemoLinks(context, logic, product),
-                    ],
-                    const SizedBox(height: 48),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        );
-      }),
-    );
-  }
-
-  bool _hasDemos(Project p) {
-    return p.demoAdminPanelLinks!.isNotEmpty ||
-        p.demoApkLinks!.isNotEmpty ||
-        (p.demoVideoUrl?.isNotEmpty ?? false);
   }
 
   Widget _buildSliverAppBar(BuildContext context, ProjectDetailsLogic logic) {
@@ -308,15 +404,20 @@ class ProjectDetailsPage extends StatelessWidget {
       elevation: 0,
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-        title: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.85),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Text(
-            logic.product.value?.title ?? '',
-            style: const TextStyle(color: Colors.black87, fontWeight: FontWeight.w600),
+        title: Seo.text(
+          text: logic.product.value?.title ?? '',
+          style: TextTagStyle.h3,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.85),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              logic.product.value?.title ?? '',
+              style: const TextStyle(
+                  color: Colors.black87, fontWeight: FontWeight.w600),
+            ),
           ),
         ),
         background: ClipRRect(
@@ -328,12 +429,17 @@ class ProjectDetailsPage extends StatelessWidget {
                 final images = logic.imagesToShow;
                 return CarouselSlider.builder(
                   itemCount: images.length,
-                  itemBuilder: (ctx, idx, realIdx) => Image.network(
-                    images[idx],
-                    fit: BoxFit.cover,
-                    loadingBuilder: (ctx, w, prog) =>
-                    prog == null ? w : const Center(child: MyLoader()),
-                  ),
+                  itemBuilder: (ctx, idx, realIdx) =>
+                      Seo.image(
+                        src: images[idx],
+                        alt: 'Carousel image ${idx + 1}',
+                        child: Image.network(
+                          images[idx],
+                          fit: BoxFit.cover,
+                          loadingBuilder: (ctx, w, prog) =>
+                          prog == null ? w : const Center(child: MyLoader()),
+                        ),
+                      ),
                   options: CarouselOptions(
                     viewportFraction: 1,
                     autoPlay: images.length > 1,
@@ -357,43 +463,6 @@ class ProjectDetailsPage extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(24)),
       ),
-    );
-  }
-
-  Widget _buildBasicInfo(BuildContext c, Project p) {
-    final txt = Theme.of(c).textTheme;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          p.title ?? '',
-          style: txt.headlineSmall?.copyWith(fontWeight: FontWeight.bold, color: Colors.black87),
-        ),
-        if (p.subtitle?.isNotEmpty ?? false)
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(p.subtitle!, style: txt.titleMedium?.copyWith(color: Colors.grey[600])),
-          ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-              decoration: BoxDecoration(
-                color: _accentColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Text(
-                '\$${p.price?.toStringAsFixed(2) ?? 'N/A'}',
-                style: txt.titleLarge?.copyWith(color: _accentColor, fontWeight: FontWeight.w600),
-              ),
-            ),
-            const Spacer(),
-            if ((p.soldCount ?? 0) > 0)
-              Text('Sold: ${p.soldCount}', style: txt.bodyMedium?.copyWith(color: Colors.grey[600])),
-          ],
-        ),
-      ],
     );
   }
 }

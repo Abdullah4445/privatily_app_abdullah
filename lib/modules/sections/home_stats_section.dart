@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:get/get.dart';
+import 'package:seo/seo.dart'; // SEO package for semantic text
 
+/// Section displaying key statistics with animated counters and SEO semantics
 class HomeStatsSection extends StatefulWidget {
   const HomeStatsSection({super.key});
 
@@ -30,12 +32,17 @@ class _HomeStatsSectionState extends State<HomeStatsSection> {
         color: const Color(0xFFF9F9FF),
         child: Column(
           children: [
-            Text(
-              'stats_title'.tr,
-              style: const TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
+            // Section title as SEO-enhanced heading
+            Seo.text(
+              text: 'stats_title'.tr,
+              style: TextTagStyle.h2,
+              child: Text(
+                'stats_title'.tr,
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
               ),
             ),
             const SizedBox(height: 40),
@@ -45,10 +52,26 @@ class _HomeStatsSectionState extends State<HomeStatsSection> {
                 spacing: horizontalSpacing,
                 runSpacing: 30,
                 children: [
-                  _StatItem(titleKey: 'stats_clients', endValue: 2300, animate: _visible),
-                  _StatItem(titleKey: 'stats_projects', endValue: 2800, animate: _visible),
-                  _StatItem(titleKey: 'stats_countries', endValue: 150, animate: _visible),
-                  _StatItem(titleKey: 'stats_years', endValue: 6, animate: _visible),
+                  _StatItem(
+                    titleKey: 'stats_clients',
+                    endValue: 2300,
+                    animate: _visible,
+                  ),
+                  _StatItem(
+                    titleKey: 'stats_projects',
+                    endValue: 2800,
+                    animate: _visible,
+                  ),
+                  _StatItem(
+                    titleKey: 'stats_countries',
+                    endValue: 150,
+                    animate: _visible,
+                  ),
+                  _StatItem(
+                    titleKey: 'stats_years',
+                    endValue: 6,
+                    animate: _visible,
+                  ),
                 ],
               ),
             ),
@@ -75,13 +98,16 @@ class _StatItem extends StatefulWidget {
 }
 
 class _StatItemState extends State<_StatItem> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<int> _animation;
+  late final AnimationController _controller;
+  late final Animation<int> _animation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
     _animation = IntTween(begin: 0, end: widget.endValue).animate(_controller)
       ..addListener(() => setState(() {}));
   }
@@ -109,31 +135,37 @@ class _StatItemState extends State<_StatItem> with SingleTickerProviderStateMixi
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 20,
-            offset: Offset(0, 10),
-          ),
+          BoxShadow(color: Colors.black12, blurRadius: 20, offset: Offset(0, 10)),
         ],
       ),
       child: Column(
         children: [
-          Text(
-            '${_animation.value}+',
-            style: const TextStyle(
-              fontSize: 36,
-              fontWeight: FontWeight.w900,
-              color: Colors.deepPurple,
+          // Animated count as SEO-enhanced heading
+          Seo.text(
+            text: '${_animation.value}+',
+            style: TextTagStyle.h3,
+            child: Text(
+              '${_animation.value}+',
+              style: const TextStyle(
+                fontSize: 36,
+                fontWeight: FontWeight.w900,
+                color: Colors.deepPurple,
+              ),
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            widget.titleKey.tr,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: Colors.black87,
+          // Stat label as SEO-enhanced paragraph
+          Seo.text(
+            text: widget.titleKey.tr,
+            style: TextTagStyle.p,
+            child: Text(
+              widget.titleKey.tr,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
             ),
           ),
         ],

@@ -1,120 +1,91 @@
-<!DOCTYPE html><html><head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Base href for Flutter web -->
+    <base href="$FLUTTER_BASE_HREF">
 
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
+    <!-- Basic Meta Tags -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaunchCode – Launch Sooner &amp; Grow Faster</title>
+    <meta name="description" content="Discover software projects on LaunchCode: launch sooner and grow faster with our curated marketplace of impactful apps and tools.">
+    <meta name="keywords" content="LaunchCode, software marketplace, launch software, grow faster, SaaS, apps, tools">
+    <link rel="canonical" href="https://launchcode.shop/">
+    <meta name="robots" content="index, follow">
 
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+    <!-- Theme color for mobile browsers -->
+    <meta name="theme-color" content="#5B3DF4">
 
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-  <base href="$FLUTTER_BASE_HREF">
+    <!-- Preconnect for critical third-party origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://launchcode.shop">
 
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="LaunchCode – Launch Sooner &amp; Grow Faster">
+    <meta property="og:description" content="Discover software projects on LaunchCode: launch sooner and grow faster with our curated marketplace of impactful apps and tools.">
+    <meta property="og:url" content="https://launchcode.shop/">
+    <meta property="og:image" content="https://launchcode.shop/assets/images/og-image.png">
 
-  <!-- iOS meta tags & icons -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="privatily_app">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LaunchCode – Launch Sooner &amp; Grow Faster">
+    <meta name="twitter:description" content="Discover software projects on LaunchCode: launch sooner and grow faster with our curated marketplace of impactful apps and tools.">
+    <meta name="twitter:image" content="https://launchcode.shop/assets/images/twitter-card.png">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png">
+    <!-- Structured Data JSON-LD -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "LaunchCode",
+            "url": "https://launchcode.shop/",
+            "description": "LaunchCode helps you launch software sooner and grow faster with our curated marketplace of software projects.",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://launchcode.shop/?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+            }
+        }
+    </script>
 
-  <title>privatily_app</title>
-  <link rel="manifest" href="manifest.json">
-  
-  
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
-  
-  
-  
-  
-  
-  
-  <style id="splash-screen-style">
-    html {
-      height: 100%
-    }
+    <!-- iOS Meta Tags & Icons -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="LaunchCode">
+    <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
-    body {
-      margin: 0;
-      min-height: 100%;
-      background-color: #FFFFFF;
-          background-size: 100% 100%;
-    }
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png">
 
-    .center {
-      margin: 0;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      -ms-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%);
-    }
+    <!-- Web Manifest -->
+    <link rel="manifest" href="manifest.json">
 
-    .contain {
-      display:block;
-      width:100%; height:100%;
-      object-fit: contain;
-    }
-
-    .stretch {
-      display:block;
-      width:100%; height:100%;
-    }
-
-    .cover {
-      display:block;
-      width:100%; height:100%;
-      object-fit: cover;
-    }
-
-    .bottom {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      -ms-transform: translate(-50%, 0);
-      transform: translate(-50%, 0);
-    }
-
-    .bottomLeft {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-    }
-
-    .bottomRight {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-    }
-  </style>
-  <script id="splash-screen-script">
-    function removeSplashFromWeb() {
-      document.getElementById("splash")?.remove();
-      document.getElementById("splash-branding")?.remove();
-      document.body.style.background = "transparent";
-    }
-  </script>
+    <!-- Splash Screen Styles & Scripts -->
+    <style id="splash-screen-style">
+        html { height: 100%; }
+        body { margin: 0; min-height: 100%; background-color: #FFFFFF; background-size: 100% 100%; }
+        .center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .cover, .contain, .stretch, .bottom, .bottomLeft, .bottomRight {
+          display: block; width:100%; height:100%; }
+        .cover { object-fit: cover; }
+        .contain { object-fit: contain; }
+    </style>
+    <script id="splash-screen-script">
+        function removeSplashFromWeb() {
+          document.getElementById("splash")?.remove();
+          document.body.style.background = "transparent";
+        }
+    </script>
 </head>
 <body>
-  <picture id="splash">
-      <source srcset="splash/img/light-1x.gif 1x, splash/img/light-2x.gif 2x, splash/img/light-3x.gif 3x, splash/img/light-4x.gif 4x" media="(prefers-color-scheme: light)">
-      <source srcset="splash/img/dark-1x.gif 1x, splash/img/dark-2x.gif 2x, splash/img/dark-3x.gif 3x, splash/img/dark-4x.gif 4x" media="(prefers-color-scheme: dark)">
-      <img class="center" aria-hidden="true" src="splash/img/light-1x.gif" alt="">
-  </picture>
-  
-  
-  
-  
-  <script src="flutter_bootstrap.js" async=""></script>
+<picture id="splash">
+    <source srcset="splash/img/light-1x.gif 1x, splash/img/light-2x.gif 2x" media="(prefers-color-scheme: light)">
+    <source srcset="splash/img/dark-1x.gif 1x, splash/img/dark-2x.gif 2x" media="(prefers-color-scheme: dark)">
+    <img class="center" aria-hidden="true" src="splash/img/light-1x.gif" alt="LaunchCode Splash Screen">
+</picture>
 
-
-</body></html>
+<script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
