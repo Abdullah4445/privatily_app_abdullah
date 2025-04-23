@@ -17,7 +17,9 @@ class HomeLogic extends GetxController {
   Future<List<Students>> getUserOnFirebase() async {
     try {
       QuerySnapshot data = await firestore.collection("Students").get();
+      print("My Students length is: ${data.docs.length}");
       for (var element in data.docs) {
+
         Students students =
         Students.fromJson(element.data() as Map<String, dynamic>);
         getStudents.add(students);
