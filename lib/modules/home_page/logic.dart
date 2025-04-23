@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
+import '../../models/students.dart';
 import '../chat_page/view.dart';
-import '../models/students.dart';
 
 class HomeLogic extends GetxController {
   List<Students> getStudents = [];

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 // Import the logic controller
+import '../../widgets/myProgressIndicator.dart';
 import 'checkout_logic.dart';
 // Import CartLogic to display total amount (assuming it's needed directly)
 import '../cart/cart_logic.dart'; // <--- ADJUST IMPORT PATH
@@ -179,7 +180,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         child: checkoutLogic.isLoading.value // Check loading state from logic
             ? const SizedBox( // Show loading indicator
           height: 24, width: 24,
-          child: CircularProgressIndicator( strokeWidth: 3, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+          child: MyLoader( ),
         )
             : const Text('Place Order'), // Show button text
       ),

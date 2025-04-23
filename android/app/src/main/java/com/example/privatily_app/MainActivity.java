@@ -1,4 +1,4 @@
-package com.example.privatily_app;
+package com.ailab.launchcode;
 
 import io.flutter.embedding.android.FlutterActivity;
 

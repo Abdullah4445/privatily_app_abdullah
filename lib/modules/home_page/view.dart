@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../models/students.dart';
+import '../../models/students.dart';
+import '../../widgets/myProgressIndicator.dart';
 import 'logic.dart';
 
 class HomePage extends StatelessWidget {
@@ -38,8 +39,11 @@ class HomePage extends StatelessWidget {
               future: logic.getUserOnFirebase(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(color: Colors.red),
+                  return Center(
+                    child: MyLoader(
+
+                        // color: Colors.red
+                    ),
                   );
                 } else if (snapshot.hasError) {
                   return Center(

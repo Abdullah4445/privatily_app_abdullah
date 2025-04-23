@@ -57,7 +57,7 @@ class ProjectDetailsLogic extends GetxController {
 
     // 2. Safely get shotUrls, ensuring they are treated as Strings
     //    Map dynamic list (if it is) to List<String>, converting non-strings or nulls if necessary
-    final List<String> shotUrlsList = (product.value!.shotUrls ?? [])
+    final List<String> shotUrlsList = (product.value!.demoAdminPanelLinks!?? [])
         .map((dynamic url) {
       // Ensure each element is treated as a string, return empty if not
       return (url is String) ? url : '';

@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../widgets/myProgressIndicator.dart';
+
 class GroupChatScreen extends StatefulWidget {
   final String groupId;
 
@@ -35,7 +37,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                   .orderBy('timestamp', descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+                if (!snapshot.hasData) return Center(child: MyLoader());
 
                 var messages = snapshot.data!.docs;
                 return ListView.builder(

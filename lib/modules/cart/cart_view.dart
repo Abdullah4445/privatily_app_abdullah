@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../models/products.dart';
+import '../../widgets/myProgressIndicator.dart';
 import '../checkout/checkout_view.dart';
 import 'cart_logic.dart';
 
@@ -129,11 +130,11 @@ class _CartPageState extends State<CartPage> {
                     height: 80,
                     color: Colors.grey[200],
                     child: Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.0,
-                        value: loadingProgress.expectedTotalBytes != null
-                            ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                            : null,
+                      child: MyLoader(
+                        // strokeWidth: 2.0,
+                        // value: loadingProgress.expectedTotalBytes != null
+                        //     ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                        //     : null,
                       ),
                     ),
                   );

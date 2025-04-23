@@ -1,36 +1,32 @@
-class Project {
-  List<dynamic>? comments;
-  int? createdAt;
-  List<DemoAdminPanelLink>? demoAdminPanelLinks;
-  List<String>? shotUrls;
-  List<DemoApkLink>? demoApkLinks;
-  String? demoDetails;
-  String? demoVideoUrl;
-  bool? isCustomizationAvailable;
-  bool? isProjectEnabled;
-  String? name;
-  int? price; // Assuming price is integer like $29
-  String? projectDesc;
-  String? projectId;
-  String? projectLink;
-  List<dynamic>? reviews;
-  int? soldCount;
-  String? subtitle;
-  List<dynamic>? teamMemberIds;
-  String? thumbnailUrl;
-  String? title;
-  dynamic updatedAt;
-  // --- New Fields Added ---
-  double? rating; // Average rating value (e.g., 4.5)
-  int? ratingCount; // Number of ratings (e.g., 10)
-  // --- End New Fields ---
+import 'dart:convert';
 
+// --- Main Project Model ---
+class Project {
+  final int? createdAt; // Consider using DateTime after parsing
+  final List<DemoAdminPanelLink>? demoAdminPanelLinks;
+  final List<String>? mobileShotUrls; // Top-level screenshots (renamed for clarity)
+  final List<DemoApkLink>? demoApkLinks;
+  final String? demoDetails;
+  final String? demoVideoUrl;
+  final bool? isCustomizationAvailable;
+  final bool? isProjectEnabled;
+  final String? name;
+  final double? price;
+  final String? projectDesc;
+  final String? projectId;
+  final String? projectLink;
+  final List<String>? reviews;
+  final int? soldCount;
+  final String? subtitle;
+  final List<String>? teamMemberIds;
+  final String? thumbnailUrl;
+  final String? title;
+  final dynamic updatedAt; // Keep dynamic or parse to DateTime/Timestamp if needed
 
   Project({
-    this.comments,
     this.createdAt,
     this.demoAdminPanelLinks,
-    this.shotUrls,
+    this.mobileShotUrls, // Corresponds to the top-level 'shotUrls' in JSON
     this.demoApkLinks,
     this.demoDetails,
     this.demoVideoUrl,
@@ -48,52 +44,79 @@ class Project {
     this.thumbnailUrl,
     this.title,
     this.updatedAt,
-    // --- Added to Constructor ---
-    this.rating,
-    this.ratingCount,
-    // --- End Constructor Update ---
   });
 
+  // Helper Getters for easier access to specific screenshot lists
+  List<String> get adminPanelScreenshots {
+    final List<String> shots = [];
+    if (demoAdminPanelLinks != null) {
+      for (var link in demoAdminPanelLinks!) {
+        if (link.shotUrls != null) {
+          shots.addAll(link.shotUrls!);
+        }
+      }
+    }
+    return shots;
+  }
+
+  List<String> get mobileAppScreenshots {
+    // Returns the top-level list if it exists
+    return mobileShotUrls ?? [];
+  }
+
+  List<String> get apkDemoScreenshots {
+    final List<String> shots = [];
+    if (demoApkLinks != null) {
+      for (var link in demoApkLinks!) {
+        if (link.shotUrls != null) {
+          shots.addAll(link.shotUrls!);
+        }
+      }
+    }
+    return shots;
+  }
+
+
   factory Project.fromJson(Map<String, dynamic> json) => Project(
-    comments: json['comments'] == null ? [] : List<dynamic>.from(json['comments'] ?? []),
-    createdAt: json['createdAt'],
+    createdAt: json['createdAt'] as int?,
     demoAdminPanelLinks: (json['demoAdminPanelLinks'] as List<dynamic>?)
-        ?.map((e) => DemoAdminPanelLink.fromJson(e as Map<String, dynamic>))
+        ?.map((x) => DemoAdminPanelLink.fromJson(x as Map<String, dynamic>))
         .toList(),
-    shotUrls: json['shotUrls'] == null ? [] : List<String>.from(json['shotUrls'] ?? []),
+    // Map the top-level 'shotUrls' from JSON to 'mobileShotUrls' in the model
+    mobileShotUrls: (json['shotUrls'] as List<dynamic>?)
+        ?.map((x) => x as String)
+        .toList(),
     demoApkLinks: (json['demoApkLinks'] as List<dynamic>?)
-        ?.map((e) => DemoApkLink.fromJson(e as Map<String, dynamic>))
+        ?.map((x) => DemoApkLink.fromJson(x as Map<String, dynamic>))
         .toList(),
-    demoDetails: json['demoDetails'],
-    demoVideoUrl: json['demoVideoUrl'],
-    isCustomizationAvailable: json['isCustomizationAvailable'],
-    isProjectEnabled: json['isProjectEnabled'],
-    name: json['name'],
-    // Ensure price is parsed as int, handle potential double/string from JSON if needed
-    price: (json['price'] as num?)?.toInt(),
-    projectDesc: json['projectDesc'],
-    projectId: json['projectId'],
-    projectLink: json['projectLink'],
-    reviews: json['reviews'] == null ? [] : List<dynamic>.from(json['reviews'] ?? []),
-    soldCount: json['soldCount'],
-    subtitle: json['subtitle'],
-    teamMemberIds: json['teamMemberIds'] == null ? [] : List<dynamic>.from(json['teamMemberIds'] ?? []),
-    thumbnailUrl: json['thumbnailUrl'],
-    title: json['title'],
-    updatedAt: json['updatedAt'],
-    // --- Added to fromJson ---
-    // Safely parse rating as double (handles int or double in JSON)
-    rating: (json['rating'] as num?)?.toDouble(),
-    ratingCount: json['ratingCount'], // Assuming ratingCount is directly an int?
-    // --- End fromJson Update ---
+    demoDetails: json['demoDetails'] as String?,
+    demoVideoUrl: json['demoVideoUrl'] as String?,
+    isCustomizationAvailable: json['isCustomizationAvailable'] as bool?,
+    isProjectEnabled: json['isProjectEnabled'] as bool?,
+    name: json['name'] as String?,
+    price: (json['price'] as num?)?.toDouble(),
+    projectDesc: json['projectDesc'] as String?,
+    projectId: json['projectId'] as String?,
+    projectLink: json['projectLink'] as String?,
+    reviews: (json['reviews'] as List<dynamic>?)
+        ?.map((x) => x as String)
+        .toList(),
+    soldCount: json['soldCount'] as int?,
+    subtitle: json['subtitle'] as String?,
+    teamMemberIds: (json['teamMemberIds'] as List<dynamic>?)
+        ?.map((x) => x as String)
+        .toList(),
+    thumbnailUrl: json['thumbnailUrl'] as String?,
+    title: json['title'] as String?,
+    updatedAt: json['updatedAt'], // Keep as dynamic
   );
 
   Map<String, dynamic> toJson() => {
-    'comments': comments,
     'createdAt': createdAt,
-    'demoAdminPanelLinks': demoAdminPanelLinks?.map((e) => e.toJson()).toList(),
-    'shotUrls': shotUrls,
-    'demoApkLinks': demoApkLinks?.map((e) => e.toJson()).toList(),
+    'demoAdminPanelLinks': demoAdminPanelLinks?.map((x) => x.toJson()).toList(),
+    // Map 'mobileShotUrls' back to 'shotUrls' key in JSON
+    'shotUrls': mobileShotUrls,
+    'demoApkLinks': demoApkLinks?.map((x) => x.toJson()).toList(),
     'demoDetails': demoDetails,
     'demoVideoUrl': demoVideoUrl,
     'isCustomizationAvailable': isCustomizationAvailable,
@@ -110,48 +133,60 @@ class Project {
     'thumbnailUrl': thumbnailUrl,
     'title': title,
     'updatedAt': updatedAt,
-    // --- Added to toJson ---
-    'rating': rating,
-    'ratingCount': ratingCount,
-    // --- End toJson Update ---
   };
 }
 
-// --- Dummy classes for DemoAdminPanelLink and DemoApkLink ---
-// Replace these with your actual class definitions if they exist
+// --- Model for items in the 'demoAdminPanelLinks' array ---
 class DemoAdminPanelLink {
-  // Example properties - replace with actual ones
-  String? url;
-  String? username;
-  String? password;
+  final String? link;
+  final String? name;
+  final List<String>? shotUrls; // Nested screenshots for admin panel
 
-  DemoAdminPanelLink({this.url, this.username, this.password});
+  DemoAdminPanelLink({
+    this.link,
+    this.name,
+    this.shotUrls, // Add to constructor
+  });
 
-  factory DemoAdminPanelLink.fromJson(Map<String, dynamic> json) => DemoAdminPanelLink(
-    url: json['url'],
-    username: json['username'],
-    password: json['password'],
-  );
+  factory DemoAdminPanelLink.fromJson(Map<String, dynamic> json) =>
+      DemoAdminPanelLink(
+        link: json['link'] as String?,
+        name: json['name'] as String?,
+        shotUrls: (json['shotUrls'] as List<dynamic>?) // Parse nested list
+            ?.map((x) => x as String)
+            .toList(),
+      );
 
   Map<String, dynamic> toJson() => {
-    'url': url,
-    'username': username,
-    'password': password,
+    'link': link,
+    'name': name,
+    'shotUrls': shotUrls, // Add to JSON output
   };
 }
 
+// --- Model for items in the 'demoApkLinks' array ---
 class DemoApkLink {
-  // Example property - replace with actual one
-  String? url;
+  final String? link;
+  final String? name;
+  final List<String>? shotUrls; // Nested screenshots for APK demo
 
-  DemoApkLink({this.url});
+  DemoApkLink({
+    this.link,
+    this.name,
+    this.shotUrls, // Add to constructor
+  });
 
   factory DemoApkLink.fromJson(Map<String, dynamic> json) => DemoApkLink(
-    url: json['url'],
+    link: json['link'] as String?,
+    name: json['name'] as String?,
+    shotUrls: (json['shotUrls'] as List<dynamic>?) // Parse nested list
+        ?.map((x) => x as String)
+        .toList(),
   );
 
   Map<String, dynamic> toJson() => {
-    'url': url,
+    'link': link,
+    'name': name,
+    'shotUrls': shotUrls, // Add to JSON output
   };
 }
-// --- End Dummy Classes ---

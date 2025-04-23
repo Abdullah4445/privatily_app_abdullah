@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/myProgressIndicator.dart';
 import 'logic.dart';
 
 class ChattingPage extends StatefulWidget {
@@ -101,7 +102,7 @@ class _ChattingPageState extends State<ChattingPage> {
               stream: logic.getMessages(widget.chatRoomId),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: MyLoader());
                 }
                 if (snapshot.hasError) {
                   return Center(child: Text('Error: ${snapshot.error}'));
