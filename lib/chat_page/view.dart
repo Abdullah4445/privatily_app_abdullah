@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'logic.dart';
 
 class ChattingPage extends StatefulWidget {
@@ -24,14 +25,28 @@ class _ChattingPageState extends State<ChattingPage> {
   final ChattingPageLogic logic = Get.put(ChattingPageLogic());
   final RxBool showCommonQuestions = true.obs;
 
+  String? guestName;
+  bool hasAskedName = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadGuestName();
+  }
+
+  Future<void> _loadGuestName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    guestName = prefs.getString('guest_name');
+  }
+
   Widget buildCommonQuestions() {
     final commonQuestions = [
-          "Hello",
-          "How are you?",
-          "What are you doing?",
-          "Where are you from?",
-          "Can we talk?",
-          "Are you available?",
+      "Hello",
+      "How are you?",
+      "What are you doing?",
+      "Where are you from?",
+      "Can we talk?",
+      "Are you available?",
     ];
 
     return Column(
@@ -39,10 +54,7 @@ class _ChattingPageState extends State<ChattingPage> {
       children: [
         Row(
           children: [
-            const Text(
-              "Common questions",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-            ),
+            const Text("Common questions", style: TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(width: 8),
             Obx(() => GestureDetector(
               onTap: () => showCommonQuestions.value = !showCommonQuestions.value,
@@ -62,7 +74,7 @@ class _ChattingPageState extends State<ChattingPage> {
           children: commonQuestions.map((question) {
             return InkWell(
               onTap: () async {
-                await logic.sendMessage(widget.chatRoomId, widget.receiverId, question);
+                await sendWithNameCheck(question);
               },
               borderRadius: BorderRadius.circular(30),
               child: Container(
@@ -85,9 +97,55 @@ class _ChattingPageState extends State<ChattingPage> {
           }).toList(),
         )
             : const SizedBox.shrink()),
-        const SizedBox(height: 8),
       ],
     );
+  }
+
+  Future<void> sendWithNameCheck(String message) async {
+    if (guestName == null) await _loadGuestName();
+
+    if (guestName == null && !hasAskedName) {
+      hasAskedName = true;
+
+      final name = await showDialog<String>(
+        context: context,
+        builder: (context) {
+          final controller = TextEditingController();
+          return AlertDialog(
+            title: const Text("Enter your name"),
+            content: TextField(
+              controller: controller,
+              decoration: const InputDecoration(hintText: "Your name"),
+            ),
+            actions: [
+              TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancel")),
+              TextButton(
+                  onPressed: () => Navigator.pop(context, controller.text.trim()),
+                  child: const Text("Continue")),
+            ],
+          );
+        },
+      );
+
+      if (name == null || name.isEmpty) {
+        hasAskedName = false;
+        return;
+      }
+
+      guestName = name;
+
+      // ✅ Save guest name in ChatsRoomId doc
+      await logic.myFbFs
+          .collection('ChatsRoomId')
+          .doc(widget.chatRoomId)
+          .set({'guestName': guestName}, SetOptions(merge: true));
+
+      // ✅ Save locally
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('guest_name', guestName!);
+    }
+
+    await logic.sendMessage(widget.chatRoomId, widget.receiverId, message);
   }
 
   @override
@@ -104,21 +162,29 @@ class _ChattingPageState extends State<ChattingPage> {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
-                if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('No messages yet.'));
+                  return Center(child: Text("Error: ${snapshot.error}"));
                 }
 
-                final messages = snapshot.data!;
+                final messages = snapshot.data ?? [];
+
+                if (messages.isEmpty) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    showCommonQuestions.value = true;
+                  });
+                  return const Center(child: Text("No messages yet."));
+                }
+
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  showCommonQuestions.value = false;
+                });
+
                 return ListView.builder(
                   padding: const EdgeInsets.all(12),
                   reverse: true,
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
-                    final message = messages[index];
-                    final isMe = message.senderId == logic.myFbAuth.currentUser?.uid;
-
+                    final msg = messages[index];
+                    final isMe = msg.senderId == logic.myFbAuth.currentUser?.uid;
                     return Align(
                       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
                       child: Container(
@@ -127,22 +193,17 @@ class _ChattingPageState extends State<ChattingPage> {
                         constraints: const BoxConstraints(maxWidth: 260),
                         decoration: BoxDecoration(
                           color: isMe ? const Color(0xFF4B2EDF) : Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(16),
-                            topRight: const Radius.circular(16),
-                            bottomLeft: Radius.circular(isMe ? 16 : 0),
-                            bottomRight: Radius.circular(isMe ? 0 : 16),
-                          ),
+                          borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.05),
                               blurRadius: 6,
                               offset: const Offset(0, 2),
-                            ),
+                            )
                           ],
                         ),
                         child: Text(
-                          message.messageText,
+                          msg.messageText,
                           style: TextStyle(
                             color: isMe ? Colors.white : Colors.black87,
                             fontSize: 14,
@@ -156,16 +217,14 @@ class _ChattingPageState extends State<ChattingPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: buildCommonQuestions(),
           ),
           Container(
-            padding: const EdgeInsets.fromLTRB(12, 6, 12, 12),
+            padding: const EdgeInsets.all(12),
             decoration: const BoxDecoration(
               color: Colors.white,
-              border: Border(
-                top: BorderSide(color: Color(0xFFEEEEEE)),
-              ),
+              border: Border(top: BorderSide(color: Color(0xFFEEEEEE))),
             ),
             child: Row(
               children: [
@@ -174,10 +233,10 @@ class _ChattingPageState extends State<ChattingPage> {
                     controller: _messageController,
                     decoration: InputDecoration(
                       hintText: "Type a message...",
-                      hintStyle: const TextStyle(fontSize: 14),
-                      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                      filled: true,
+                      contentPadding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                       fillColor: const Color(0xFFF2F2F5),
+                      filled: true,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(25),
                         borderSide: BorderSide.none,
@@ -186,25 +245,22 @@ class _ChattingPageState extends State<ChattingPage> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: const Color(0xFF4B2EDF),
-                  ),
+                CircleAvatar(
+                  backgroundColor: const Color(0xFF4B2EDF),
                   child: IconButton(
                     icon: const Icon(Icons.send, color: Colors.white, size: 20),
                     onPressed: () async {
                       String text = _messageController.text.trim();
                       if (text.isNotEmpty) {
-                        await logic.sendMessage(widget.chatRoomId, widget.receiverId, text);
+                        await sendWithNameCheck(text);
                         _messageController.clear();
                       }
                     },
                   ),
-                ),
+                )
               ],
             ),
-          ),
+          )
         ],
       ),
     );
