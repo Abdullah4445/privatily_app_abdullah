@@ -14,7 +14,7 @@ class ChattingPageLogic extends GetxController {
     try {
       String senderId = myFbAuth.currentUser!.uid;
       await myFbFs
-          .collection('Guests') // 🔁 Updated path
+          .collection('ChatsRoomId') // 🔁 Updated path
           .doc(chatRoomId)
           .collection('Messages')
           .add({
@@ -31,7 +31,7 @@ class ChattingPageLogic extends GetxController {
   // ✅ Get Messages from ChatsRoomId → chatRoomId → Messages
   Stream<List<Messages>> getMessages(String chatRoomId) {
     return myFbFs
-        .collection('Guests') // 🔁 Updated path
+        .collection('ChatsRoomId') // 🔁 Updated path
         .doc(chatRoomId)
         .collection('Messages')
         .orderBy('timestamp', descending: true)

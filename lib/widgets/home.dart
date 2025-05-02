@@ -141,25 +141,25 @@ class _HomeState extends State<Home> {
 
 
   // Floating action button to toggle chat
-  Widget floatingMessageButton() {
-    return Positioned(
-      bottom: 24,
-      right: 24,
-      child: FloatingActionButton(
-        backgroundColor: Colors.deepPurple,
-        onPressed: () async {
-          setState(() => showChatBox = !showChatBox);
-          if (showChatBox) {
-            await logic.initGuestChat();
-          }
-        },
-        child: Icon(
-          showChatBox ? Icons.close : Icons.chat_bubble_outline,
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
+  // Widget floatingMessageButton() {
+  //   return Positioned(
+  //     bottom: 24,
+  //     right: 24,
+  //     child: FloatingActionButton(
+  //       backgroundColor: Colors.deepPurple,
+  //       onPressed: () async {
+  //         setState(() => showChatBox = !showChatBox);
+  //         if (showChatBox) {
+  //           await logic.initGuestChat();
+  //         }
+  //       },
+  //       child: Icon(
+  //         showChatBox ? Icons.close : Icons.chat_bubble_outline,
+  //         color: Colors.white,
+  //       ),
+  //     ),
+  //   );
+  // }
 
 
   // Scroll to testimonials
@@ -174,33 +174,32 @@ class _HomeState extends State<Home> {
   }
 
   // Five-star rating section
-  Widget fiveStars(double screenWidth) {
-    double iconSize = screenWidth < 600 ? 18 : screenWidth < 1024 ? 22 : 26;
-    return GestureDetector(
-      onTap: scrollToTestimonials,
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              children: List.generate(5, (index) {
-                return Icon(Icons.star, color: Colors.orange, size: iconSize);
-              }),
-            ),
-            const SizedBox(width: 12),
-            Text(
-              'Rated 4.2+ stars by entrepreneurs worldwide',
-              style: TextStyle(fontSize: iconSize * 0.6, fontWeight: FontWeight.bold),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget fiveStars(double screenWidth) {
+  //   double iconSize = screenWidth < 600 ? 18 : screenWidth < 1024 ? 22 : 26;
+  //   return GestureDetector(
+  //     onTap: scrollToTestimonials,
+  //     child: MouseRegion(
+  //       cursor: SystemMouseCursors.click,
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: [
+  //           Row(
+  //             children: List.generate(5, (index) {
+  //               return Icon(Icons.star, color: Colors.orange, size: iconSize);
+  //             }),
+  //           ),
+  //           const SizedBox(width: 12),
+  //           Text(
+  //             'Rated 4.2+ stars by entrepreneurs worldwide',
+  //             style: TextStyle(fontSize: iconSize * 0.6, fontWeight: FontWeight.bold),
+  //           )
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // Widget for displaying testimonial section
-  final GlobalKey _testimonialKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {

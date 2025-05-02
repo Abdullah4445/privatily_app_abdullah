@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import '../chat_page/view.dart';
 import '../utils/utils.dart';
 
 class HomeLogic extends GetxController {
