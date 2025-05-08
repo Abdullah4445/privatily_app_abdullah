@@ -146,7 +146,7 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
             children: [
               // Product image wrapped in SEO image
               ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                 child: Seo.image(
                   src: product.thumbnailUrl ?? '',
                   alt: product.title ?? 'Product image',

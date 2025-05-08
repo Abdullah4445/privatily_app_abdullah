@@ -11,7 +11,9 @@ import 'package:seo/seo.dart'; // SEO package
 import '../animations/animated_on_scrool.dart';
 import '../modules/cart/cart_logic.dart';
 import '../modules/cart/cart_view.dart';
+import '../modules/chat_page/chat/view/chatting_page.dart';
 import '../modules/chat_page/view.dart';
+import '../modules/chatting_page/chatting_page_view.dart';
 import '../modules/preview/privatily_preview_image.dart';
 import '../modules/sections/FAQ_section.dart';
 import '../modules/sections/FooterSection.dart';
@@ -130,7 +132,7 @@ class _HomeState extends State<Home> {
     backgroundColor: Colors.deepPurple,
     onPressed: () async {
       setState(() => showChatBox = !showChatBox);
-      if (showChatBox) await logic.initGuestChat();
+       if (showChatBox) await logic.initGuestChat();
     },
     child: Icon(showChatBox ? Icons.close : Icons.chat_bubble_outline, color: Colors.white),
   );

@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import '../../models/students.dart';
+import '../chat_page/chat/view/chatting_page.dart';
 import '../chat_page/view.dart';
 
 class HomeLogic extends GetxController {
