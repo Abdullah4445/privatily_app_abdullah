@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import '../utils/utils.dart';
+import '../firebase_utils.dart';
+import '../utils/utils.dart';  // Assuming utils.dart contains generateChatRoomId()
+// Import for setUserOnline()
+
 
 class HomeLogic extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -15,10 +18,27 @@ class HomeLogic extends GetxController {
   var receiverIdForPopup = ''.obs;
   var receiverNameForPopup = ''.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    // Call setUserOnline after the controller is initialized (if user is signed in)
+    checkAndSetUserOnline();
+  }
+
+  Future<void> checkAndSetUserOnline() async {
+    if (auth.currentUser != null) {
+      await setUserOnline();  // Set online if already signed in
+    }
+  }
+
   Future<void> initGuestChat() async {
     try {
       if (auth.currentUser == null) {
-        await auth.signInAnonymously();
+        await auth.signInAnonymously().then((value) async {  // Use .then() to execute code after signInAnonymously completes
+          if (auth.currentUser != null) {
+            await setUserOnline(); // Set online after signing in anonymously
+          }
+        });
       }
 
       final guestId = auth.currentUser!.uid;
