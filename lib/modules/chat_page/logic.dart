@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
+import '../../firebase_utils.dart';
 import '../../models/messages.dart';
 
 class ChattingPageLogic extends GetxController {
@@ -44,5 +47,50 @@ class ChattingPageLogic extends GetxController {
   void updateMessages(List<Messages> newMessages) {
     messages.value = newMessages;
   }
+
+  Future<void> setUserOffline() async {
+    final user = myFbAuth.currentUser;
+    if (user != null) {
+      await myFbFs.collection('users').doc(user.uid).set({
+        'isOnline': false,
+        'lastSeen': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+    }
+  }
+
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      setUserOnline();
+    } else if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      setUserOffline();
+    }
+  }
+  void setTypingStatus(bool isTyping) async {
+    final user = myFbAuth.currentUser;
+    if (user != null) {
+      print("setTypingStatus called with isTyping: $isTyping"); //ADDED
+      await myFbFs.collection('users').doc(user.uid).set({
+        'isTyping': isTyping,
+      }, SetOptions(merge: true));
+    }
+  }
+  // Future<void> setUserOnline() async {
+  //   final user = FirebaseAuth.instance.currentUser;
+  //   if (user != null) {
+  //     try {
+  //       await myFbFs.collection('users').doc(user.uid).set({
+  //         'isOnline': true,
+  //         'lastSeen': FieldValue.serverTimestamp(),
+  //       }, SetOptions(merge: true));
+  //       print("User ${user.uid} set to online");
+  //     } catch (e) {
+  //       print("Error setting user online: $e");
+  //     }
+  //   } else {
+  //     print("No user logged in, cannot set online status.");
+  //   }
+  // }
 }
 //2891627 0308

@@ -8,7 +8,7 @@ Future<void> setUserOnline() async {
       await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
         'isOnline': true,
         'lastSeen': FieldValue.serverTimestamp(),
-        'isTyping': false, // Set default value for isTyping
+        // 'isTyping': false, // Set default value for isTyping
       }, SetOptions(merge: true));
       print("User ${user.uid} set to online");
     } catch (e) {

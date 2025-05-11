@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../../firebase_utils.dart';
 import '../../logic.dart';
 import 'widgets/message_bubble.dart';
 import 'widgets/message_input_field.dart';
@@ -49,60 +50,16 @@ class _ChattingPageState extends State<ChattingPage> with WidgetsBindingObserver
 
   @override
   void dispose() {
-    setUserOffline();
+    logic.setUserOffline();
     WidgetsBinding.instance.removeObserver(this);
     _typingTimer?.cancel();
     Get.delete<ChattingPageLogic>();
     super.dispose();
   }
 
-  Future<void> setUserOnline() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      try {
-        await _firestore.collection('users').doc(user.uid).set({
-          'isOnline': true,
-          'lastSeen': FieldValue.serverTimestamp(),
-        }, SetOptions(merge: true));
-        print("User ${user.uid} set to online");
-      } catch (e) {
-        print("Error setting user online: $e");
-      }
-    } else {
-      print("No user logged in, cannot set online status.");
-    }
-  }
 
-  Future<void> setUserOffline() async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      await _firestore.collection('users').doc(user.uid).set({
-        'isOnline': false,
-        'lastSeen': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
-    }
-  }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      setUserOnline();
-    } else if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
-      setUserOffline();
-    }
-  }
 
-  void setTypingStatus(bool isTyping) async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      print("setTypingStatus called with isTyping: $isTyping"); //ADDED
-      await _firestore.collection('users').doc(user.uid).set({
-        'isTyping': isTyping,
-      }, SetOptions(merge: true));
-    }
-  }
 
   Future<void> _loadGuestName() async {
     final prefs = await SharedPreferences.getInstance();
@@ -233,21 +190,25 @@ class _ChattingPageState extends State<ChattingPage> with WidgetsBindingObserver
             onChanged: (text) {
               final isTyping = text.trim().isNotEmpty;
               print("onChanged called. text: '$text', isTyping: $isTyping");
-              setTypingStatus(isTyping);
+
+             logic.setTypingStatus(isTyping);
+
               if (_typingTimer != null && _typingTimer!.isActive) {
                 print("Timer cancelled");
                 _typingTimer!.cancel();
               }
+
               if (isTyping) {
                 _typingTimer = Timer(const Duration(seconds: 1), () {
                   print("Timer expired, setting isTyping to false");
-                  setTypingStatus(false);
+                 logic.setTypingStatus(false);
                 });
               } else {
                 print("Text field is empty");
               }
             },
           ),
+
         ],
       ),
     );
