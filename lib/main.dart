@@ -8,6 +8,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'firebase_options.dart';
 import 'firebase_utils.dart';
 import 'modules/cart/cart_view.dart';
+import 'modules/chat_page/chat/view/widgets/variables/globalVariables.dart';
 import 'modules/checkout/checkout_view.dart';
 import 'modules/project_details/project_details_view.dart';
 import 'modules/sections/featuredProducts/productController.dart';
@@ -31,7 +32,7 @@ void main() async {
 
   // Call setUserOnline if the user is already logged in
   if (user != null) {
-    await setUserOnline();
+    await setUserOnline(globalChatRoomId);
   }
   // Register controllers before runApp
   Get.put(ProductsController());

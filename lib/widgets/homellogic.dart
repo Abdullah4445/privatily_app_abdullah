@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import '../firebase_utils.dart';
+import '../modules/chat_page/chat/view/widgets/variables/globalVariables.dart';
 import '../utils/utils.dart';  // Assuming utils.dart contains generateChatRoomId()
 // Import for setUserOnline()
 
@@ -27,7 +28,7 @@ class HomeLogic extends GetxController {
 
   Future<void> checkAndSetUserOnline() async {
     if (auth.currentUser != null) {
-      await setUserOnline();  // Set online if already signed in
+      await setUserOnline(globalChatRoomId);  // Set online if already signed in
     }
   }
 
@@ -36,7 +37,7 @@ class HomeLogic extends GetxController {
       if (auth.currentUser == null) {
         await auth.signInAnonymously().then((value) async {  // Use .then() to execute code after signInAnonymously completes
           if (auth.currentUser != null) {
-            await setUserOnline(); // Set online after signing in anonymously
+            await setUserOnline(globalChatRoomId); // Set online after signing in anonymously
           }
         });
       }

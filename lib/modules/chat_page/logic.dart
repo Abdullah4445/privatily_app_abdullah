@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import '../../firebase_utils.dart';
 import '../../models/messages.dart';
+import 'chat/view/widgets/variables/globalVariables.dart';
 
 class ChattingPageLogic extends GetxController {
   var messages = <Messages>[].obs;
@@ -51,7 +52,7 @@ class ChattingPageLogic extends GetxController {
   Future<void> setUserOffline() async {
     final user = myFbAuth.currentUser;
     if (user != null) {
-      await myFbFs.collection('users').doc(user.uid).set({
+      await myFbFs.collection('ChatsRoomId').doc(globalChatRoomId).collection("usersStatus").doc(user.uid).set({
         'isOnline': false,
         'lastSeen': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
@@ -60,7 +61,7 @@ class ChattingPageLogic extends GetxController {
 
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      setUserOnline();
+      setUserOnline(globalChatRoomId);
     } else if (state == AppLifecycleState.inactive ||
         state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached) {
@@ -71,7 +72,7 @@ class ChattingPageLogic extends GetxController {
     final user = myFbAuth.currentUser;
     if (user != null) {
       print("setTypingStatus called with isTyping: $isTyping"); //ADDED
-      await myFbFs.collection('users').doc(user.uid).set({
+      await myFbFs.collection('ChatsRoomId').doc(globalChatRoomId).collection("usersStatus").doc(user.uid).set({
         'isTyping': isTyping,
       }, SetOptions(merge: true));
     }
@@ -92,5 +93,7 @@ class ChattingPageLogic extends GetxController {
   //     print("No user logged in, cannot set online status.");
   //   }
   // }
+
+
 }
 //2891627 0308
