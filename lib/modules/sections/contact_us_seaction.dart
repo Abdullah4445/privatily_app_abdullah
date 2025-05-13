@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:uuid/uuid.dart';
 
 class ContactUsSection extends StatefulWidget {
   const ContactUsSection({super.key});
@@ -16,46 +19,80 @@ class _ContactUsSectionState extends State<ContactUsSection> {
   final ideaC = TextEditingController();
   final notesC = TextEditingController();
 
-  Future<void> sendEmail() async {
-    const serviceId = 'service_0d6qpba'; // ✅ Your SMTP service ID
-    const templateId = 'template_udo45eh'; // ✅ Template ID from EmailJS
-    const userId = 'TK04rHsB5x7lbPwpx'; // ✅ Your Public Key from API settings
+  // Future<void> sendEmail() async {
+  //   const serviceId = 'service_0d6qpba'; // ✅ Your SMTP service ID
+  //   const templateId = 'template_udo45eh'; // ✅ Template ID from EmailJS
+  //   const userId = 'TK04rHsB5x7lbPwpx'; // ✅ Your Public Key from API settings
+  //
+  //   final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+  //
+  //   final response = await http.post(
+  //     url,
+  //     headers: {
+  //       'origin': 'http://localhost', // required header
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: json.encode({
+  //       'service_id': serviceId,
+  //       'template_id': templateId,
+  //       'user_id': userId,
+  //       'template_params': {
+  //         'from_name': nameC.text, // must match template variable
+  //         'from_email': emailC.text,
+  //         'business_idea': ideaC.text,
+  //         'additional_notes': notesC.text,
+  //       },
+  //     }),
+  //   );
+  //
+  //   if (response.statusCode == 200) {
+  //     Get.snackbar(
+  //       'Success',
+  //       'Email sent successfully!',
+  //       snackPosition: SnackPosition.BOTTOM,
+  //     );
+  //     nameC.clear();
+  //     emailC.clear();
+  //     ideaC.clear();
+  //     notesC.clear();
+  //   } else {
+  //     Get.snackbar(
+  //       'Error',
+  //       'Failed to send email: ${response.body}',
+  //       snackPosition: SnackPosition.BOTTOM,
+  //     );
+  //   }
+  // }
+  Future<void> sendMessage() async {
+    var myDocId = Uuid().v1();
+    final messageData = {
+      'from_name': nameC.text,
+      'from_email': emailC.text,
+      'business_idea': ideaC.text,
+      'additional_notes': notesC.text,
+      'timestamp': FieldValue.serverTimestamp(),
+      'id': myDocId,
+    };
 
-    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    try {
+      // Save data to Firestore
+      await FirebaseFirestore.instance.collection('messageTouch').doc(myDocId).set(messageData);
 
-    final response = await http.post(
-      url,
-      headers: {
-        'origin': 'http://localhost', // required header
-        'Content-Type': 'application/json',
-      },
-      body: json.encode({
-        'service_id': serviceId,
-        'template_id': templateId,
-        'user_id': userId,
-        'template_params': {
-          'from_name': nameC.text, // must match template variable
-          'from_email': emailC.text,
-          'business_idea': ideaC.text,
-          'additional_notes': notesC.text,
-        },
-      }),
-    );
-
-    if (response.statusCode == 200) {
       Get.snackbar(
         'Success',
-        'Email sent successfully!',
+        'Message submitted successfully!',
         snackPosition: SnackPosition.BOTTOM,
       );
+
+      // Clear form
       nameC.clear();
       emailC.clear();
       ideaC.clear();
       notesC.clear();
-    } else {
+    } catch (e) {
       Get.snackbar(
         'Error',
-        'Failed to send email: ${response.body}',
+        'Failed to submit message: $e',
         snackPosition: SnackPosition.BOTTOM,
       );
     }
@@ -166,7 +203,7 @@ class _ContactUsSectionState extends State<ContactUsSection> {
                                           ),
                                         ),
                                       ),
-                                      onPressed: sendEmail,
+                                      onPressed: sendMessage,
                                       child: Text('contact_button'.tr),
                                     ),
                                   ),

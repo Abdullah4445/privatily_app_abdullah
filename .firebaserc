@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "billtech-6f3b1"
-  }
+    "default": "billtech-6f3b1",
+    "development": "billtech-6f3b1"
+  },
+  "targets": {},
+  "etags": {}
 }

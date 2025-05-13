@@ -75,7 +75,7 @@ class OurMissionSection extends StatelessWidget {
               ),
               children: [
                 TextSpan(
-                  text: ' mission_heading_2'.tr,
+                  text: 'mission_heading_2'.tr,
                   style: const TextStyle(color: Color(0xFF00C853)),
                 ),
               ],
