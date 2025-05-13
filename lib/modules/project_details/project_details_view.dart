@@ -8,6 +8,7 @@ import '../../widgets/myProgressIndicator.dart';
 import 'project_details_logic.dart';
 
 class ProjectDetailsPage extends StatelessWidget {
+  //Shoaib work
   const ProjectDetailsPage({super.key});
 
   static const _horizontalPadding = 16.0;
