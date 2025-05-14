@@ -28,7 +28,8 @@ class _HomeStatsSectionState extends State<HomeStatsSection> {
         }
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        // padding: EdgeInsets.only(top: 10),
         color: const Color(0xFFF9F9FF),
         child: Column(
           children: [
@@ -54,22 +55,22 @@ class _HomeStatsSectionState extends State<HomeStatsSection> {
                 children: [
                   _StatItem(
                     titleKey: 'stats_clients',
-                    endValue: 2300,
+                    endValue: 300,
                     animate: _visible,
                   ),
                   _StatItem(
                     titleKey: 'stats_projects',
-                    endValue: 2800,
+                    endValue: 800,
                     animate: _visible,
                   ),
                   _StatItem(
                     titleKey: 'stats_countries',
-                    endValue: 150,
+                    endValue: 30,
                     animate: _visible,
                   ),
                   _StatItem(
                     titleKey: 'stats_years',
-                    endValue: 6,
+                    endValue: 10,
                     animate: _visible,
                   ),
                 ],

@@ -93,6 +93,7 @@ flutter:
    - assets/lotties/back.json
    - assets/lotties/myGreyBack.json
    - assets/lotties/rocket.json
+   - assets/lotties/
   #   - images/a_dot_ham.jpeg
 
 flutter_launcher_icons:

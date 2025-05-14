@@ -65,7 +65,7 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
             Text('discover_software'.tr,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: screenWidth < 600 ? 16 : 18, color: Colors.black54)),
-            const Gap(14),
+            const Gap(5),
             SizedBox(
               width: double.infinity,
               height: isMobile ? 300 : 450,
@@ -152,143 +152,145 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
             borderRadius: BorderRadius.circular(8),
             boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4))],
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Use a Stack to layer the image and the WhatsApp icon
-              Stack(
-                children: [
-                  // Product image wrapped in SEO image
-                  ClipRRect(
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
-                    child: Seo.image(
-                      src: product.thumbnailUrl ?? '',
-                      alt: product.title ?? 'Product image',
-                      child: Image.network(
-                        product.thumbnailUrl ?? 'https://via.placeholder.com/300x200?text=No+Image',
-                        height: isMobile ? 215 : 295,
-                        width: double.infinity,
-                        fit: BoxFit.fill,
-                        loadingBuilder: (ctx, child, progress) {
-                          return progress == null ? child : const MyLoader();
-                        },
-                        errorBuilder: (ctx, _, __) => Container(
-                          height: 200,
-                          color: Colors.grey[200],
-                          child: const Icon(Icons.broken_image, size: 48, color: Colors.grey),
-                        ),
-                      ),
-                    ),
-                  ),
-                  // WhatsApp icon positioned at the top right
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: GestureDetector(
-                      onTap: () async {
-                        final Uri uri = Uri.parse(whatsappUrl);
-                        if (!await launchUrl(uri)) {
-                          Get.snackbar('Error', 'Could not launch WhatsApp');
-                        }
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.8),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          FontAwesomeIcons.whatsapp, // Using a generic WhatsApp icon from Material Icons
-                          color: Colors.green,
-                          size: 24,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Use a Stack to layer the image and the WhatsApp icon
+                Stack(
                   children: [
-                    // Product title and rating
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Seo.text(
-                            text: product.title ?? 'No Title',
-                            style: TextTagStyle.h3,
-                            child: Text(
-                              product.title ?? 'No Title',
-                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                    // Product image wrapped in SEO image
+                    ClipRRect(
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                      child: Seo.image(
+                        src: product.thumbnailUrl ?? '',
+                        alt: product.title ?? 'Product image',
+                        child: Image.network(
+                          product.thumbnailUrl ?? 'https://via.placeholder.com/300x200?text=No+Image',
+                          height: isMobile ? 215 : 295,
+                          width: double.infinity,
+                          fit: BoxFit.fill,
+                          loadingBuilder: (ctx, child, progress) {
+                            return progress == null ? child : const MyLoader();
+                          },
+                          errorBuilder: (ctx, _, __) => Container(
+                            height: 200,
+                            color: Colors.grey[200],
+                            child: const Icon(Icons.broken_image, size: 48, color: Colors.grey),
                           ),
                         ),
-                        _buildRatingStars(4.5),
-                      ],
-                    ),
-                    const Gap(4),
-                    // Product subtitle
-                    Seo.text(
-                      text: product.subtitle ?? '',
-                      style: TextTagStyle.p,
-                      child: Text(
-                        product.subtitle ?? '',
-                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const Gap(4),
-                    // Price and sales count
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Seo.text(
-                          text: '\$${product.price?.toStringAsFixed(0) ?? 'N/A'}',
-                          style: TextTagStyle.h4,
-                          child: Text(
-                            '\$${product.price?.toStringAsFixed(0) ?? 'N/A'}',
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    // WhatsApp icon positioned at the top right
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: GestureDetector(
+                        onTap: () async {
+                          final Uri uri = Uri.parse(whatsappUrl);
+                          if (!await launchUrl(uri)) {
+                            Get.snackbar('Error', 'Could not launch WhatsApp');
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.8),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            FontAwesomeIcons.whatsapp, // Using a generic WhatsApp icon from Material Icons
+                            color: Colors.green,
+                            size: 24,
                           ),
                         ),
-                        Seo.text(
-                          text: '${product.soldCount ?? 0} Sales',
-                          style: TextTagStyle.p,
-                          child: Text(
-                            '${product.soldCount ?? 0} Sales',
-                            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                    // Add to cart button
-                    // Align(
-                    //   alignment: Alignment.centerRight,
-                    //   child: IconButton(
-                    //     onPressed: () {
-                    //       cartController.add(product);
-                    //       Get.snackbar(
-                    //         'Added',
-                    //         '${product.title} added to cart',
-                    //         snackPosition: SnackPosition.BOTTOM,
-                    //         mainButton: TextButton(
-                    //           onPressed: () => Get.toNamed(CartPage.routeName),
-                    //           child: const Text('VIEW CART'),
-                    //         ),
-                    //       );
-                    //     },
-                    //     icon: const Icon(Icons.add_shopping_cart, size: 18),
-                    //   ),
-                    // ),
                   ],
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Product title and rating
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Seo.text(
+                              text: product.title ?? 'No Title',
+                              style: TextTagStyle.h3,
+                              child: Text(
+                                product.title ?? 'No Title',
+                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                          _buildRatingStars(4.5),
+                        ],
+                      ),
+                      const Gap(4),
+                      // Product subtitle
+                      Seo.text(
+                        text: product.subtitle ?? '',
+                        style: TextTagStyle.p,
+                        child: Text(
+                          product.subtitle ?? '',
+                          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const Gap(4),
+                      // Price and sales count
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Seo.text(
+                            text: '\$${product.price?.toStringAsFixed(0) ?? 'N/A'}',
+                            style: TextTagStyle.h4,
+                            child: Text(
+                              '\$${product.price?.toStringAsFixed(0) ?? 'N/A'}',
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                          ),
+                          Seo.text(
+                            text: '${product.soldCount ?? 0} Sales',
+                            style: TextTagStyle.p,
+                            child: Text(
+                              '${product.soldCount ?? 0} Sales',
+                              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // Add to cart button
+                      // Align(
+                      //   alignment: Alignment.centerRight,
+                      //   child: IconButton(
+                      //     onPressed: () {
+                      //       cartController.add(product);
+                      //       Get.snackbar(
+                      //         'Added',
+                      //         '${product.title} added to cart',
+                      //         snackPosition: SnackPosition.BOTTOM,
+                      //         mainButton: TextButton(
+                      //           onPressed: () => Get.toNamed(CartPage.routeName),
+                      //           child: const Text('VIEW CART'),
+                      //         ),
+                      //       );
+                      //     },
+                      //     icon: const Icon(Icons.add_shopping_cart, size: 18),
+                      //   ),
+                      // ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

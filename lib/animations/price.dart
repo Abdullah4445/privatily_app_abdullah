@@ -130,12 +130,12 @@ class _PlanCardState extends State<PlanCard> {
           child: Card(
             elevation: 10,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            // margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             color: Colors.white,
             child: Stack(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(18),
+                  padding: const EdgeInsets.all(8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -179,7 +179,7 @@ class _PlanCardState extends State<PlanCard> {
 
                 // ✅ WhatsApp Icon Top Right
                 Positioned(
-                  top: 8,
+                  bottom: 5,
                   right: 8,
                   child: GestureDetector(
                     onTap: () async {

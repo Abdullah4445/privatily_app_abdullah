@@ -191,6 +191,7 @@ const Map<String, String> esES = {
   'world_premium_feature5': 'Implementación más rápida en tiendas de aplicaciones globales con soporte especializado',
   'Contact Us!': '¡Contáctanos!',
   'for_new_proj': 'Para Nuevos Proyectos',
+  'other_services': "Otros servicios",
   //
 
 };
