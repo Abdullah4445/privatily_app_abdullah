@@ -192,5 +192,6 @@ const Map<String, String> frFR = {
   'chat_suggestion_plan': 'J\'ai besoin d\'aide avec un plan',
   'chat_input_hint': 'Écrivez votre message...',
   'Contact Us!': 'Contactez-nous !',
+  'for_new_proj': 'Pour les Nouveaux Projets',
 
 };

@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:seo/seo.dart'; // SEO package
 
+import '../../../animations/price.dart';
 import '../../../models/products.dart';
 import '../../../widgets/myProgressIndicator.dart';
 import '../../cart/cart_logic.dart';
@@ -60,6 +62,10 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
               ),
             ),
             const Gap(5),
+            Text('discover_software'.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: screenWidth < 600 ? 16 : 18, color: Colors.black54)),
+            const Gap(14),
             SizedBox(
               width: double.infinity,
               height: isMobile ? 300 : 450,
@@ -120,6 +126,11 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 768;
 
+    // Define the WhatsApp URL. You'll need the phone number.
+    // Replace 'YOUR_PHONE_NUMBER' with the actual phone number, including country code.
+    // You can also add a pre-filled message using '&text=Your message here'.
+    final whatsappUrl = "whatsapp://send?phone=+923058431046&text=I'm interested in your product: ${product.title}";
+
     return Seo.link(
       href: '/product-detail/${product.projectId}',
       anchor: product.title ?? 'Product',
@@ -144,27 +155,57 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Product image wrapped in SEO image
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
-                child: Seo.image(
-                  src: product.thumbnailUrl ?? '',
-                  alt: product.title ?? 'Product image',
-                  child: Image.network(
-                    product.thumbnailUrl ?? 'https://via.placeholder.com/300x200?text=No+Image',
-                    height: isMobile ? 215 : 295,
-                    width: double.infinity,
-                    fit: BoxFit.fill,
-                    loadingBuilder: (ctx, child, progress) {
-                      return progress == null ? child : const MyLoader();
-                    },
-                    errorBuilder: (ctx, _, __) => Container(
-                      height: 200,
-                      color: Colors.grey[200],
-                      child: const Icon(Icons.broken_image, size: 48, color: Colors.grey),
+              // Use a Stack to layer the image and the WhatsApp icon
+              Stack(
+                children: [
+                  // Product image wrapped in SEO image
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+                    child: Seo.image(
+                      src: product.thumbnailUrl ?? '',
+                      alt: product.title ?? 'Product image',
+                      child: Image.network(
+                        product.thumbnailUrl ?? 'https://via.placeholder.com/300x200?text=No+Image',
+                        height: isMobile ? 215 : 295,
+                        width: double.infinity,
+                        fit: BoxFit.fill,
+                        loadingBuilder: (ctx, child, progress) {
+                          return progress == null ? child : const MyLoader();
+                        },
+                        errorBuilder: (ctx, _, __) => Container(
+                          height: 200,
+                          color: Colors.grey[200],
+                          child: const Icon(Icons.broken_image, size: 48, color: Colors.grey),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  // WhatsApp icon positioned at the top right
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: GestureDetector(
+                      onTap: () async {
+                        final Uri uri = Uri.parse(whatsappUrl);
+                        if (!await launchUrl(uri)) {
+                          Get.snackbar('Error', 'Could not launch WhatsApp');
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.8),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          FontAwesomeIcons.whatsapp, // Using a generic WhatsApp icon from Material Icons
+                          color: Colors.green,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.all(8),
@@ -226,24 +267,24 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
                       ],
                     ),
                     // Add to cart button
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: IconButton(
-                        onPressed: () {
-                          cartController.add(product);
-                          Get.snackbar(
-                            'Added',
-                            '${product.title} added to cart',
-                            snackPosition: SnackPosition.BOTTOM,
-                            mainButton: TextButton(
-                              onPressed: () => Get.toNamed(CartPage.routeName),
-                              child: const Text('VIEW CART'),
-                            ),
-                          );
-                        },
-                        icon: const Icon(Icons.add_shopping_cart, size: 18),
-                      ),
-                    ),
+                    // Align(
+                    //   alignment: Alignment.centerRight,
+                    //   child: IconButton(
+                    //     onPressed: () {
+                    //       cartController.add(product);
+                    //       Get.snackbar(
+                    //         'Added',
+                    //         '${product.title} added to cart',
+                    //         snackPosition: SnackPosition.BOTTOM,
+                    //         mainButton: TextButton(
+                    //           onPressed: () => Get.toNamed(CartPage.routeName),
+                    //           child: const Text('VIEW CART'),
+                    //         ),
+                    //       );
+                    //     },
+                    //     icon: const Icon(Icons.add_shopping_cart, size: 18),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

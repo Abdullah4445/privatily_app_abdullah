@@ -1,14 +1,18 @@
 import 'dart:io';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
+import 'package:privatily_app/modules/stepstolaunch/stepstolaunch.dart';
 import 'package:privatily_app/widgets/translationsController.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:seo/seo.dart'; // SEO package
 
 import '../animations/animated_on_scrool.dart';
+import '../animations/price.dart';
 import '../modules/cart/cart_logic.dart';
 import '../modules/cart/cart_view.dart';
 import '../modules/chat_page/view.dart';
@@ -158,17 +162,17 @@ class _HomeState extends State<Home> {
                     if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
                       TextButton(onPressed: () => scrollToSection(_faqKey), child: Text('FAQ'.tr)),
                     const Gap(10),
-                    Obx(() {
-                      final count = Get.find<CartLogic>().itemCount;
-                      return Badge(
-                        label: Text(count.toString()),
-                        isLabelVisible: count > 0,
-                        child: IconButton(
-                          icon: const Icon(Icons.shopping_cart),
-                          onPressed: () => Get.toNamed(CartPage.routeName),
-                        ),
-                      );
-                    }),
+                    // Obx(() {
+                    //   final count = Get.find<CartLogic>().itemCount;
+                    //   return Badge(
+                    //     label: Text(count.toString()),
+                    //     isLabelVisible: count > 0,
+                    //     child: IconButton(
+                    //       icon: const Icon(Icons.shopping_cart),
+                    //       onPressed: () => Get.toNamed(CartPage.routeName),
+                    //     ),
+                    //   );
+                    // }),
                     // Language selector
                     Container(
                       width: 80,
@@ -197,6 +201,42 @@ class _HomeState extends State<Home> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // Hero with SEO text
+
+                      // AnimatedOnScroll(
+                      //   child: Seo.text(
+                      //     text: 'ready_to_launch'.tr,
+                      //     style: TextTagStyle.h2,
+                      //     child: Text('ready_to_launch'.tr,
+                      //         textAlign: TextAlign.center,
+                      //         style: TextStyle(
+                      //             fontSize: screenWidth < 600
+                      //                 ? 24
+                      //                 : screenWidth < 1024
+                      //                 ? 36
+                      //                 : 46,
+                      //             fontWeight: FontWeight.bold)),
+                      //   ),
+                      // ),
+                      // const Gap(10),
+                      // AnimatedOnScroll(
+                      //   child: Seo.text(
+                      //     text: 'leverageOur'.tr,
+                      //     style: TextTagStyle.p,
+                      //     child: Text('leverageOur'.tr,
+                      //         textAlign: TextAlign.center,
+                      //         style: TextStyle(
+                      //             fontSize: screenWidth < 600 ? 14 : 16,
+                      //             color: Colors.black87)),
+                      //   ),
+                      // ),
+                      const Gap(12),
+                      // AnimatedOnScroll(
+                      //   child: Seo.image(
+                      //     src: 'assets/images/preview.png',
+                      //     alt: 'LaunchCode app preview',
+                      //     child: const PrivatilyPreviewImage(),
+                      //   ),
+                      // ),
                       AnimatedOnScroll(
                         child: Seo.text(
                           text: 'launch_sooner'.tr + ' ' + 'grow_faster'.tr,
@@ -204,48 +244,12 @@ class _HomeState extends State<Home> {
                           child: _buildLaunchCodeHero(ctx),
                         ),
                       ),
-                      const Gap(20),
-                      AnimatedOnScroll(
-                        child: Seo.text(
-                          text: 'ready_to_launch'.tr,
-                          style: TextTagStyle.h2,
-                          child: Text('ready_to_launch'.tr,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: screenWidth < 600
-                                      ? 24
-                                      : screenWidth < 1024
-                                      ? 36
-                                      : 46,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                      const Gap(10),
-                      AnimatedOnScroll(
-                        child: Seo.text(
-                          text: 'leverageOur'.tr,
-                          style: TextTagStyle.p,
-                          child: Text('leverageOur'.tr,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: screenWidth < 600 ? 14 : 16,
-                                  color: Colors.black87)),
-                        ),
-                      ),
-                      const Gap(30),
-                      AnimatedOnScroll(
-                        child: Seo.image(
-                          src: 'assets/images/preview.png',
-                          alt: 'LaunchCode app preview',
-                          child: const PrivatilyPreviewImage(),
-                        ),
-                      ),
+                      const Gap(12),
+
                       // Sections
-                      Padding(
-                        key: _featuredKey,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: const FeaturedProductsSection(),
-                      ),
+
+
+                      const Gap(12),
                       const AnimatedOnScroll(child: HomeStatsSection()),
                       AnimatedOnScroll(child: WhyLaunchCodeSection(key: _whyUsKey)),
                       const AnimatedOnScroll(child: PremiumBonusSection()),
@@ -286,39 +290,121 @@ class _HomeState extends State<Home> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Wrap(
-            spacing: 8,
-            runSpacing: 4,
-            alignment: WrapAlignment.center,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.rocket_launch, color: Colors.deepPurple, size: 28),
-              Text('launch_sooner'.tr, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
-              const Icon(Icons.trending_up, color: Colors.green, size: 28),
-              Text('grow_faster'.tr, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+              SizedBox(
+                height: 80,
+                width: 50,
+                child: Lottie.asset(
+                  'assets/lotties/rocket.json', // 🔥 change to your lottie
+                  repeat: true,
+                  animate: true,
+                ),
+              ),
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                alignment: WrapAlignment.center,
+                children: [
+
+                  Text('launch_sooner'.tr, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+                  const Icon(Icons.trending_up, color: Colors.green, size: 28),
+                  Text('grow_faster'.tr, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+                ],
+              ),
             ],
           ),
           const Gap(6),
-          Text('discover_software'.tr,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: width < 600 ? 16 : 18, color: Colors.black54)),
-          const Gap(16),
-          Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
+
+          Stack(
             children: [
-              ElevatedButton.icon(
-                onPressed: () => scrollToSection(_featuredKey),
-                icon: const Icon(Icons.explore),
-                label: Text('explore_products'.tr),
-                style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12)),
+              AnimatedOnScroll(
+                child: Seo.image(
+                  src: 'assets/images/preview.png',
+                  alt: 'LaunchCode app preview',
+                  child: const LaunchSteps(),
+                ),
               ),
-              OutlinedButton.icon(
-                onPressed: () => scrollToSection(_featuredKey),
-                icon: const Icon(Icons.code),
-                label: Text('browse_categories'.tr),
-                style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12)),
+              Positioned(
+                top: 6,
+                right: 6,
+                child: SizedBox(
+                  width: 250,
+                  height:400,
+                  child:  Lottie.asset(
+                    'assets/lotties/back.json' ,// 🎉 Show hurrah on last step
+                    repeat: true,
+                    animate: true,
+                  ),
+                )
               ),
+            ],
+          ),
+
+          // const Gap(16),
+
+          Stack(
+            children: [
+              Container(
+                color:Colors.white,
+                height: 700,
+                width: double.infinity,
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    Padding(
+                      key: _featuredKey,
+                      padding: const EdgeInsets.symmetric(vertical: 2),
+                      child: const FeaturedProductsSection(),
+                    ),
+                    Lottie.asset('assets/lotties/myGreyBack.json',width: double.infinity),
+
+
+                    Container(
+                      height: 200,
+                      child: Row(
+                        spacing: 16,
+                        // runSpacing: 16,
+                        // alignment: WrapAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          PlanCard(
+                            text: "BASIC PLAN",
+                            price: 150,
+                            supportDays: "Mon-Fri",
+                            deliveryTime: "15 Days",
+                          ),
+                          PlanCard(
+                            text: "ADVANCED PLAN",
+                            price: 350,
+                            supportDays: "Mon-Sun",
+                            deliveryTime: "7 Days",
+                          )
+
+                          // ElevatedButton.icon(
+                          //   onPressed: () => scrollToSection(_featuredKey),
+                          //   icon: const Icon(Icons.explore),
+                          //   label: Text('explore_products'.tr),
+                          //   style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12)),
+                          // ),
+
+                          // OutlinedButton.icon(
+                          //   onPressed: () => scrollToSection(_featuredKey),
+                          //   icon: const Icon(Icons.code),
+                          //   label: Text('browse_categories'.tr),
+                          //   style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12)),
+                          // ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+
+
+
             ],
           ),
         ],

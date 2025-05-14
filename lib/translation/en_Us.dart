@@ -1,7 +1,7 @@
 const Map<String, String> enUS = {
   'launch_sooner': 'Launch Sooner.',
   'grow_faster': 'Grow Faster.',
-  'discover_software': 'Discover Ready-to-Use Software Scripts to Power Your Business.',
+  'discover_software': 'Discover Ready-to-Use Software Scripts to Power Your Digital Business.',
   'explore_products': 'Explore Products',
   'browse_categories': 'Browse Categories',
   'rated_stars': 'Rated 4.2+ stars by entrepreneurs worldwide',
@@ -198,5 +198,6 @@ const Map<String, String> enUS = {
   'world_premium_feature3': 'Phone, chat, and email support anytime, anywhere',
   'world_premium_feature4': 'Premium hosting and domain management globally',
   'world_premium_feature5': 'Faster deployment to global app stores with specialized support',
+  'for_new_proj':"For New Projects",
 
 };

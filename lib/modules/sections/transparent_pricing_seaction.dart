@@ -118,7 +118,7 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
         children: [
           // Section title as SEO-enhanced h2
           Seo.text(
-            text: '${'transparent'.tr} ${'pricing'.tr}',
+            text: '${'transparent'.tr} ${'pricing'.tr} ${'for_new_proj'.tr}',
             style: TextTagStyle.h2,
             child: Text.rich(
               TextSpan(
@@ -128,6 +128,10 @@ class _TransparentPricingSectionState extends State<TransparentPricingSection> {
                   TextSpan(
                     text: ' ${'pricing'.tr}',
                     style: const TextStyle(color: Colors.green),
+                  ),
+                  TextSpan(
+                    text: ' ${'for_new_proj'.tr}',
+                    style: const TextStyle(color: Colors.black54),
                   ),
                 ],
               ),

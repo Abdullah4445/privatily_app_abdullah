@@ -190,5 +190,6 @@ const Map<String, String> arAR = {
   'world_premium_feature4': 'إدارة الاستضافة والنطاقات المتميزة عالميًا',
   'world_premium_feature5': 'نشر أسرع في متاجر التطبيقات العالمية بدعم متخصص',
   'Contact Us!': 'اتصل بنا!',
+  'for_new_proj': 'للمشاريع الجديدة',
 
 };
