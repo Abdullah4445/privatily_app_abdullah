@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:math';
+import 'package:animated_icon/animated_icon.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:privatily_app/modules/chat_page/chat/view/widgets/guestStatus.dart';
+import 'package:privatily_app/modules/chat_page/chat/view/widgets/msgAnim_Icon.dart';
+import 'package:privatily_app/modules/chat_page/chat/view/widgets/typing_indicator.dart';
 import 'package:privatily_app/modules/chat_page/chat/view/widgets/variables/globalVariables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -120,7 +124,10 @@ class _ChattingPageState extends State<ChattingPage> with WidgetsBindingObserver
     return Container(
       color: const Color(0xFFF9F9FB),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: AdminStatus(adminUserId: widget.receiverId),
@@ -178,6 +185,8 @@ class _ChattingPageState extends State<ChattingPage> with WidgetsBindingObserver
               },
             ),
           ),
+          MsgAnimIcon(guestUserId: widget.receiverId),
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: CommonQuestions(
@@ -218,4 +227,5 @@ class _ChattingPageState extends State<ChattingPage> with WidgetsBindingObserver
     );
   }
 }
+
 
