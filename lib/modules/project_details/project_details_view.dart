@@ -90,10 +90,10 @@ class ProjectDetailsPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          product.title ?? '',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-        ),
+        // Text(
+        //   product.title ?? '',
+        //   style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+        // ),
         if (product.subtitle?.isNotEmpty ?? false)
           Padding(
             padding: const EdgeInsets.only(top: 4),
