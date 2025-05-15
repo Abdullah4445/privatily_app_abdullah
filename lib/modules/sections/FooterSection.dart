@@ -184,7 +184,7 @@ class FooterSection extends StatelessWidget {
 
 Widget responsiveFooter(BuildContext context) {
   final screenWidth = MediaQuery.of(context).size.width;
-  const webBreakpoint = 800; // Adjust this based on your design
+  const webBreakpoint = 1000; // Adjust this based on your design
 
   // Web Layout
   if (screenWidth >= webBreakpoint) {
