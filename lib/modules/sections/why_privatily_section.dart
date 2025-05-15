@@ -55,7 +55,7 @@ class _WhyLaunchCodeSectionState extends State<WhyLaunchCodeSection>
       child: SlideTransition(
         position: _slideAnimation,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 50),
+          padding: const EdgeInsets.symmetric(vertical: 2),
           child: Flex(
             direction: isMobile ? Axis.vertical : Axis.horizontal,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

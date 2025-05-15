@@ -1,14 +1,19 @@
 import 'dart:io';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
+import 'package:privatily_app/animations/serviceCards.dart';
+import 'package:privatily_app/modules/stepstolaunch/stepstolaunch.dart';
 import 'package:privatily_app/widgets/translationsController.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:seo/seo.dart'; // SEO package
 
 import '../animations/animated_on_scrool.dart';
+import '../animations/price.dart';
 import '../modules/cart/cart_logic.dart';
 import '../modules/cart/cart_view.dart';
 import '../modules/chat_page/view.dart';
@@ -64,7 +69,12 @@ class _HomeState extends State<Home> {
   }
 
   Widget fiveStars(double screenWidth) {
-    final iconSize = screenWidth < 600 ? 18 : screenWidth < 1024 ? 22 : 26;
+    final iconSize =
+        screenWidth < 600
+            ? 18
+            : screenWidth < 1024
+            ? 22
+            : 26;
     return GestureDetector(
       onTap: () => scrollToSection(_testimonialKey),
       child: MouseRegion(
@@ -72,9 +82,21 @@ class _HomeState extends State<Home> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(children: List.generate(5, (_) => Icon(Icons.star, color: Colors.orange, size: double.parse(iconSize.toString())))),
+            Row(
+              children: List.generate(
+                5,
+                (_) => Icon(
+                  Icons.star,
+                  color: Colors.orange,
+                  size: double.parse(iconSize.toString()),
+                ),
+              ),
+            ),
             const SizedBox(width: 12),
-            Text('rated_stars'.tr, style: TextStyle(fontSize: iconSize * 0.6, fontWeight: FontWeight.bold)),
+            Text(
+              'rated_stars'.tr,
+              style: TextStyle(fontSize: iconSize * 0.6, fontWeight: FontWeight.bold),
+            ),
           ],
         ),
       ),
@@ -87,41 +109,49 @@ class _HomeState extends State<Home> {
       right: 24,
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 500),
-        transitionBuilder: (child, anim) => FadeTransition(
-          opacity: anim,
-          child: ScaleTransition(
-            scale: CurvedAnimation(parent: anim, curve: Curves.easeOutBack),
-            child: SlideTransition(
-              position: Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero).animate(anim),
-              child: child,
+        transitionBuilder:
+            (child, anim) => FadeTransition(
+              opacity: anim,
+              child: ScaleTransition(
+                scale: CurvedAnimation(parent: anim, curve: Curves.easeOutBack),
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(0, 0.2),
+                    end: Offset.zero,
+                  ).animate(anim),
+                  child: child,
+                ),
+              ),
             ),
-          ),
-        ),
-        child: showChatBox
-            ? Material(
-          key: const ValueKey('chatbox'),
-          borderRadius: BorderRadius.circular(20),
-          elevation: 8,
-          color: Colors.transparent,
-          child: Container(
-            width: 360,
-            height: 480,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 25)],
-            ),
-            child: Obx(() => logic.showChatScreen.value
-                ? ChattingPage(
-              chatRoomId: logic.chatRoomIdForPopup.value,
-              receiverId: logic.receiverIdForPopup.value,
-              receiverName: logic.receiverNameForPopup.value,
-            )
-                : const Center(child: CircularProgressIndicator())),
-          ),
-        )
-            : const SizedBox.shrink(),
+        child:
+            showChatBox
+                ? Material(
+                  key: const ValueKey('chatbox'),
+                  borderRadius: BorderRadius.circular(20),
+                  elevation: 8,
+                  color: Colors.transparent,
+                  child: Container(
+                    width: 360,
+                    height: 480,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 25)],
+                    ),
+                    child: Obx(
+                      () =>
+                          logic.showChatScreen.value
+                              ? ChattingPage(
+                                chatRoomId: logic.chatRoomIdForPopup.value,
+                                receiverId: logic.receiverIdForPopup.value,
+                                receiverName: logic.receiverNameForPopup.value,
+                              )
+                              : const Center(child: CircularProgressIndicator()),
+                    ),
+                  ),
+                )
+                : const SizedBox.shrink(),
       ),
     );
   }
@@ -132,14 +162,21 @@ class _HomeState extends State<Home> {
       setState(() => showChatBox = !showChatBox);
       if (showChatBox) await logic.initGuestChat();
     },
-    child: Icon(showChatBox ? Icons.close : Icons.chat_bubble_outline, color: Colors.white),
+    child: Icon(
+      showChatBox ? Icons.close : Icons.chat_bubble_outline,
+      color: Colors.white,
+    ),
   );
 
   @override
   Widget build(BuildContext context) {
     return Seo.head(
       tags: [
-        MetaTag(name: 'description', content: 'LaunchCode: launch sooner and grow faster with our software marketplace.'),
+        MetaTag(
+          name: 'description',
+          content:
+              'LaunchCode: launch sooner and grow faster with our software marketplace.',
+        ),
         LinkTag(rel: 'canonical', href: 'https://launchcode.shop/'),
       ],
       child: Builder(
@@ -153,41 +190,52 @@ class _HomeState extends State<Home> {
                   backgroundColor: Colors.white,
                   actions: [
                     if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
-                      TextButton(onPressed: () => scrollToSection(_whyUsKey), child: Text('Why Us?'.tr)),
-                    TextButton(onPressed: () => scrollToSection(_contactUsKey), child: Text('Contact Us!'.tr)),
+                      TextButton(
+                        onPressed: () => scrollToSection(_whyUsKey),
+                        child: Text('Why Us?'.tr),
+                      ),
+                    TextButton(
+                      onPressed: () => scrollToSection(_contactUsKey),
+                      child: Text('Contact Us!'.tr),
+                    ),
                     if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
-                      TextButton(onPressed: () => scrollToSection(_faqKey), child: Text('FAQ'.tr)),
+                      TextButton(
+                        onPressed: () => scrollToSection(_faqKey),
+                        child: Text('FAQ'.tr),
+                      ),
                     const Gap(10),
-                    Obx(() {
-                      final count = Get.find<CartLogic>().itemCount;
-                      return Badge(
-                        label: Text(count.toString()),
-                        isLabelVisible: count > 0,
-                        child: IconButton(
-                          icon: const Icon(Icons.shopping_cart),
-                          onPressed: () => Get.toNamed(CartPage.routeName),
-                        ),
-                      );
-                    }),
+                    // Obx(() {
+                    //   final count = Get.find<CartLogic>().itemCount;
+                    //   return Badge(
+                    //     label: Text(count.toString()),
+                    //     isLabelVisible: count > 0,
+                    //     child: IconButton(
+                    //       icon: const Icon(Icons.shopping_cart),
+                    //       onPressed: () => Get.toNamed(CartPage.routeName),
+                    //     ),
+                    //   );
+                    // }),
                     // Language selector
                     Container(
                       width: 80,
                       margin: const EdgeInsets.only(right: 8),
-                      child: Obx(() => DropdownButton<String>(
-                        value: selectedLang.value,
-                        underline: const SizedBox.shrink(),
-                        isExpanded: true,
-                        items: const [
-                          DropdownMenuItem(value: 'en', child: Text('English')),
-                          DropdownMenuItem(value: 'fr', child: Text('Français')),
-                          DropdownMenuItem(value: 'es', child: Text('Español')),
-                          DropdownMenuItem(value: 'ar', child: Text('عربي')),
-                        ],
-                        onChanged: (val) {
-                          selectedLang.value = val!;
-                          Get.put(TranslationController()).changeLanguage(val);
-                        },
-                      )),
+                      child: Obx(
+                        () => DropdownButton<String>(
+                          value: selectedLang.value,
+                          underline: const SizedBox.shrink(),
+                          isExpanded: true,
+                          items: const [
+                            DropdownMenuItem(value: 'en', child: Text('English')),
+                            DropdownMenuItem(value: 'fr', child: Text('Français')),
+                            DropdownMenuItem(value: 'es', child: Text('Español')),
+                            DropdownMenuItem(value: 'ar', child: Text('عربي')),
+                          ],
+                          onChanged: (val) {
+                            selectedLang.value = val!;
+                            Get.put(TranslationController()).changeLanguage(val);
+                          },
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -197,6 +245,42 @@ class _HomeState extends State<Home> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // Hero with SEO text
+
+                      // AnimatedOnScroll(
+                      //   child: Seo.text(
+                      //     text: 'ready_to_launch'.tr,
+                      //     style: TextTagStyle.h2,
+                      //     child: Text('ready_to_launch'.tr,
+                      //         textAlign: TextAlign.center,
+                      //         style: TextStyle(
+                      //             fontSize: screenWidth < 600
+                      //                 ? 24
+                      //                 : screenWidth < 1024
+                      //                 ? 36
+                      //                 : 46,
+                      //             fontWeight: FontWeight.bold)),
+                      //   ),
+                      // ),
+                      // const Gap(10),
+                      // AnimatedOnScroll(
+                      //   child: Seo.text(
+                      //     text: 'leverageOur'.tr,
+                      //     style: TextTagStyle.p,
+                      //     child: Text('leverageOur'.tr,
+                      //         textAlign: TextAlign.center,
+                      //         style: TextStyle(
+                      //             fontSize: screenWidth < 600 ? 14 : 16,
+                      //             color: Colors.black87)),
+                      //   ),
+                      // ),
+                      const Gap(12),
+                      // AnimatedOnScroll(
+                      //   child: Seo.image(
+                      //     src: 'assets/images/preview.png',
+                      //     alt: 'LaunchCode app preview',
+                      //     child: const PrivatilyPreviewImage(),
+                      //   ),
+                      // ),
                       AnimatedOnScroll(
                         child: Seo.text(
                           text: 'launch_sooner'.tr + ' ' + 'grow_faster'.tr,
@@ -204,49 +288,40 @@ class _HomeState extends State<Home> {
                           child: _buildLaunchCodeHero(ctx),
                         ),
                       ),
-                      const Gap(20),
-                      AnimatedOnScroll(
-                        child: Seo.text(
-                          text: 'ready_to_launch'.tr,
-                          style: TextTagStyle.h2,
-                          child: Text('ready_to_launch'.tr,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: screenWidth < 600
-                                      ? 24
-                                      : screenWidth < 1024
-                                      ? 36
-                                      : 46,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                      const Gap(10),
-                      AnimatedOnScroll(
-                        child: Seo.text(
-                          text: 'leverageOur'.tr,
-                          style: TextTagStyle.p,
-                          child: Text('leverageOur'.tr,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: screenWidth < 600 ? 14 : 16,
-                                  color: Colors.black87)),
-                        ),
-                      ),
-                      const Gap(30),
+                      const Gap(18),
+
+                      const AnimatedOnScroll(child: HomeStatsSection()),
+
+                      const Gap(18),
                       AnimatedOnScroll(
                         child: Seo.image(
                           src: 'assets/images/preview.png',
                           alt: 'LaunchCode app preview',
-                          child: const PrivatilyPreviewImage(),
+                          child: Column(
+                            children: [
+                              Seo.text(
+                                text: 'other_services'.tr,
+                                style: TextTagStyle.h1,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'other_services'.tr,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: screenWidth < 600 ? 18 : 22,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    ServiceCards(),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      // Sections
-                      Padding(
-                        key: _featuredKey,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: const FeaturedProductsSection(),
-                      ),
-                      const AnimatedOnScroll(child: HomeStatsSection()),
+                      const Gap(18),
                       AnimatedOnScroll(child: WhyLaunchCodeSection(key: _whyUsKey)),
                       const AnimatedOnScroll(child: PremiumBonusSection()),
                       const AnimatedOnScroll(child: HowMuchTimeSection()),
@@ -271,6 +346,8 @@ class _HomeState extends State<Home> {
     );
   }
 
+  var greyBackSize = 800.0;
+
   Widget _buildLaunchCodeHero(BuildContext ctx) {
     final width = MediaQuery.of(ctx).size.width;
     return Container(
@@ -286,40 +363,129 @@ class _HomeState extends State<Home> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Wrap(
-            spacing: 8,
-            runSpacing: 4,
-            alignment: WrapAlignment.center,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.rocket_launch, color: Colors.deepPurple, size: 28),
-              Text('launch_sooner'.tr, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
-              const Icon(Icons.trending_up, color: Colors.green, size: 28),
-              Text('grow_faster'.tr, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+              SizedBox(
+                height: 80,
+                width: 50,
+                child: Lottie.asset(
+                  'assets/lotties/rocket.json', // 🔥 change to your lottie
+                  repeat: true,
+                  animate: true,
+                ),
+              ),
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                alignment: WrapAlignment.center,
+                children: [
+                  Text(
+                    'launch_sooner'.tr,
+                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  ),
+                  const Icon(Icons.trending_up, color: Colors.green, size: 28),
+                  Text(
+                    'grow_faster'.tr,
+                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ],
           ),
           const Gap(6),
-          Text('discover_software'.tr,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: width < 600 ? 16 : 18, color: Colors.black54)),
-          const Gap(16),
-          Wrap(
-            spacing: 16,
-            runSpacing: 16,
-            alignment: WrapAlignment.center,
-            children: [
-              ElevatedButton.icon(
-                onPressed: () => scrollToSection(_featuredKey),
-                icon: const Icon(Icons.explore),
-                label: Text('explore_products'.tr),
-                style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12)),
-              ),
-              OutlinedButton.icon(
-                onPressed: () => scrollToSection(_featuredKey),
-                icon: const Icon(Icons.code),
-                label: Text('browse_categories'.tr),
-                style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12)),
-              ),
-            ],
+
+          AnimatedOnScroll(
+            child: Seo.image(
+              src: 'assets/images/preview.png',
+              alt: 'LaunchCode app preview',
+              child: const LaunchSteps(),
+            ),
+          ),
+
+          // const Gap(16),
+          Container(
+            height:
+                !ResponsiveBreakpoints.of(context).isMobile
+                    ? 750
+                    : 660, // Adjusted height to fit everything comfortably
+            alignment: Alignment.bottomCenter,
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                Padding(
+                  key: _featuredKey,
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: const FeaturedProductsSection(),
+                ),
+                SizedBox(
+                  height: 500,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: [
+                      SizedBox(
+                        height: 600,
+                        width: greyBackSize,
+                        child: Lottie.asset('assets/lotties/myGreyBack.json'),
+                      ),
+                      SizedBox(
+                        height: 600,
+                        width: greyBackSize,
+                        child: Lottie.asset('assets/lotties/myGreyBack.json'),
+                      ),
+                      SizedBox(
+                        height: 600,
+                        width: greyBackSize,
+                        child: Lottie.asset('assets/lotties/myGreyBack.json'),
+                      ),
+                      SizedBox(
+                        height: 600,
+                        width: greyBackSize,
+                        child: Lottie.asset('assets/lotties/myGreyBack.json'),
+                      ),
+                    ],
+                  ),
+                ),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SizedBox(
+                      height: 190,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        // padding: const EdgeInsets.symmetric(horizontal: 8),
+                        children: [
+                          // Wrap in a SizedBox to match the full width if content is small
+                          ConstrainedBox(
+                            constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                PlanCard(
+                                  text: "BASIC PLAN",
+                                  price: 150,
+                                  supportDays: "Mon-Fri",
+                                  deliveryTime: "15 Days",
+                                ),
+                                SizedBox(width: 2),
+                                PlanCard(
+                                  text: "ADVANCED PLAN",
+                                  price: 350,
+                                  supportDays: "Mon-Sun",
+                                  deliveryTime: "7 Days",
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+
+                // 🟢 Lottie animation at the bottom
+              ],
+            ),
           ),
         ],
       ),

@@ -1,7 +1,7 @@
 const Map<String, String> enUS = {
   'launch_sooner': 'Launch Sooner.',
   'grow_faster': 'Grow Faster.',
-  'discover_software': 'Discover Ready-to-Use Software Scripts to Power Your Business.',
+  'discover_software': 'Discover Ready-to-Use Software Scripts to Power Your Digital Business.',
   'explore_products': 'Explore Products',
   'browse_categories': 'Browse Categories',
   'rated_stars': 'Rated 4.2+ stars by entrepreneurs worldwide',
@@ -20,7 +20,7 @@ const Map<String, String> enUS = {
   'customization_details_desc': 'Provide us with your business name, logo, design preferences, and any other required details to tailor the product to your needs.',
   'get_ready_launch': 'Get Ready to Launch',
   'get_ready_launch_desc': 'We’ll customize and deploy your app to the App Store, Play Store, and Admin Panel in as little as 3 days.',
-  'trusted_text': 'With over 10 years in the industry and having served 2300+ clients, LaunchCode is the trusted partner for entrepreneurs worldwide. Our expert team ensures that your digital product is built, deployed, and live in no time!',
+  'trusted_text': 'With over 10 years in the industry and having served 300+ clients, LaunchCode is the trusted partner for entrepreneurs worldwide. Our expert team ensures that your digital product is built, deployed, and live in no time!',
   'transparent': 'Transparent ',
   'pricing': 'Pricing',
   'where_live': 'Where do you live?',
@@ -63,7 +63,7 @@ const Map<String, String> enUS = {
   'time_playstore': 'Play Store Deployment',
   'time_adminpanel': 'Admin Panel Deployment',
   'stats_title': 'LaunchCode by Numbers',
-  'stats_clients': 'Clients',
+  'stats_clients': 'Satisfied Customers',
   'stats_projects': 'Projects Delivered',
   'stats_countries': 'Countries Reached',
   'stats_years': 'Years in Industry',
@@ -198,5 +198,8 @@ const Map<String, String> enUS = {
   'world_premium_feature3': 'Phone, chat, and email support anytime, anywhere',
   'world_premium_feature4': 'Premium hosting and domain management globally',
   'world_premium_feature5': 'Faster deployment to global app stores with specialized support',
+  'for_new_proj':"For New Projects",
+
+  'other_services':"Other Services"
 
 };
