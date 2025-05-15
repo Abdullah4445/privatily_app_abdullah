@@ -3,6 +3,7 @@
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:readmore/readmore.dart';
 import 'package:seo/seo.dart';
 
 import '../../models/products.dart';
@@ -90,10 +91,10 @@ class ProjectDetailsPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Text(
-        //   product.title ?? '',
-        //   style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-        // ),
+        Text(
+          product.title ?? '',
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+        ),
         if (product.subtitle?.isNotEmpty ?? false)
           Padding(
             padding: const EdgeInsets.only(top: 4),
@@ -159,10 +160,19 @@ class ProjectDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildDescription(BuildContext context, Project product) => Text(
-    product.projectDesc ?? '',
-    style: Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.6, color: Colors.grey[800]),
-  );
+  Widget _buildDescription(BuildContext context, Project product) =>
+      ReadMoreText(product.projectDesc ?? '',
+        trimMode: TrimMode.Line,
+        trimLines:2,
+        trimCollapsedText: 'Read More',
+        trimExpandedText: 'Read Less',
+
+      );
+
+    //   Text(
+    // product.projectDesc ?? '',
+    // style: Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.6, color: Colors.grey[800]),
+  // );
 
   Widget _buildShotBlockWithDemo(BuildContext context, String? title, String? demoLink, List<String>? urls, ProjectDetailsLogic logic) {
     if (urls == null || urls.isEmpty) return const SizedBox();
@@ -267,22 +277,22 @@ class ProjectDetailsPage extends StatelessWidget {
       backgroundColor: Colors.white,
       elevation: 0,
       flexibleSpace: FlexibleSpaceBar(
-        titlePadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-        title: Seo.text(
-          text: logic.product.value?.title ?? '',
-          style: TextTagStyle.h3,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.85),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              logic.product.value?.title ?? '',
-              style: const TextStyle(color: Colors.black87, fontWeight: FontWeight.w600),
-            ),
-          ),
-        ),
+        // titlePadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        // title: Seo.text(
+        //   text: logic.product.value?.title ?? '',
+        //   style: TextTagStyle.h3,
+        //   child: Container(
+        //     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        //     decoration: BoxDecoration(
+        //       color: Colors.white.withOpacity(0.85),
+        //       borderRadius: BorderRadius.circular(20),
+        //     ),
+        //     child: Text(
+        //       logic.product.value?.title ?? '',
+        //       style: const TextStyle(color: Colors.black87, fontWeight: FontWeight.w600),
+        //     ),
+        //   ),
+        // ),
         background: ClipRRect(
           borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
           child: Stack(
