@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:privatily_app/translation/app_translations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -47,7 +48,8 @@ class MyApp extends StatelessWidget {
       // ],
       // Pass the context to generate <head> and <body> tree
       tree: WidgetTree(context: context),
-      child: GetMaterialApp(
+      child: GetMaterialApp(theme: ThemeData(
+          textTheme: GoogleFonts.poppinsTextTheme(),),
         title: 'LaunchCode',
         debugShowCheckedModeBanner: false,
         translations: AppTranslations(),

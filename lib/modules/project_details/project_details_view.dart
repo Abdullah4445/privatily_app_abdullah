@@ -1,3 +1,258 @@
+// import 'package:carousel_slider_plus/carousel_slider_plus.dart';
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:seo/seo.dart';
+// import 'package:google_fonts/google_fonts.dart';
+//
+// import '../../models/products.dart';
+// import '../../widgets/myProgressIndicator.dart';
+// import 'project_details_logic.dart';
+//
+// class ProjectDetailsPage extends StatelessWidget {
+//   const ProjectDetailsPage({super.key});
+//
+//   static const _horizontalPadding = 16.0;
+//   static const _accentColor = Color(0xFF00E676);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final logic = Get.put(ProjectDetailsLogic());
+//
+//     return Scaffold(
+//       backgroundColor: Colors.white,
+//       body: Obx(() {
+//         if (!logic.isProductLoaded) {
+//           return const Center(child: MyLoader());
+//         }
+//         final product = logic.product.value;
+//         if (product == null) {
+//           return const Center(child: Text('Product not found.'));
+//         }
+//
+//         return Seo.head(
+//           tags: [
+//             MetaTag(name: 'description', content: product.projectDesc ?? ''),
+//             LinkTag(
+//               rel: 'canonical',
+//               href: 'https://launchcode.shop/product-detail/${product.projectId}',
+//             ),
+//           ],
+//           child: CustomScrollView(
+//             slivers: [
+//               _buildSliverAppBar(context, logic),
+//               SliverToBoxAdapter(
+//                 child: Padding(
+//                   padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
+//                   child: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       const SizedBox(height: 24),
+//                       Seo.text(
+//                         text: product.title ?? '',
+//                         style: TextTagStyle.h1,
+//                         child: Text(
+//                           product.title ?? '',
+//                           style: GoogleFonts.poppins(
+//                             textStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
+//                               fontWeight: FontWeight.bold,
+//                               color: Colors.black87,
+//                               fontSize: 28,
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//                       if (product.subtitle?.isNotEmpty ?? false)
+//                         Padding(
+//                           padding: const EdgeInsets.only(top: 4),
+//                           child: Seo.text(
+//                             text: product.subtitle!,
+//                             style: TextTagStyle.h2,
+//                             child: Text(
+//                               product.subtitle!,
+//                               style: GoogleFonts.poppins(
+//                                 textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
+//                                   color: Colors.grey[600],
+//                                   fontSize: 20,
+//                                 ),
+//                               ),
+//                             ),
+//                           ),
+//                         ),
+//                       const SizedBox(height: 12),
+//                       Row(
+//                         children: [
+//                           Container(
+//                             padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+//                             decoration: BoxDecoration(
+//                               color: _accentColor.withOpacity(0.1),
+//                               borderRadius: BorderRadius.circular(30),
+//                             ),
+//                             child: Seo.text(
+//                               text: '\$${product.price?.toStringAsFixed(2) ?? 'N/A'}',
+//                               style: TextTagStyle.h2,
+//                               child: Text(
+//                                 '\$${product.price?.toStringAsFixed(2) ?? 'N/A'}',
+//                                 style: GoogleFonts.poppins(
+//                                   textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
+//                                     color: _accentColor,
+//                                     fontWeight: FontWeight.w600,
+//                                     fontSize: 20,
+//                                   ),
+//                                 ),
+//                               ),
+//                             ),
+//                           ),
+//                           const Spacer(),
+//                           if ((product.soldCount ?? 0) > 0)
+//                             Seo.text(
+//                               text: 'Sold: ${product.soldCount}',
+//                               style: TextTagStyle.p,
+//                               child: Text(
+//                                 'Sold: ${product.soldCount}',
+//                                 style: GoogleFonts.poppins(
+//                                   textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+//                                     color: Colors.grey[600],
+//                                     fontSize: 16,
+//                                   ),
+//                                 ),
+//                               ),
+//                             ),
+//                         ],
+//                       ),
+//                       const SizedBox(height: 24),
+//                       _buildActionButtons(context, logic),
+//                       const SizedBox(height: 32),
+//                       _buildSectionTitle(context, 'Description', isSeo: true),
+//                       const SizedBox(height: 8),
+//                       _buildDescription(context, product, isSeo: true),
+//                       if (product.adminPanelScreenshots.isNotEmpty) ...[
+//                         const SizedBox(height: 32),
+//                         _buildGallerySection(
+//                           context,
+//                           title: 'Admin Panel Screenshots',
+//                           images: product.adminPanelScreenshots,
+//                           logic: logic,
+//                           isSeo: true,
+//                         ),
+//                       ],
+//                       if (product.apkDemoScreenshots.isNotEmpty) ...[
+//                         const SizedBox(height: 32),
+//                         _buildGallerySection(
+//                           context,
+//                           title: 'APK Demo Screenshots',
+//                           images: product.apkDemoScreenshots,
+//                           logic: logic,
+//                           isSeo: true,
+//                         ),
+//                       ],
+//                       if (_hasDemos(product)) ...[
+//                         const SizedBox(height: 32),
+//                         _buildSectionTitle(context, 'Live Demos', isSeo: true),
+//                         _buildDemoLinks(context, logic, product),
+//                       ],
+//                       const SizedBox(height: 48),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             ],
+//           ),
+//         );
+//       }),
+//     );
+//   }
+//
+//   Widget _buildActionButtons(BuildContext c, ProjectDetailsLogic logic) {
+//     final link = logic.product.value?.projectLink;
+//     return Wrap(
+//       spacing: 12,
+//       runSpacing: 8,
+//       children: [
+//         ElevatedButton.icon(
+//           icon: const Icon(Icons.shopping_cart_outlined),
+//           label: Text('Add to Cart', style: GoogleFonts.poppins(fontSize: 16)),
+//           onPressed: logic.addToCart,
+//           style: ElevatedButton.styleFrom(
+//             backgroundColor: _accentColor,
+//             elevation: 6,
+//             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 28),
+//             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+//           ),
+//         ),
+//         if (link?.isNotEmpty ?? false)
+//           OutlinedButton.icon(
+//             icon: const Icon(Icons.open_in_new),
+//             label: Text('Preview', style: GoogleFonts.poppins(fontSize: 16)),
+//             onPressed: () => logic.launchUrlExternal(link),
+//             style: OutlinedButton.styleFrom(
+//               side: BorderSide(color: _accentColor, width: 2),
+//               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+//               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 28),
+//             ),
+//           ),
+//       ],
+//     );
+//   }
+//
+//   Widget _buildSectionTitle(BuildContext c, String text, {bool isSeo = false}) {
+//     final row = Row(
+//       children: [
+//         Container(width: 4, height: 24, color: _accentColor),
+//         const SizedBox(width: 8),
+//         Text(
+//           text,
+//           style: GoogleFonts.poppins(
+//             textStyle: Theme.of(c).textTheme.titleMedium?.copyWith(
+//               fontWeight: FontWeight.bold,
+//               fontSize: 22,
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//     if (isSeo) {
+//       return Seo.text(
+//         text: text,
+//         style: TextTagStyle.h2,
+//         child: row,
+//       );
+//     }
+//     return row;
+//   }
+//
+//   Widget _buildDescription(BuildContext c, Project p, {bool isSeo = false}) {
+//     final desc = Text(
+//       p.projectDesc ?? '',
+//       style: GoogleFonts.poppins(
+//         textStyle: Theme.of(c).textTheme.bodyMedium?.copyWith(
+//           height: 1.6,
+//           color: Colors.grey[800],
+//           fontSize: 16,
+//         ),
+//       ),
+//     );
+//     if (isSeo) {
+//       return Seo.text(
+//         text: p.projectDesc ?? '',
+//         style: TextTagStyle.p,
+//         child: desc,
+//       );
+//     }
+//     return desc;
+//   }
+
+// Remaining helper methods stay the same
+
+
+
+
+
+
+
+
+
+
+
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -401,7 +656,7 @@ class ProjectDetailsPage extends StatelessWidget {
     return SliverAppBar(
       expandedHeight: 280,
       pinned: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xFF00E676),
       elevation: 0,
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
