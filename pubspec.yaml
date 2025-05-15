@@ -63,6 +63,8 @@ dependencies:
   animated_text_kit: ^4.2.3
   google_fonts: ^6.2.1
   readmore: ^3.0.0
+  card_swiper: ^3.0.1
+  flutter_card_swiper: ^7.0.2
 
 dev_dependencies:
   flutter_test:

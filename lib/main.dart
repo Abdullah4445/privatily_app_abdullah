@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: CheckoutPage.routeName, page: () => const CheckoutPage()),
           GetPage(
             name: '/product-detail/:projectId',
-            page: () => const ProjectDetailsPage(),
+            page: () => ProjectDetailsPage(),
           ),
         ],
         builder: (context, child) => ResponsiveBreakpoints.builder(

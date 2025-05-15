@@ -293,6 +293,8 @@ class _HomeState extends State<Home> {
                       const AnimatedOnScroll(child: HomeStatsSection()),
 
                       const Gap(18),
+
+                      AnimatedOnScroll(child: WhyLaunchCodeSection(key: _whyUsKey)),
                       AnimatedOnScroll(
                         child: Seo.image(
                           src: 'assets/images/preview.png',
@@ -322,7 +324,6 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       const Gap(18),
-                      AnimatedOnScroll(child: WhyLaunchCodeSection(key: _whyUsKey)),
                       const AnimatedOnScroll(child: PremiumBonusSection()),
                       const AnimatedOnScroll(child: HowMuchTimeSection()),
                       const AnimatedOnScroll(child: WhyLaunchCodeSection2()),
@@ -455,11 +456,6 @@ class _HomeState extends State<Home> {
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
-                Padding(
-                  key: _featuredKey,
-                  padding: const EdgeInsets.symmetric(vertical: 2),
-                  child: const FeaturedProductsSection(),
-                ),
                 ResponsiveBreakpoints.of(context).isMobile?Container():SizedBox(
                   height: 500,
                   child: ListView(
@@ -489,6 +485,12 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
+                Padding(
+                  key: _featuredKey,
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: const FeaturedProductsSection(),
+                ),
+
                 LayoutBuilder(
                   builder: (context, constraints) {
                     return SizedBox(

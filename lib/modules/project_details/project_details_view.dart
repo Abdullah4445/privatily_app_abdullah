@@ -2,6 +2,7 @@
 
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 import 'package:seo/seo.dart';
@@ -11,7 +12,7 @@ import '../../widgets/myProgressIndicator.dart';
 import 'project_details_logic.dart';
 
 class ProjectDetailsPage extends StatelessWidget {
-  const ProjectDetailsPage({super.key});
+  ProjectDetailsPage({super.key});
 
   static const _horizontalPadding = 16.0;
   static const _accentColor = Color(0xFF00E676);
@@ -166,6 +167,8 @@ class ProjectDetailsPage extends StatelessWidget {
         trimLines:2,
         trimCollapsedText: 'Read More',
         trimExpandedText: 'Read Less',
+        colorClickableText: Colors.black38,
+
 
       );
 
@@ -226,44 +229,108 @@ class ProjectDetailsPage extends StatelessWidget {
     );
   }
 
+
   void _openImageViewer(BuildContext context, List<String> images, int initialIndex) {
-    final controller = CarouselSliderController();
+    final swiperController = CardSwiperController();
+    int currentIndex = initialIndex;
+
     showDialog(
       context: context,
       barrierColor: Colors.black87,
-      builder: (_) => Dialog(
-        insetPadding: EdgeInsets.zero,
-        backgroundColor: Colors.transparent,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            CarouselSlider.builder(
-              controller: controller,
-              itemCount: images.length,
-              itemBuilder: (ctx, idx, realIdx) => GestureDetector(
-                onTap: () => Navigator.of(context).pop(),
-                child: InteractiveViewer(
-                  child: Center(
-                    child: Image.network(
-                      images[idx],
-                      fit: BoxFit.contain,
+      builder: (_) => StatefulBuilder(
+        builder: (ctx, setState) => Dialog(
+          insetPadding: EdgeInsets.zero,
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // Card Swiper
+              CardSwiper(
+                controller: swiperController,
+                cardsCount: images.length,
+                initialIndex: initialIndex,
+                onSwipe: (previousIndex, newIndex, direction) {
+                  setState(() => currentIndex = newIndex!);
+                  return true;
+                },
+                cardBuilder: (context, index, percentX, percentY) {
+                  return Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.network(
+                        images[index],
+                        fit: BoxFit.contain,
+                      ),
                     ),
+                  );
+                },
+              ),
+
+              // ❌ Close Button (Top Left)
+              Positioned(
+                top: 32,
+                left: 16,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.black54,
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white),
+                    onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),
               ),
-              options: CarouselOptions(
-                initialPage: initialIndex,
-                height: MediaQuery.of(context).size.height * 0.9,
-                viewportFraction: 1,
-                enableInfiniteScroll: false,
-                enlargeCenterPage: true,
-              ),
-            ),
-          ],
+
+              // ⬅️ Left Arrow
+              if (currentIndex > 0)
+                Positioned(
+                  left: 16,
+                  top: MediaQuery.of(context).size.height / 2 - 24,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.black54,
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+                      onPressed: () {
+                        swiperController.swipe(CardSwiperDirection.left);
+                        setState(() => currentIndex--);
+                      },
+                    ),
+                  ),
+                ),
+
+              // ➡️ Right Arrow
+              if (currentIndex < images.length - 1)
+                Positioned(
+                  right: 16,
+                  top: MediaQuery.of(context).size.height / 2 - 24,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.black54,
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                      icon: const Icon(Icons.arrow_forward_ios, color: Colors.white),
+                      onPressed: () {
+                        swiperController.swipe(CardSwiperDirection.right);
+                        setState(() => currentIndex++);
+                      },
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
   }
+
+
+
+
 
   bool _hasDemos(Project p) =>
       (p.demoAdminPanelLinks?.isNotEmpty ?? false) ||
@@ -272,10 +339,14 @@ class ProjectDetailsPage extends StatelessWidget {
 
   Widget _buildSliverAppBar(BuildContext context, ProjectDetailsLogic logic) {
     return SliverAppBar(
+      foregroundColor: Colors.transparent,
       expandedHeight: 280,
       pinned: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       elevation: 0,
+      leading: BackButton(
+        color: Colors.black, // Or Colors.white if your FlexibleSpaceBar is dark
+      ),
       flexibleSpace: FlexibleSpaceBar(
         // titlePadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
         // title: Seo.text(
