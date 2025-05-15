@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:privatily_app/modules/cart/cart_logic.dart';
 import 'package:privatily_app/translation/app_translations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -27,6 +28,7 @@ void main() async {
 
   // Register controllers before runApp
   Get.put(ProductsController());
+  Get.put(CartLogic());
 
   // Launch the app
   runApp(const MyApp());
