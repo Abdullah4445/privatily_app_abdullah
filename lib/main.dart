@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:privatily_app/modules/cart/cart_logic.dart';
 import 'package:privatily_app/translation/app_translations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -28,6 +28,7 @@ void main() async {
 
   // Register controllers before runApp
   Get.put(ProductsController());
+  Get.put(CartLogic());
 
   // Launch the app
   runApp(const MyApp());
@@ -48,8 +49,7 @@ class MyApp extends StatelessWidget {
       // ],
       // Pass the context to generate <head> and <body> tree
       tree: WidgetTree(context: context),
-      child: GetMaterialApp(theme: ThemeData(
-          textTheme: GoogleFonts.poppinsTextTheme(),),
+      child: GetMaterialApp(
         title: 'LaunchCode',
         debugShowCheckedModeBanner: false,
         translations: AppTranslations(),
@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: CheckoutPage.routeName, page: () => const CheckoutPage()),
           GetPage(
             name: '/product-detail/:projectId',
-            page: () => const ProjectDetailsPage(),
+            page: () => ProjectDetailsPage(),
           ),
         ],
         builder: (context, child) => ResponsiveBreakpoints.builder(

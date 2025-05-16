@@ -293,6 +293,8 @@ class _HomeState extends State<Home> {
                       const AnimatedOnScroll(child: HomeStatsSection()),
 
                       const Gap(18),
+
+                      AnimatedOnScroll(child: WhyLaunchCodeSection(key: _whyUsKey)),
                       AnimatedOnScroll(
                         child: Seo.image(
                           src: 'assets/images/preview.png',
@@ -322,7 +324,6 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       const Gap(18),
-                      AnimatedOnScroll(child: WhyLaunchCodeSection(key: _whyUsKey)),
                       const AnimatedOnScroll(child: PremiumBonusSection()),
                       const AnimatedOnScroll(child: HowMuchTimeSection()),
                       const AnimatedOnScroll(child: WhyLaunchCodeSection2()),
@@ -363,34 +364,76 @@ class _HomeState extends State<Home> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          ResponsiveBreakpoints.of(context).isMobile?Column(
+
             children: [
-              SizedBox(
-                height: 80,
-                width: 50,
-                child: Lottie.asset(
-                  'assets/lotties/rocket.json', // 🔥 change to your lottie
-                  repeat: true,
-                  animate: true,
-                ),
-              ),
-              Wrap(
-                spacing: 8,
-                runSpacing: 4,
-                alignment: WrapAlignment.center,
+             Row(
+               mainAxisAlignment: MainAxisAlignment.center,
+               children: [
+                 SizedBox(
+                   height: 50,
+                   width: 50,
+                   child: Lottie.asset(
+                     'assets/lotties/rocket.json', // 🔥 change to your lottie
+                     repeat: true,
+                     animate: true,
+                   ),
+                 ),
+                 Gap(8),
+                 Text(
+                   'launch_sooner'.tr,
+                   style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                 ),
+               ],
+             ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'launch_sooner'.tr,
-                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                  ),
                   const Icon(Icons.trending_up, color: Colors.green, size: 28),
+                  Gap(8),
                   Text(
                     'grow_faster'.tr,
                     style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
                 ],
+              )
+
+            ],
+          ):Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: Lottie.asset(
+                      'assets/lotties/rocket.json', // 🔥 change to your lottie
+                      repeat: true,
+                      animate: true,
+                    ),
+                  ),
+                  Gap(8),
+                  Text(
+                    'launch_sooner'.tr,
+                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.trending_up, color: Colors.green, size: 28),
+                  Gap(8),
+                  Text(
+                    'grow_faster'.tr,
+                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              )
+
             ],
           ),
           const Gap(6),
@@ -413,12 +456,7 @@ class _HomeState extends State<Home> {
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
-                Padding(
-                  key: _featuredKey,
-                  padding: const EdgeInsets.symmetric(vertical: 2),
-                  child: const FeaturedProductsSection(),
-                ),
-                SizedBox(
+                ResponsiveBreakpoints.of(context).isMobile?Container():SizedBox(
                   height: 500,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
@@ -447,6 +485,12 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
+                Padding(
+                  key: _featuredKey,
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: const FeaturedProductsSection(),
+                ),
+
                 LayoutBuilder(
                   builder: (context, constraints) {
                     return SizedBox(
