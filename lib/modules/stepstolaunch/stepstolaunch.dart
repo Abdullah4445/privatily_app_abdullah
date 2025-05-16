@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
 class LaunchSteps extends StatefulWidget {
@@ -11,36 +12,36 @@ class LaunchSteps extends StatefulWidget {
 class _LaunchStepsState extends State<LaunchSteps> {
   int _hoveredIndex = -1;
 
-  final List<Map<String, dynamic>> steps = const [
+  final List<Map<String, dynamic>> steps = [
     {
       'icon': Icons.dashboard_customize,
-      'title': 'Select Script',
-      'subtitle': 'Choose from our Ready Made products.',
+      'title': 'Select Script'.tr,
+      'subtitle': 'Choose from our Ready Made products.'.tr,
     },
     {
       'icon': Icons.assignment,
-      'title': 'Provide Details',
-      'subtitle': 'Logo, name, accounts, hosting.',
+      'title': 'Provide Details'.tr,
+      'subtitle': 'Logo, name, accounts, hosting.'.tr,
     },
     {
       'icon': Icons.build_circle,
-      'title': 'Configuration',
-      'subtitle': 'We customize and send you test links.',
+      'title': 'Configuration'.tr,
+      'subtitle': 'We customize and send you test links.'.tr,
     },
     {
       'icon': Icons.cloud_upload,
-      'title': 'Upload & Confirm',
-      'subtitle': 'You confirm and apps are submitted to your stores.',
+      'title': 'Upload & Confirm'.tr,
+      'subtitle': 'You confirm and apps are submitted to your stores.'.tr,
     },
     {
       'icon': Icons.attach_money,
-      'title': 'Monitor & Earn',
-      'subtitle': 'Watch installs & revenue grow.',
+      'title': 'Monitor & Earn'.tr,
+      'subtitle': 'Watch installs & revenue grow.'.tr,
     },
     {
       'icon': Icons.campaign,
-      'title': 'SMM (Optional)',
-      'subtitle': 'We can serve to market your product',
+      'title': 'SMM (Optional)'.tr,
+      'subtitle': 'We can serve to market your product'.tr,
     },
   ];
 
@@ -49,7 +50,7 @@ class _LaunchStepsState extends State<LaunchSteps> {
     return Center(
       child: SizedBox(
         height: 200,
-        child: Row(
+      child: Row(
           children: [
             Flexible(
               child: FocusableActionDetector(
@@ -97,13 +98,14 @@ class _LaunchStepsState extends State<LaunchSteps> {
                                   Icon(step['icon'], size: 30, color: Colors.redAccent),
                                   const SizedBox(height: 3),
                                   Text(
-                                    'Step ${index + 1}',
+                                    'step_number'.trArgs([ (index + 1).toString() ]),
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600,
                                       color: Colors.grey.shade700,
                                     ),
                                   ),
+
                                   const SizedBox(height: 3),
                                   Text(
                                     step['title'],

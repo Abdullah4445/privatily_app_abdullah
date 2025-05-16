@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:lottie/lottie.dart';
@@ -146,7 +147,7 @@ class _PlanCardState extends State<PlanCard> {
                           const Icon(Icons.support_agent, size: 18, color: Colors.teal),
                           const SizedBox(width: 8),
                           Text(
-                            'Support: ${widget.supportDays}',
+                            'support_with_days'.trParams({'days': widget.supportDays.toString()}),
                             style: GoogleFonts.poppins(fontSize: 13),
                           ),
                         ],
@@ -157,18 +158,19 @@ class _PlanCardState extends State<PlanCard> {
                           const Icon(Icons.access_time, size: 18, color: Colors.blue),
                           const SizedBox(width: 8),
                           Text(
-                            'Delivery Time: ${widget.deliveryTime}',
+                            'delivery_time_with_days'.trParams({'days': widget.deliveryTime.toString()}),
                             style: GoogleFonts.poppins(fontSize: 13),
                           ),
                         ],
                       ),
+
                       const SizedBox(height: 8),
                       Row(
                         children: [
                           const Icon(Icons.price_check_outlined, size: 18, color: Colors.blue),
                           const SizedBox(width: 8),
                           Text(
-                            'Fixed Price for all Scripts',
+                            'Fixed Price for all Scripts'.tr,
                             style: GoogleFonts.poppins(fontSize: 13),
                           ),
                         ],
