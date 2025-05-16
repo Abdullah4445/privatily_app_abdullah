@@ -249,19 +249,19 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          // Seo.text(
+                          //   text: '\$${product.price?.toStringAsFixed(0) ?? 'N/A'}',
+                          //   style: TextTagStyle.h4,
+                          //   child: Text(
+                          //     '\$${product.price?.toStringAsFixed(0) ?? 'N/A'}',
+                          //     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                          //   ),
+                          // ),
                           Seo.text(
-                            text: '\$${product.price?.toStringAsFixed(0) ?? 'N/A'}',
-                            style: TextTagStyle.h4,
-                            child: Text(
-                              '\$${product.price?.toStringAsFixed(0) ?? 'N/A'}',
-                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                            ),
-                          ),
-                          Seo.text(
-                            text: '${product.soldCount ?? 0} Sales',
+                            text: 'Deployed ${product.soldCount ?? 0} times',
                             style: TextTagStyle.p,
                             child: Text(
-                              '${product.soldCount ?? 0} Sales',
+                              'Deployed ${product.soldCount ?? 0} times',
                               style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                             ),
                           ),
