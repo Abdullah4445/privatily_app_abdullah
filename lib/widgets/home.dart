@@ -217,7 +217,7 @@ class _HomeState extends State<Home> {
                     // }),
                     // Language selector
                     Container(
-                      width: 80,
+                      width: 85,
                       margin: const EdgeInsets.only(right: 8),
                       child: Obx(
                         () => DropdownButton<String>(

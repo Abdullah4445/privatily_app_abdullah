@@ -9,6 +9,7 @@ import '../refundPolicy/refundPolicy.dart';
 class FooterSection extends StatelessWidget {
   const FooterSection({super.key});
 
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -120,34 +121,7 @@ class FooterSection extends StatelessWidget {
 
               const SizedBox(height: 8),
 
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image.asset('assets/images/ailab.png', height: 70, width: 70),
-                  Gap(10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Powered by Ailab Solutions'.tr,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-
-                      // Disclaimer
-                      Text(
-                        'footer_disclaimer'.tr,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 12,
-                          height: 1.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+              responsiveFooter(context)
             ],
           ),
         );
@@ -204,3 +178,77 @@ class FooterSection extends StatelessWidget {
     );
   }
 }
+
+
+
+
+Widget responsiveFooter(BuildContext context) {
+  final screenWidth = MediaQuery.of(context).size.width;
+  const webBreakpoint = 1000; // Adjust this based on your design
+
+  // Web Layout
+  if (screenWidth >= webBreakpoint) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Image.asset('assets/images/ailab.png', height: 70, width: 70),
+        const SizedBox(width: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Powered by Ailab Solutions'.tr,
+              style: const TextStyle(color: Colors.white),
+            ),
+            Text(
+              'footer_disclaimer'.tr,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 12,
+                height: 1.5,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  // Mobile Layout
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      Expanded(
+        flex: 3,
+        child: Image.asset('assets/images/ailab.png', height: 70, width: 80),
+      ),
+      Expanded(
+        flex: 7,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Powered by Ailab Solutions'.tr,
+              style: const TextStyle(color: Colors.white),
+            ),
+            Text(
+              'footer_disclaimer'.tr,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 12,
+                height: 1.5,
+              ),
+              softWrap: true,
+              overflow: TextOverflow.visible,
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
+
