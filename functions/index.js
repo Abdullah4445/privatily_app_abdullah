@@ -1,13 +1,16 @@
-const {logger} = require("firebase-functions");
-const {onDocumentCreated} = require("firebase-functions/v2/firestore");
-const {initializeApp} = require("firebase-admin/app");
-const {getFirestore, FieldValue} = require("firebase-admin/firestore");
-const {getMessaging} = require("firebase-admin/messaging");
+const { logger } = require("firebase-functions");
+const { onDocumentCreated } = require("firebase-functions/v2/firestore");
+const { initializeApp } = require("firebase-admin/app");
+const { getFirestore, FieldValue } = require("firebase-admin/firestore");
+const { getMessaging } = require("firebase-admin/messaging");
+const functions = require("firebase-functions");
+const { format } = require("date-fns");
 
 initializeApp();
 
 const ADMIN_UID = "RMhlAqRXFzLaaovOKstR3bEzYnC3";
 
+// 🔔 Function 1: Send push notification to admin on new message
 exports.notifyAdminOnNewMessage = onDocumentCreated("messageTouch/{messageId}", async (event) => {
   const data = event.data.data();
 
@@ -36,10 +39,11 @@ exports.notifyAdminOnNewMessage = onDocumentCreated("messageTouch/{messageId}", 
     const invalidTokens = [];
     response.results.forEach((result, index) => {
       const error = result.error;
-      if (error && (
-        error.code === "messaging/invalid-registration-token" ||
-        error.code === "messaging/registration-token-not-registered"
-      )) {
+      if (
+        error &&
+        (error.code === "messaging/invalid-registration-token" ||
+          error.code === "messaging/registration-token-not-registered")
+      ) {
         invalidTokens.push(tokens[index]);
       }
     });
@@ -50,8 +54,39 @@ exports.notifyAdminOnNewMessage = onDocumentCreated("messageTouch/{messageId}", 
       });
       logger.info("Removed invalid FCM tokens:", invalidTokens);
     }
-
   } catch (err) {
     logger.error("Error sending notification to admin:", err);
+  }
+});
+
+// 🌐 Function 2: Dynamic sitemap generation
+exports.sitemap = functions.https.onRequest(async (req, res) => {
+  res.set("Content-Type", "application/xml");
+
+  try {
+const snapshot = await getFirestore().collection("projects").get();
+
+    const urls = snapshot.docs.map((doc) => {
+      const id = doc.id;
+      return `
+  <url>
+    <loc>https://launchcode.shop/product-detail/${id}</loc>
+    <lastmod>${format(new Date(), "yyyy-MM-dd")}</lastmod>
+  </url>`;
+    });
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://launchcode.shop/</loc>
+    <lastmod>${format(new Date(), "yyyy-MM-dd")}</lastmod>
+  </url>
+  ${urls.join("\n")}
+</urlset>`;
+
+    res.status(200).send(xml);
+  } catch (error) {
+    logger.error("Error generating sitemap:", error);
+    res.status(500).send("Error generating sitemap");
   }
 });

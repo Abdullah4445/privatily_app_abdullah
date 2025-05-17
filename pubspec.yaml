@@ -65,6 +65,8 @@ dependencies:
   readmore: ^3.0.0
   card_swiper: ^3.0.1
   flutter_card_swiper: ^7.0.2
+  web: ^1.1.1
+  js: ^0.7.2
 
 dev_dependencies:
   flutter_test:
