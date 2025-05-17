@@ -217,7 +217,7 @@ class _HomeState extends State<Home> {
                     // }),
                     // Language selector
                     Container(
-                      width: 80,
+                      width: 85,
                       margin: const EdgeInsets.only(right: 8),
                       child: Obx(
                         () => DropdownButton<String>(
@@ -504,19 +504,19 @@ class _HomeState extends State<Home> {
                             constraints: BoxConstraints(minWidth: constraints.maxWidth),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children:  [
                                 PlanCard(
-                                  text: "BASIC PLAN",
+                                  text: "BASIC PLAN".tr,
                                   price: 150,
-                                  supportDays: "Mon-Fri",
-                                  deliveryTime: "15 Days",
+                                  supportDays: "Mon-Fri".tr,
+                                  deliveryTime: "15 Days".tr,
                                 ),
                                 SizedBox(width: 2),
                                 PlanCard(
-                                  text: "ADVANCED PLAN",
+                                  text: "ADVANCED PLAN".tr,
                                   price: 350,
-                                  supportDays: "Mon-Sun",
-                                  deliveryTime: "7 Days",
+                                  supportDays: "Mon-Sun".tr,
+                                  deliveryTime: "7 Days".tr,
                                 ),
                               ],
                             ),

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:privatily_app/modules/terms_and_conditions/terms_and_conditions_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../privacy_page/privacy_page_view.dart';
 import '../refundPolicy/refundPolicy.dart';
 
 class FooterSection extends StatelessWidget {
   const FooterSection({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,19 @@ class FooterSection extends StatelessWidget {
         final isMobile = constraints.maxWidth < 800;
 
         return Container(
-          color: const Color(0xFF1B5E20),
+          // color: const Color(0xFF007921),
+
+
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xFF005A18),
+                Color(0xFF00FF66),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,13 +55,47 @@ class FooterSection extends StatelessWidget {
 
                         const SizedBox(height: 16),
                         _contactRow(Icons.email, 'support@launchcode.shop'),
-                        // _contactRow(Icons.phone, '+1 (507) 410-4666'),
-                        // _contactRow(Icons.article, 'footer_guides'.tr),
-                        // _contactRow(Icons.help_outline, 'footer_support'.tr),
+                        // _contactRow(Icons.person, '+923058431046'),
+                        // _contactRow(Icons.crisis_alert, 'F/Q'),
+
+                        _contactRow(Icons.phone, '+923058431046'),
+                        _contactRow(Icons.article, 'footer_guides'.tr),
+                        _contactRow(Icons.help_outline, 'footer_support'.tr),
                         const SizedBox(height: 16),
+                        Row(
+
+                          children: [
+                            IconButton(
+                              icon: const FaIcon(FontAwesomeIcons.facebook),color: Colors.white,
+                              onPressed: () {
+                                // open Facebook link
+                              },
+                            ),
+                            IconButton(
+                              icon: const FaIcon(FontAwesomeIcons.instagram),color: Colors.white,
+                              onPressed: () {
+                                // open Instagram link
+                              },
+                            ),
+                            IconButton(
+                              icon: const FaIcon(FontAwesomeIcons.linkedin),color: Colors.white,
+                              onPressed: () {
+                                // open LinkedIn link
+                              },
+                            ),
+                            IconButton(
+                              icon: const FaIcon(FontAwesomeIcons.twitter),color: Colors.white,
+                              onPressed: () {
+                                // open LinkedIn link
+                              },
+                            ),
+                          ],
+                        )
 
 
-                        //Social Platforms links are:
+
+
+                        // Social Platforms links are:
                         // Row(
                         //   children: const [
                         //     FaIcon(
@@ -96,6 +145,8 @@ class FooterSection extends StatelessWidget {
                           'footer_privacy'.tr,
                           'footer_refund'.tr,
                           'footer_license'.tr,
+                          'About us'.tr,
+                          'Contact us'.tr
                         ]),
                       ],
                     ),
@@ -103,51 +154,25 @@ class FooterSection extends StatelessWidget {
 
 
 
+
                   // Footer Image
                   SizedBox(
                     width: isMobile ? double.infinity : 250,
                     child: Image.asset(
-                      'assets/images/footer_person.png',
-                      height: 230,
+                      'assets/images/footer_person_1.png',
+                      height: 350,
                       fit: BoxFit.contain,
                     ),
                   ),
                 ],
               ),
 
-              const SizedBox(height: 30),
-              const Divider(color: Colors.white30),
+              // const SizedBox(height: 30),
+              // const Divider(color: Colors.white30),
 
               const SizedBox(height: 8),
 
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image.asset('assets/images/ailab.png', height: 70, width: 70),
-                  Gap(10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Powered by Ailab Solutions'.tr,
-                        style: const TextStyle(color: Colors.white),
-                      ),
-
-                      // Disclaimer
-                      Text(
-                        'footer_disclaimer'.tr,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 12,
-                          height: 1.5,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+              responsiveFooter(context)
             ],
           ),
         );
@@ -204,3 +229,85 @@ class FooterSection extends StatelessWidget {
     );
   }
 }
+
+
+
+
+Widget responsiveFooter(BuildContext context) {
+  final screenWidth = MediaQuery.of(context).size.width;
+  const webBreakpoint = 1000; // Adjust this based on your design
+
+  // Web Layout
+  if (screenWidth >= webBreakpoint) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        ClipOval(child: Image.asset('assets/images/ailab.png', height: 70, width: 70)),
+        const SizedBox(width: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Powered by Ailab Solutions'.tr,
+              style: const TextStyle(color: Colors.white),
+            ),
+            Text(
+              'footer_disclaimer'.tr,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 12,
+                height: 1.5,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  // Mobile Layout
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+      Expanded(
+        flex: 3,
+        child: Image.asset('assets/images/ailab.png', height: 70, width: 80),
+      ),
+      Expanded(
+        flex: 7,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              'Powered by Ailab Solutions'.tr,
+              style: const TextStyle(color: Colors.white),
+            ),
+            Text(
+              'footer_disclaimer'.tr,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 12,
+                height: 1.5,
+              ),
+              softWrap: true,
+              overflow: TextOverflow.visible,
+            ),
+          ],
+        ),
+      ),
+    ],
+  );
+}
+
+// function for moving through url
+void _launchURL(String url) async {
+  final Uri uri = Uri.parse(url);
+  if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+    throw 'Could not launch $url';
+  }
+}
+

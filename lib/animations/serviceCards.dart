@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,47 +16,47 @@ class ServiceCards extends StatefulWidget {
 class _ServiceCardsState extends State<ServiceCards> {
   int _hoveredIndex = -1;
 
-  final List<Map<String, dynamic>> services = const [
+  final List<Map<String, dynamic>> services =[
     {
       'icon': Icons.movie_edit,
-      'title': 'Video Editing',
-      'subtitle': 'Professional reels, shorts, promos',
+      'title': 'Video Editing'.tr,
+      'subtitle': 'Professional reels, shorts, promos'.tr,
     },
     {
       'icon': Icons.code,
-      'title': 'App, Web, Desktop & Arduino Development',
-      'subtitle': 'Landing pages to full-stack apps',
+      'title': 'App, Web, Desktop & Arduino Development'.tr,
+      'subtitle': 'Landing pages to full-stack apps'.tr,
     },
 
     {
       'icon': Icons.bar_chart,
-      'title': 'SEO',
-      'subtitle': 'Rank on Google organically',
+      'title': 'SEO'.tr,
+      'subtitle': 'Rank on Google organically'.tr,
     },
     {
       'icon': Icons.phone_android,
-      'title': 'ASO',
-      'subtitle': 'App Store Optimization services',
+      'title': 'ASO'.tr,
+      'subtitle': 'App Store Optimization services'.tr,
     },
     {
       'icon': Icons.campaign,
-      'title': 'SMM',
-      'subtitle': 'We manage social media growth',
+      'title': 'SMM'.tr,
+      'subtitle': 'We manage social media growth'.tr,
     },
     {
       'icon': Icons.storefront,
-      'title': 'E-commerce Setup',
-      'subtitle': 'Launch Shopify/WooCommerce stores',
+      'title': 'E-commerce Setup'.tr,
+      'subtitle': 'Launch Shopify/WooCommerce stores'.tr,
     },
     {
       'icon': Icons.brush,
-      'title': 'Logo & Branding',
-      'subtitle': 'Custom logos, brand kits, assets',
+      'title': 'Logo & Branding'.tr,
+      'subtitle': 'Custom logos, brand kits, assets'.tr,
     },
     {
       'icon': Icons.edit_note,
-      'title': 'Content Writing',
-      'subtitle': 'SEO blogs, scripts, articles',
+      'title': 'Content Writing'.tr,
+      'subtitle': 'SEO blogs, scripts, articles'.tr,
     },
 
   ];
