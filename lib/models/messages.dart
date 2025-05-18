@@ -8,6 +8,8 @@ class Messages {
   String messageType; // 'text' or 'voice'
   DateTime? timestamp;
   String? audioUrl;
+  String? name;
+
 
   Messages({
     required this.id,
@@ -17,12 +19,14 @@ class Messages {
     required this.messageType,
     this.timestamp,
     this.audioUrl,
+    this.name,
   });
 
   factory Messages.fromJson(Map<String, dynamic> json, String id) {
     return Messages(
       id: id,
       senderId: json['senderId'] ?? '',
+      name: json['name'] ?? '',
       messageText: json['messageText'] ?? '',
       receiverId: json['receiverId'] ?? '',
       messageType: json['messageType'] ?? 'text',
@@ -34,6 +38,7 @@ class Messages {
   Map<String, dynamic> toJson() {
     return {
       'senderId': senderId,
+      'name': name,
       'messageText': messageText,
       'receiverId': receiverId,
       'messageType': messageType,

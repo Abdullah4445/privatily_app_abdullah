@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -13,7 +14,6 @@ import '../modules/cart/cart_logic.dart';
 import '../modules/cart/cart_view.dart';
 import '../modules/chat_page/chat/view/chatting_page.dart';
 import '../modules/chat_page/view.dart';
-import '../modules/chatting_page/chatting_page_view.dart';
 import '../modules/preview/privatily_preview_image.dart';
 import '../modules/sections/FAQ_section.dart';
 import '../modules/sections/FooterSection.dart';
@@ -51,7 +51,16 @@ class _HomeState extends State<Home> {
   bool showChatBox = false;
   bool showLoginForm = false;
   bool showSignupForm = false;
+  //New Variables
+  bool showRoleSelection = false;
+  bool isStudent = false; // Track if the user is a student or a client
+
   RxString selectedLang = 'en'.obs;
+
+  //Controllers
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   void scrollToSection(GlobalKey key) {
     final box = key.currentContext?.findRenderObject() as RenderBox?;
@@ -114,13 +123,50 @@ class _HomeState extends State<Home> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 25)],
             ),
-            child: Obx(() => logic.showChatScreen.value
-                ? ChattingPage(
-              chatRoomId: logic.chatRoomIdForPopup.value,
-              receiverId: logic.receiverIdForPopup.value,
-              receiverName: logic.receiverNameForPopup.value,
-            )
-                : const Center(child: CircularProgressIndicator())),
+            child: Obx(() {
+              if (logic.isLoading.value) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (logic.showChatScreen.value) {
+                return ChattingPage(
+                  chatRoomId: logic.chatRoomIdForPopup.value,
+                  receiverId: logic.receiverIdForPopup.value,
+                  receiverName: logic.receiverNameForPopup.value,
+                );
+              } else if (showRoleSelection) { // Show role selection screen
+                return _buildRoleSelection();
+              } else if (showLoginForm) {
+                return _buildLoginForm();
+              } else if (showSignupForm) {
+                return _buildSignupForm();
+              } else {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          showLoginForm = true;
+                          showSignupForm = false;
+                        });
+                      },
+                      child: Text('Login'),
+                    ),
+                    SizedBox(height: 16),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          showSignupForm = true;
+                          showLoginForm = false;
+                        });
+                      },
+                      child: Text('Create an account'),
+
+                    ),
+                  ],
+                );
+              }
+            }),
           ),
         )
             : const SizedBox.shrink(),
@@ -131,77 +177,152 @@ class _HomeState extends State<Home> {
   Widget floatingMessageButton() => FloatingActionButton(
     backgroundColor: Colors.deepPurple,
     onPressed: () async {
-      setState(() => showChatBox = !showChatBox);
-       if (showChatBox) await logic.initGuestChat();
+      _openChatPopup();
     },
     child: Icon(showChatBox ? Icons.close : Icons.chat_bubble_outline, color: Colors.white),
   );
 
+  void _openChatPopup() {
+    setState(() {
+      showChatBox = !showChatBox;
+      showLoginForm = false;
+      showSignupForm = false;
+      showRoleSelection = false;
+    });
 
+    // Check if the user is already logged in
+    if (FirebaseAuth.instance.currentUser != null) {
+      // User is already logged in, generate chatRoomId and show chat screen
+      String chatRoomId = logic.generateChatRoomId(FirebaseAuth.instance.currentUser!.uid, logic.fixedAdminId);
+      logic.chatRoomIdForPopup.value = chatRoomId;
+      logic.receiverIdForPopup.value = logic.fixedAdminId;
+      logic.receiverNameForPopup.value = logic.adminName;
+      logic.showChatScreen.value = true;
+    } else {
+      // Show login/signup options
+      setState(() {
+        showRoleSelection = showChatBox; // Show role selection on opening chatbox
+      });
+    }
+  }
 
-  // Initial buttons for starting chat as guest
-
-
-  // Floating action button to toggle chat
-  // Widget floatingMessageButton() {
-  //   return Positioned(
-  //     bottom: 24,
-  //     right: 24,
-  //     child: FloatingActionButton(
-  //       backgroundColor: Colors.deepPurple,
-  //       onPressed: () async {
-  //         setState(() => showChatBox = !showChatBox);
-  //         if (showChatBox) {
-  //           await logic.initGuestChat();
-  //         }
-  //       },
-  //       child: Icon(
-  //         showChatBox ? Icons.close : Icons.chat_bubble_outline,
-  //         color: Colors.white,
-  //       ),
-  //     ),
-  //   );
-  // }
-
-
-  // Scroll to testimonials
-  void scrollToTestimonials() {
-    final RenderBox renderBox = _testimonialKey.currentContext!.findRenderObject() as RenderBox;
-    final position = renderBox.localToGlobal(Offset.zero, ancestor: null).dy;
-    _scrollController.animateTo(
-      position + _scrollController.offset,
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.easeInOut,
+  Widget _buildRoleSelection() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                isStudent = true;
+                showRoleSelection = false;
+                showLoginForm = true; // Show login form after role selection
+              });
+            },
+            child: Text('Login as Student'),
+          ),
+          SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                isStudent = false;
+                showRoleSelection = false;
+                showLoginForm = true; // Show login form after role selection
+              });
+            },
+            child: Text('Login as Client'),
+          ),
+        ],
+      ),
     );
   }
 
-  // Five-star rating section
-  // Widget fiveStars(double screenWidth) {
-  //   double iconSize = screenWidth < 600 ? 18 : screenWidth < 1024 ? 22 : 26;
-  //   return GestureDetector(
-  //     onTap: scrollToTestimonials,
-  //     child: MouseRegion(
-  //       cursor: SystemMouseCursors.click,
-  //       child: Row(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: [
-  //           Row(
-  //             children: List.generate(5, (index) {
-  //               return Icon(Icons.star, color: Colors.orange, size: iconSize);
-  //             }),
-  //           ),
-  //           const SizedBox(width: 12),
-  //           Text(
-  //             'Rated 4.2+ stars by entrepreneurs worldwide',
-  //             style: TextStyle(fontSize: iconSize * 0.6, fontWeight: FontWeight.bold),
-  //           )
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget _buildLoginForm() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextFormField(
+            controller: emailController,
+            decoration: InputDecoration(labelText: 'Email'),
+          ),
+          TextFormField(
+            controller: passwordController,
+            decoration: InputDecoration(labelText: 'Password'),
+            obscureText: true,
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () async {
+              await logic.signInWithEmailAndPassword(emailController.text, passwordController.text, isStudent: isStudent);
+              if (logic.auth.currentUser != null) {
+                setState(() {
+                  showLoginForm = false;
+                });
+              }
+            },
+            child: Text('Login'),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                showLoginForm = false;
+                showSignupForm = true;
+              });
+            },
+            child: Text('Create an account'),
+          ),
+        ],
+      ),
+    );
+  }
 
-  // Widget for displaying testimonial section
+  Widget _buildSignupForm() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextFormField(
+            controller: nameController,
+            decoration: InputDecoration(labelText: 'Email'),
+          ),
+          TextFormField(
+            controller: emailController,
+            decoration: InputDecoration(labelText: 'Email'),
+          ),
+          TextFormField(
+            controller: passwordController,
+            decoration: InputDecoration(labelText: 'Password'),
+            obscureText: true,
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () async {
+              await logic.createUserWithEmailAndPassword(emailController.text, passwordController.text,nameController.text, isStudent: isStudent);
+              if (logic.auth.currentUser != null) {
+                setState(() {
+                  showSignupForm = false;
+                });
+              }
+            },
+            child: Text('Create Account'),
+          ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                showSignupForm = false;
+                showLoginForm = true;
+              });
+            },
+            child: Text('Already have an account? Login'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -220,6 +341,11 @@ class _HomeState extends State<Home> {
                   title: Image.asset('assets/images/logo_white.png', height: 120),
                   backgroundColor: Colors.white,
                   actions: [
+                    // IconButton(
+                    //   icon: Icon(Icons.login),
+                    //   onPressed: _openChatPopup,
+                    // ),
+                    TextButton(onPressed:_openChatPopup, child: Text("LogIn")),
                     if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
                       TextButton(onPressed: () => scrollToSection(_whyUsKey), child: Text('Why Us?'.tr)),
                     TextButton(onPressed: () => scrollToSection(_contactUsKey), child: Text('Contact Us!'.tr)),
