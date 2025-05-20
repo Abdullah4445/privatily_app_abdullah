@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -53,7 +54,10 @@ class _HomeState extends State<Home> {
   bool showSignupForm = false;
   //New Variables
   bool showRoleSelection = false;
+  RxBool showStudentCourses = false.obs;
   bool isStudent = false; // Track if the user is a student or a client
+  RxBool isLoggedIn = false.obs;
+  String? selectedCourse;
 
   RxString selectedLang = 'en'.obs;
 
@@ -61,6 +65,18 @@ class _HomeState extends State<Home> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Check initial login state
+    isLoggedIn.value = FirebaseAuth.instance.currentUser != null;
+
+    // Listen for authentication changes
+    FirebaseAuth.instance.authStateChanges().listen((user) {
+      isLoggedIn.value = user != null;
+    });
+  }
 
   void scrollToSection(GlobalKey key) {
     final box = key.currentContext?.findRenderObject() as RenderBox?;
@@ -119,54 +135,67 @@ class _HomeState extends State<Home> {
             height: 480,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
               borderRadius: BorderRadius.circular(20),
               boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 25)],
+              image: DecorationImage(
+                image: NetworkImage('https://i.gifer.com/origin/0f/0f412581c9c78dec416072c7a42ef1b4.gif'), // Animated image URL
+                fit: BoxFit.cover,
+              ),
             ),
-            child: Obx(() {
-              if (logic.isLoading.value) {
-                return Center(child: CircularProgressIndicator());
-              }
-              if (logic.showChatScreen.value) {
-                return ChattingPage(
-                  chatRoomId: logic.chatRoomIdForPopup.value,
-                  receiverId: logic.receiverIdForPopup.value,
-                  receiverName: logic.receiverNameForPopup.value,
-                );
-              } else if (showRoleSelection) { // Show role selection screen
-                return _buildRoleSelection();
-              } else if (showLoginForm) {
-                return _buildLoginForm();
-              } else if (showSignupForm) {
-                return _buildSignupForm();
-              } else {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          showLoginForm = true;
-                          showSignupForm = false;
-                        });
-                      },
-                      child: Text('Login'),
-                    ),
-                    SizedBox(height: 16),
-                    TextButton(
-                      onPressed: () {
-                        setState(() {
-                          showSignupForm = true;
-                          showLoginForm = false;
-                        });
-                      },
-                      child: Text('Create an account'),
+            child: ClipRRect( // To clip the content inside the container
+              borderRadius: BorderRadius.circular(20),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5), // Adjust blur intensity
+                child: Container(
+                  color: Colors.white.withOpacity(0.7), // Adjust opacity for content visibility
+                  padding: const EdgeInsets.all(16),
+                  child: Obx(() {
+                    if (logic.isLoading.value) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (logic.showChatScreen.value) {
+                      return ChattingPage(
+                        chatRoomId: logic.chatRoomIdForPopup.value,
+                        receiverId: logic.receiverIdForPopup.value,
+                        receiverName: logic.receiverNameForPopup.value,
+                      );
+                    } else if (showRoleSelection) { // Show role selection screen
+                      return _buildRoleSelection();
+                    } else if (showLoginForm) {
+                      return _buildLoginForm();
+                    } else if (showSignupForm) {
+                      return _buildSignupForm();
+                    } else {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                showLoginForm = true;
+                                showSignupForm = false;
+                              });
+                            },
+                            child: Text('Login'),
+                          ),
+                          SizedBox(height: 16),
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                showSignupForm = true;
+                                showLoginForm = false;
+                              });
+                            },
+                            child: Text('Create an account'),
 
-                    ),
-                  ],
-                );
-              }
-            }),
+                          ),
+                        ],
+                      );
+                    }
+                  }),
+                ),
+              ),
+            ),
           ),
         )
             : const SizedBox.shrink(),
@@ -217,7 +246,7 @@ class _HomeState extends State<Home> {
               setState(() {
                 isStudent = true;
                 showRoleSelection = false;
-                showLoginForm = true; // Show login form after role selection
+                showSignupForm = true;
               });
             },
             child: Text('Login as Student'),
@@ -238,88 +267,217 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _buildLoginForm() {
+  Widget _buildSignupForm() {
+    List<String> courses = ['Software Engineers', 'Digital Marketing', 'Spoken English '];
+
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(24.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Text(
+            'Create Account',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.deepPurple, // Primary Color
+            ),
+          ),
+          const Gap(15),
+          TextFormField(
+            controller: nameController,
+            decoration: InputDecoration(
+              labelText: 'Name',
+              hintText: 'Enter your name',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              filled: true,
+              fillColor: Colors.grey[200],
+            ),
+          ),
+          const Gap(12),
           TextFormField(
             controller: emailController,
-            decoration: InputDecoration(labelText: 'Email'),
+            decoration: InputDecoration(
+              labelText: 'Email',
+              hintText: 'Enter your email',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              filled: true,
+              fillColor: Colors.grey[200],
+            ),
           ),
+          const Gap(12),
           TextFormField(
             controller: passwordController,
-            decoration: InputDecoration(labelText: 'Password'),
+            decoration: InputDecoration(
+              labelText: 'Password',
+              hintText: 'Enter your password',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              filled: true,
+              fillColor: Colors.grey[200],
+            ),
             obscureText: true,
           ),
-          SizedBox(height: 20),
+          const Gap(12),
+          if(isStudent)
+            DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                labelText: 'Select Course',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.grey[200],
+              ),
+              value: selectedCourse,
+              items: courses.map((String course) {
+                return DropdownMenuItem<String>(
+                  value: course,
+                  child: Text(course),
+                );
+              }).toList(),
+              onChanged: (String? value) {
+                setState(() {
+                  selectedCourse = value;
+                });
+              },
+              validator: (value) => value == null ? 'Please select a course' : null,
+            ),
+          const Gap(12),
           ElevatedButton(
             onPressed: () async {
-              await logic.signInWithEmailAndPassword(emailController.text, passwordController.text, isStudent: isStudent);
-              if (logic.auth.currentUser != null) {
-                setState(() {
-                  showLoginForm = false;
-                });
+              if (selectedCourse != null) {
+                await logic.createUserWithEmailAndPassword(emailController.text, passwordController.text,nameController.text, selectedCourse!, isStudent: isStudent);
+                if (logic.auth.currentUser != null) {
+                  setState(() {
+                    showSignupForm = false;
+                  });
+                }
+              } else {
+                Get.snackbar('Error', 'Please select a course');
               }
             },
-            child: Text('Login'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple, // Primary Color
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 48),
+              textStyle: const TextStyle(fontSize: 18),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+            ),
+            child: const Text('Create Account', style: TextStyle(color: Colors.white)),
           ),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                showLoginForm = false;
-                showSignupForm = true;
-              });
+          const Gap(4),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
             },
-            child: Text('Create an account'),
-          ),
-        ],
+            child: TextButton(
+              key: ValueKey<bool>(showLoginForm),
+              onPressed: () {
+                setState(() {
+                  showSignupForm = false;
+                  showLoginForm = true;
+                });
+              },
+              child: const Text('Already have an account? Login', style: TextStyle(color: Colors.deepPurple)),
+            ),
+          ),        ],
       ),
     );
   }
 
-  Widget _buildSignupForm() {
+  Widget _buildLoginForm() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(24.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TextFormField(
-            controller: nameController,
-            decoration: InputDecoration(labelText: 'Email'),
+          Text(
+            'Login',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.deepPurple, // Primary Color
+            ),
           ),
+          const Gap(24),
           TextFormField(
             controller: emailController,
-            decoration: InputDecoration(labelText: 'Email'),
+            decoration: InputDecoration(
+              labelText: 'Email',
+              hintText: 'Enter your email',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              filled: true,
+              fillColor: Colors.grey[200],
+            ),
           ),
+          const Gap(16),
           TextFormField(
             controller: passwordController,
-            decoration: InputDecoration(labelText: 'Password'),
+            decoration: InputDecoration(
+              labelText: 'Password',
+              hintText: 'Enter your password',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              filled: true,
+              fillColor: Colors.grey[200],
+            ),
             obscureText: true,
           ),
-          SizedBox(height: 20),
+          const Gap(32),
           ElevatedButton(
             onPressed: () async {
-              await logic.createUserWithEmailAndPassword(emailController.text, passwordController.text,nameController.text, isStudent: isStudent);
-              if (logic.auth.currentUser != null) {
+              // Your login logic here
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple, // Primary Color
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 48),
+              textStyle: const TextStyle(fontSize: 18),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+            ),
+            child: const Text('Login', style: TextStyle(color: Colors.white)),
+          ),
+          const Gap(16),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
+            child: TextButton(
+              key: ValueKey<bool>(showSignupForm),
+              onPressed: () {
                 setState(() {
-                  showSignupForm = false;
+                  showLoginForm = false;
+                  showSignupForm = true;
                 });
-              }
-            },
-            child: Text('Create Account'),
-          ),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                showSignupForm = false;
-                showLoginForm = true;
-              });
-            },
-            child: Text('Already have an account? Login'),
-          ),
-        ],
+              },
+              child: const Text('Create an account', style: TextStyle(color: Colors.deepPurple)),
+            ),
+          ),        ],
       ),
     );
   }
@@ -341,16 +499,21 @@ class _HomeState extends State<Home> {
                   title: Image.asset('assets/images/logo_white.png', height: 120),
                   backgroundColor: Colors.white,
                   actions: [
-                    // IconButton(
-                    //   icon: Icon(Icons.login),
-                    //   onPressed: _openChatPopup,
-                    // ),
-                    TextButton(onPressed:_openChatPopup, child: Text("LogIn")),
+
                     if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
                       TextButton(onPressed: () => scrollToSection(_whyUsKey), child: Text('Why Us?'.tr)),
                     TextButton(onPressed: () => scrollToSection(_contactUsKey), child: Text('Contact Us!'.tr)),
                     if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
                       TextButton(onPressed: () => scrollToSection(_faqKey), child: Text('FAQ'.tr)),
+                    FirebaseAuth.instance.currentUser == null
+                        ? TextButton(
+                      onPressed: _openChatPopup,
+                      child: Text('Login'.tr),
+                    )
+                        : TextButton(
+                      onPressed: logic.logOut,
+                      child: Text('Logout'.tr),
+                    ),
                     const Gap(10),
                     Obx(() {
                       final count = Get.find<CartLogic>().itemCount;

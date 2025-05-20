@@ -18,27 +18,28 @@ class HomeLogic extends GetxController {
   var isLoading = false.obs;
 
   // ✅ Create User with Email and Password and save details
-  Future<void> createUserWithEmailAndPassword(String email, String password, String name, {required bool isStudent}) async {
+  Future<void> createUserWithEmailAndPassword(String email, String password, String name,String course ,{required bool isStudent}) async {
     try {
       if(email.isEmpty || name.isEmpty || password.isEmpty ){
         Get.snackbar("Error", "Everything is Required");
+        return;
       }
-      else{  isLoading.value = true;
+      isLoading.value = true; // Move isLoading.value = true outside the if statement
       final credential = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
-      );}
-      final userId = FirebaseAuth.instance.currentUser!.uid;      // final userId = credential.user!.uid;
-      final userName = email.split('@')[0];
+      );
+      final userId = FirebaseAuth.instance.currentUser!.uid; // final userId = credential.user!.uid;
+      // final userName = email.split('@')[0];
       final role = isStudent ? 'student' : 'client'; // Set the role
 
       // ✅ Store User data in "Users" collection
       await firestore.collection("Users").doc(userId).set({
-        // 'name':name,
+        'name':name,
         'id': userId,
-        'name': userName,
         'email': email,
         'role': role,
+        'course': course,
       });
       // Generate chatRoomId
       String chatRoomId = generateChatRoomId(userId, fixedAdminId);
@@ -90,12 +91,21 @@ class HomeLogic extends GetxController {
     }
   }
 
+  Future<void> logOut() async {
+    try {
+      await auth.signOut();
+      // Clear the chat screen state
+      showChatScreen.value = false;
+      Get.snackbar('Success', 'Successfully logged out');
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to log out');
+    }
+  }
 
   Future<void> signOut() async {
     await auth.signOut();
   }
   String generateChatRoomId(String userId1, String userId2) {
-
     return userId1.hashCode <= userId2.hashCode
         ? "$userId1-$userId2"
         : "$userId2-$userId1";

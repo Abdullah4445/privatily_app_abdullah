@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:privatily_app/modules/chat_page/chat/view/widgets/variables/globalVariables.dart';
 
@@ -40,10 +41,15 @@ class MsgAnimIcon extends StatelessWidget {
 
           return Padding(
             padding: const EdgeInsets.only(left: 20),
-            child: Container(
-                width: 40,
-                height: 40,
-                child: Lottie.network('https://lottie.host/1deedddc-0474-4eb6-b4aa-beaa685e4022/LrZ4QMhJwk.json')),
+            child: Card(
+              elevation: 6,
+              child: Container(
+
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.white,),
+                  width: 40,
+                  height: 40,
+                  child: Lottie.network('https://lottie.host/1deedddc-0474-4eb6-b4aa-beaa685e4022/LrZ4QMhJwk.json')),
+            ),
           );//AnimateIcon(
           //   key: UniqueKey(), // Forces rebuild to replay animation
           //   onTap: () {},
