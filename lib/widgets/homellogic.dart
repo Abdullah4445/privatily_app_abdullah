@@ -14,65 +14,100 @@ class HomeLogic extends GetxController {
   var receiverIdForPopup = ''.obs;
   var receiverNameForPopup = ''.obs;
 
-  // 🔁 Called from Floating Button
-  Future<void> initGuestChat() async {
+  //New variables
+  var isLoading = false.obs;
+
+  // ✅ Create User with Email and Password and save details
+  Future<void> createUserWithEmailAndPassword(String email, String password, String name,String course ,{required bool isStudent}) async {
     try {
-      if (auth.currentUser == null) {
-        await auth.signInAnonymously();
+      if(email.isEmpty || name.isEmpty || password.isEmpty ){
+        Get.snackbar("Error", "Everything is Required");
+        return;
       }
+      isLoading.value = true; // Move isLoading.value = true outside the if statement
+      final credential = await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      final userId = FirebaseAuth.instance.currentUser!.uid; // final userId = credential.user!.uid;
+      // final userName = email.split('@')[0];
+      final role = isStudent ? 'student' : 'client'; // Set the role
 
-      final guestId = auth.currentUser!.uid;
-      final adminId = fixedAdminId;
+      // ✅ Store User data in "Users" collection
+      await firestore.collection("Users").doc(userId).set({
+        'name':name,
+        'id': userId,
+        'email': email,
+        'role': role,
+        'course': course,
+      });
+      // Generate chatRoomId
+      String chatRoomId = generateChatRoomId(userId, fixedAdminId);
 
-      // ✅ Create Guest in Firestore
-      await _createGuestUser(guestId);
-
-      // ✅ Generate chatRoomId
-      String chatRoomId = guestId.hashCode <= adminId.hashCode
-          ? "$guestId-$adminId"
-          : "$adminId-$guestId";
-
-      // ✅ Create chatroom if not exists
-      DocumentSnapshot chatRoomDoc = await firestore.collection("ChatsRoomId").doc(chatRoomId).get();
-      if (!chatRoomDoc.exists) {
-        await firestore.collection("ChatsRoomId").doc(chatRoomId).set({
-          'chatRoomId': chatRoomId,
-          'participants': [guestId, adminId],
-          'createdAt': FieldValue.serverTimestamp(),
-        });
-      }
-
-      // ✅ Update state
       chatRoomIdForPopup.value = chatRoomId;
-      receiverIdForPopup.value = adminId;
+      receiverIdForPopup.value = fixedAdminId;
       receiverNameForPopup.value = adminName;
       showChatScreen.value = true;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        Get.snackbar("Error", "The password provided is too weak.");
+      } else if (e.code == 'email-already-in-use') {
+        Get.snackbar("Error", "The account already exists for that email.");
+      }
     } catch (e) {
-      Get.snackbar("Error", "❌ Failed to create chat room: $e");
+      Get.snackbar("Error", "❌ Failed to create user: $e");
+    } finally {
+      isLoading.value = false;
     }
   }
 
-  // ✅ Create "Guests" Collection Entry
-  Future<void> _createGuestUser(String guestId) async {
+  // ✅ Sign In with Email and Password
+  Future<void> signInWithEmailAndPassword(String email, String password, {required bool isStudent}) async {
     try {
-      DocumentSnapshot guestDoc = await firestore.collection("Guests").doc(guestId).get();
+      isLoading.value = true;
+      final credential = await auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
-      if (!guestDoc.exists) {
-        await firestore.collection("Guests").doc(guestId).set({
-          'name': 'Guest $guestId',
-          'id': guestId,
-          'createdAt': FieldValue.serverTimestamp(),
-        });
-        print("✅ Guest created: $guestId");
-      } else {
-        print("ℹ️ Guest already exists: $guestId");
+      final userId = credential.user!.uid;
+      // Generate chatRoomId
+      String chatRoomId = generateChatRoomId(userId, fixedAdminId);
+
+      chatRoomIdForPopup.value = chatRoomId;
+      receiverIdForPopup.value = fixedAdminId;
+      receiverNameForPopup.value = adminName;
+      showChatScreen.value = true;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        Get.snackbar("Error", "No user found for that email.");
+      } else if (e.code == 'wrong-password') {
+        Get.snackbar("Error", "Wrong password provided for that email.");
       }
     } catch (e) {
-      Get.snackbar("Error", "❌ Failed to create guest: $e");
+      Get.snackbar("Error", "❌ Failed to sign in: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> logOut() async {
+    try {
+      await auth.signOut();
+      // Clear the chat screen state
+      showChatScreen.value = false;
+      Get.snackbar('Success', 'Successfully logged out');
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to log out');
     }
   }
 
   Future<void> signOut() async {
     await auth.signOut();
+  }
+  String generateChatRoomId(String userId1, String userId2) {
+    return userId1.hashCode <= userId2.hashCode
+        ? "$userId1-$userId2"
+        : "$userId2-$userId1";
   }
 }

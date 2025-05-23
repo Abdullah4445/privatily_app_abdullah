@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,7 @@ import '../animations/animated_on_scrool.dart';
 import '../animations/price.dart';
 import '../modules/cart/cart_logic.dart';
 import '../modules/cart/cart_view.dart';
+import '../modules/chat_page/chat/view/chatting_page.dart';
 import '../modules/chat_page/view.dart';
 import '../modules/preview/privatily_preview_image.dart';
 import '../modules/sections/FAQ_section.dart';
@@ -54,7 +56,31 @@ class _HomeState extends State<Home> {
   bool showChatBox = false;
   bool showLoginForm = false;
   bool showSignupForm = false;
+  //New Variables
+  bool showRoleSelection = false;
+  RxBool showStudentCourses = false.obs;
+  bool isStudent = false; // Track if the user is a student or a client
+  RxBool isLoggedIn = false.obs;
+  String? selectedCourse;
+
   RxString selectedLang = 'en'.obs;
+
+  //Controllers
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Check initial login state
+    isLoggedIn.value = FirebaseAuth.instance.currentUser != null;
+
+    // Listen for authentication changes
+    FirebaseAuth.instance.authStateChanges().listen((user) {
+      isLoggedIn.value = user != null;
+    });
+  }
 
   void scrollToSection(GlobalKey key) {
     final box = key.currentContext?.findRenderObject() as RenderBox?;
@@ -109,6 +135,91 @@ class _HomeState extends State<Home> {
       right: 24,
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 500),
+        transitionBuilder: (child, anim) => FadeTransition(
+          opacity: anim,
+          child: ScaleTransition(
+            scale: CurvedAnimation(parent: anim, curve: Curves.easeOutBack),
+            child: SlideTransition(
+              position: Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero).animate(anim),
+              child: child,
+            ),
+          ),
+        ),
+        child: showChatBox
+            ? Material(
+          key: const ValueKey('chatbox'),
+          borderRadius: BorderRadius.circular(20),
+          elevation: 8,
+          color: Colors.transparent,
+          child: Container(
+            width: 360,
+            height: 480,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 25)],
+              image: DecorationImage(
+                image: NetworkImage('https://i.gifer.com/origin/0f/0f412581c9c78dec416072c7a42ef1b4.gif'), // Animated image URL
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: ClipRRect( // To clip the content inside the container
+              borderRadius: BorderRadius.circular(20),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5), // Adjust blur intensity
+                child: Container(
+                  color: Colors.white.withOpacity(0.7), // Adjust opacity for content visibility
+                  padding: const EdgeInsets.all(16),
+                  child: Obx(() {
+                    if (logic.isLoading.value) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (logic.showChatScreen.value) {
+                      return ChattingPage(
+                        chatRoomId: logic.chatRoomIdForPopup.value,
+                        receiverId: logic.receiverIdForPopup.value,
+                        receiverName: logic.receiverNameForPopup.value,
+                      );
+                    } else if (showRoleSelection) { // Show role selection screen
+                      return _buildRoleSelection();
+                    } else if (showLoginForm) {
+                      return _buildLoginForm();
+                    } else if (showSignupForm) {
+                      return _buildSignupForm();
+                    } else {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                showLoginForm = true;
+                                showSignupForm = false;
+                              });
+                            },
+                            child: Text('Login'),
+                          ),
+                          SizedBox(height: 16),
+                          TextButton(
+                            onPressed: () {
+                              setState(() {
+                                showSignupForm = true;
+                                showLoginForm = false;
+                              });
+                            },
+                            child: Text('Create an account'),
+
+                          ),
+                        ],
+                      );
+                    }
+                  }),
+                ),
+              ),
+            ),
+          ),
+        )
+            : const SizedBox.shrink(),
         transitionBuilder:
             (child, anim) => FadeTransition(
               opacity: anim,
@@ -159,14 +270,284 @@ class _HomeState extends State<Home> {
   Widget floatingMessageButton() => FloatingActionButton(
     backgroundColor: Colors.deepPurple,
     onPressed: () async {
-      setState(() => showChatBox = !showChatBox);
-      if (showChatBox) await logic.initGuestChat();
+      _openChatPopup();
     },
     child: Icon(
       showChatBox ? Icons.close : Icons.chat_bubble_outline,
       color: Colors.white,
     ),
   );
+
+  void _openChatPopup() {
+    setState(() {
+      showChatBox = !showChatBox;
+      showLoginForm = false;
+      showSignupForm = false;
+      showRoleSelection = false;
+    });
+
+    // Check if the user is already logged in
+    if (FirebaseAuth.instance.currentUser != null) {
+      // User is already logged in, generate chatRoomId and show chat screen
+      String chatRoomId = logic.generateChatRoomId(FirebaseAuth.instance.currentUser!.uid, logic.fixedAdminId);
+      logic.chatRoomIdForPopup.value = chatRoomId;
+      logic.receiverIdForPopup.value = logic.fixedAdminId;
+      logic.receiverNameForPopup.value = logic.adminName;
+      logic.showChatScreen.value = true;
+    } else {
+      // Show login/signup options
+      setState(() {
+        showRoleSelection = showChatBox; // Show role selection on opening chatbox
+      });
+    }
+  }
+
+  Widget _buildRoleSelection() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                isStudent = true;
+                showRoleSelection = false;
+                showSignupForm = true;
+              });
+            },
+            child: Text('Login as Student'),
+          ),
+          SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                isStudent = false;
+                showRoleSelection = false;
+                showLoginForm = true; // Show login form after role selection
+              });
+            },
+            child: Text('Login as Client'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSignupForm() {
+    List<String> courses = ['Software Engineers', 'Digital Marketing', 'Spoken English '];
+
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Create Account',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.deepPurple, // Primary Color
+            ),
+          ),
+          const Gap(15),
+          TextFormField(
+            controller: nameController,
+            decoration: InputDecoration(
+              labelText: 'Name',
+              hintText: 'Enter your name',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              filled: true,
+              fillColor: Colors.grey[200],
+            ),
+          ),
+          const Gap(12),
+          TextFormField(
+            controller: emailController,
+            decoration: InputDecoration(
+              labelText: 'Email',
+              hintText: 'Enter your email',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              filled: true,
+              fillColor: Colors.grey[200],
+            ),
+          ),
+          const Gap(12),
+          TextFormField(
+            controller: passwordController,
+            decoration: InputDecoration(
+              labelText: 'Password',
+              hintText: 'Enter your password',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              filled: true,
+              fillColor: Colors.grey[200],
+            ),
+            obscureText: true,
+          ),
+          const Gap(12),
+          if(isStudent)
+            DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                labelText: 'Select Course',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Colors.grey[200],
+              ),
+              value: selectedCourse,
+              items: courses.map((String course) {
+                return DropdownMenuItem<String>(
+                  value: course,
+                  child: Text(course),
+                );
+              }).toList(),
+              onChanged: (String? value) {
+                setState(() {
+                  selectedCourse = value;
+                });
+              },
+              validator: (value) => value == null ? 'Please select a course' : null,
+            ),
+          const Gap(12),
+          ElevatedButton(
+            onPressed: () async {
+              if (selectedCourse != null) {
+                await logic.createUserWithEmailAndPassword(emailController.text, passwordController.text,nameController.text, selectedCourse!, isStudent: isStudent);
+                if (logic.auth.currentUser != null) {
+                  setState(() {
+                    showSignupForm = false;
+                  });
+                }
+              } else {
+                Get.snackbar('Error', 'Please select a course');
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple, // Primary Color
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 48),
+              textStyle: const TextStyle(fontSize: 18),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+            ),
+            child: const Text('Create Account', style: TextStyle(color: Colors.white)),
+          ),
+          const Gap(4),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
+            child: TextButton(
+              key: ValueKey<bool>(showLoginForm),
+              onPressed: () {
+                setState(() {
+                  showSignupForm = false;
+                  showLoginForm = true;
+                });
+              },
+              child: const Text('Already have an account? Login', style: TextStyle(color: Colors.deepPurple)),
+            ),
+          ),        ],
+      ),
+    );
+  }
+
+  Widget _buildLoginForm() {
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Login',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.deepPurple, // Primary Color
+            ),
+          ),
+          const Gap(24),
+          TextFormField(
+            controller: emailController,
+            decoration: InputDecoration(
+              labelText: 'Email',
+              hintText: 'Enter your email',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              filled: true,
+              fillColor: Colors.grey[200],
+            ),
+          ),
+          const Gap(16),
+          TextFormField(
+            controller: passwordController,
+            decoration: InputDecoration(
+              labelText: 'Password',
+              hintText: 'Enter your password',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              filled: true,
+              fillColor: Colors.grey[200],
+            ),
+            obscureText: true,
+          ),
+          const Gap(32),
+          ElevatedButton(
+            onPressed: () async {
+              // Your login logic here
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple, // Primary Color
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 48),
+              textStyle: const TextStyle(fontSize: 18),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(24),
+              ),
+            ),
+            child: const Text('Login', style: TextStyle(color: Colors.white)),
+          ),
+          const Gap(16),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
+            child: TextButton(
+              key: ValueKey<bool>(showSignupForm),
+              onPressed: () {
+                setState(() {
+                  showLoginForm = false;
+                  showSignupForm = true;
+                });
+              },
+              child: const Text('Create an account', style: TextStyle(color: Colors.deepPurple)),
+            ),
+          ),        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -189,6 +570,7 @@ class _HomeState extends State<Home> {
                   title: Image.asset('assets/images/logo_white.png', height: 120),
                   backgroundColor: Colors.white,
                   actions: [
+
                     if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
                       TextButton(
                         onPressed: () => scrollToSection(_whyUsKey),
@@ -199,6 +581,16 @@ class _HomeState extends State<Home> {
                       child: Text('Contact Us!'.tr),
                     ),
                     if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
+                      TextButton(onPressed: () => scrollToSection(_faqKey), child: Text('FAQ'.tr)),
+                    FirebaseAuth.instance.currentUser == null
+                        ? TextButton(
+                      onPressed: _openChatPopup,
+                      child: Text('Login'.tr),
+                    )
+                        : TextButton(
+                      onPressed: logic.logOut,
+                      child: Text('Logout'.tr),
+                    ),
                       TextButton(
                         onPressed: () => scrollToSection(_faqKey),
                         child: Text('FAQ'.tr),
@@ -346,8 +738,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
-  var greyBackSize = 800.0;
 
   Widget _buildLaunchCodeHero(BuildContext ctx) {
     final width = MediaQuery.of(ctx).size.width;
