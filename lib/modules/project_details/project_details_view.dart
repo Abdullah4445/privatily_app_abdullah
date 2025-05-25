@@ -10,6 +10,7 @@ import 'package:readmore/readmore.dart';
 import 'package:seo/seo.dart';
 
 import '../../models/products.dart';
+import '../../utils/translationHelper.dart';
 import '../../widgets/myProgressIndicator.dart';
 import '../stepstolaunch/stepstolaunch.dart';
 import 'project_details_logic.dart';
@@ -73,7 +74,7 @@ class ProjectDetailsPage extends StatelessWidget {
                       const SizedBox(height: 24),
                       _buildHeader(context, product),
                       const SizedBox(height: 24),
-                      _buildSectionTitle(context, 'Description'),
+                      _buildSectionTitle(context, 'description'),
                       const SizedBox(height: 8),
                       _buildDescription(context, product),
                       const SizedBox(height: 32),
@@ -105,7 +106,7 @@ class ProjectDetailsPage extends StatelessWidget {
             Text(product.title ?? '', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
             TextButton(
               onPressed: () => showDialog(context: context, builder: (ctx) => LaunchSteps()),
-              child: const Text("How to earn with this??"),
+              child: Text("How to earn with this?".tr),
             ),
           ],
         ),
@@ -125,7 +126,7 @@ class ProjectDetailsPage extends StatelessWidget {
     children: [
       Container(width: 4, height: 24, color: _accentColor),
       const SizedBox(width: 8),
-      Text(title, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+      Text(title.tr, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
     ],
   );
 
@@ -143,11 +144,25 @@ class ProjectDetailsPage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(title, style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600)),
+                FutureBuilder<String>(
+                  future: TranslationService.translateText(title, Get.locale?.languageCode ?? 'en'),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Text('...');
+                    } else if (snapshot.hasError) {
+                      return Text(title); // fallback to original
+                    } else {
+                      return Text(
+                        snapshot.data ?? title,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+                      );
+                    }
+                  },
+                ),
                 if (demoLink?.isNotEmpty ?? false)
                   TextButton.icon(
                     icon: const Icon(Icons.open_in_new, size: 16),
-                    label: const Text('Try Demo'),
+                    label:  Text('tryDemo'.tr),
                     onPressed: () => logic.launchUrlExternal(demoLink!),
                     style: TextButton.styleFrom(foregroundColor: _accentColor),
                   ),
@@ -185,7 +200,11 @@ class ProjectDetailsPage extends StatelessWidget {
 
   void _openImageViewer(BuildContext context, List<String> images, int initialIndex) {
     final swiperController = CardSwiperController();
+    final transformationController = TransformationController();
     int currentIndex = initialIndex;
+    double scale = 1.0;
+
+    const double panDelta = 50.0;
 
     showDialog(
       context: context,
@@ -197,19 +216,35 @@ class ProjectDetailsPage extends StatelessWidget {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              CardSwiper(
-                controller: swiperController,
-                cardsCount: images.length,
-                initialIndex: initialIndex,
-                onSwipe: (prev, next, dir) {
-                  setState(() => currentIndex = next!);
-                  return true;
-                },
-                cardBuilder: (ctx, i, _, __) => ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.network(images[i], fit: BoxFit.contain),
+              // === Image Viewer with Swipe ===
+              InteractiveViewer(
+                panEnabled: true,
+                scaleEnabled: true,
+                minScale: 1,
+                maxScale: 5,
+                transformationController: transformationController,
+                child: CardSwiper(
+                  controller: swiperController,
+                  cardsCount: images.length,
+                  initialIndex: initialIndex,
+                  onSwipe: (prev, next, dir) {
+                    setState(() {
+                      currentIndex = next!;
+                      scale = 1.0;
+                      transformationController.value = Matrix4.identity();
+                    });
+                    return true;
+                  },
+                  cardBuilder: (ctx, i, _, __) => ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Center(
+                      child: Image.network(images[i], fit: BoxFit.contain),
+                    ),
+                  ),
                 ),
               ),
+
+              // === Close Button ===
               Positioned(
                 top: 32,
                 left: 16,
@@ -221,6 +256,8 @@ class ProjectDetailsPage extends StatelessWidget {
                   ),
                 ),
               ),
+
+              // === Swipe Left Arrow ===
               if (currentIndex > 0)
                 Positioned(
                   left: 16,
@@ -231,11 +268,17 @@ class ProjectDetailsPage extends StatelessWidget {
                       icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
                       onPressed: () {
                         swiperController.swipe(CardSwiperDirection.left);
-                        setState(() => currentIndex--);
+                        setState(() {
+                          currentIndex--;
+                          scale = 1.0;
+                          transformationController.value = Matrix4.identity();
+                        });
                       },
                     ),
                   ),
                 ),
+
+              // === Swipe Right Arrow ===
               if (currentIndex < images.length - 1)
                 Positioned(
                   right: 16,
@@ -246,11 +289,126 @@ class ProjectDetailsPage extends StatelessWidget {
                       icon: const Icon(Icons.arrow_forward_ios, color: Colors.white),
                       onPressed: () {
                         swiperController.swipe(CardSwiperDirection.right);
-                        setState(() => currentIndex++);
+                        setState(() {
+                          currentIndex++;
+                          scale = 1.0;
+                          transformationController.value = Matrix4.identity();
+                        });
                       },
                     ),
                   ),
                 ),
+
+              // === Control Pad: Zoom + Pan Cluster ===
+              Positioned(
+                bottom: 32,
+                right: 16,
+                child: Column(
+                  children: [
+                    // Zoom In Button
+                    CircleAvatar(
+                      backgroundColor: Colors.black54,
+                      child: IconButton(
+                        icon: const Icon(Icons.zoom_in, color: Colors.white),
+                        onPressed: () {
+                          setState(() {
+
+                            scale = (scale + 0.2).clamp(1.0, 5.0);
+                            final focalPoint = MediaQuery.of(context).size.center(Offset.zero);
+                            transformationController.value = Matrix4.identity()
+                              ..translate(focalPoint.dx * (1 - scale), focalPoint.dy * (1 - scale))
+                              ..scale(scale);
+
+
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+
+                    // D-Pad Container
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.black38,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        children: [
+                          // Up
+                          IconButton(
+                            icon: const Icon(Icons.arrow_drop_up, color: Colors.white),
+                            onPressed: () {
+                              setState(() {
+                                transformationController.value = transformationController.value
+                                  ..translate(0.0, panDelta);
+                              });
+                            },
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // Left
+                              IconButton(
+                                icon: const Icon(Icons.arrow_left, color: Colors.white),
+                                onPressed: () {
+                                  setState(() {
+                                    transformationController.value = transformationController.value
+                                      ..translate(panDelta, 0.0);
+                                  });
+                                },
+                              ),
+                              const SizedBox(width: 8),
+                              // Right
+                              IconButton(
+                                icon: const Icon(Icons.arrow_right, color: Colors.white),
+                                onPressed: () {
+                                  setState(() {
+                                    transformationController.value = transformationController.value
+                                      ..translate(-panDelta, 0.0);
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          // Down
+                          IconButton(
+                            icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+                            onPressed: () {
+                              setState(() {
+                                transformationController.value = transformationController.value
+                                  ..translate(0.0, -panDelta);
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    // Zoom Out Button
+                    CircleAvatar(
+                      backgroundColor: Colors.black54,
+                      child: IconButton(
+                        icon: const Icon(Icons.zoom_out, color: Colors.white),
+                        onPressed: () {
+                          setState(() {
+
+                            scale = (scale - 0.2).clamp(1.0, 5.0);
+                            final focalPoint = MediaQuery.of(context).size.center(Offset.zero);
+                            transformationController.value = Matrix4.identity()
+                              ..translate(focalPoint.dx * (1 - scale), focalPoint.dy * (1 - scale))
+                              ..scale(scale);
+
+
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -264,30 +422,41 @@ class ProjectDetailsPage extends StatelessWidget {
     return SliverAppBar(
       pinned: true,
       backgroundColor: Colors.white,
-      expandedHeight: 320,
+      expandedHeight: 120,
+      elevation: 4,
       iconTheme: const IconThemeData(color: Colors.black87),
-      title: Text(product?.title ?? '', style: const TextStyle(color: Colors.black87)),
-      flexibleSpace: FlexibleSpaceBar(
-        background: product == null
-            ? Container()
-            : CarouselSlider.builder(
-          itemCount: logic.imagesToShow.length,
-          options: CarouselOptions(
-            autoPlay: true,
-            enlargeCenterPage: true,
-            viewportFraction: 0.9,
-            aspectRatio: 16 / 9,
-          ),
-          itemBuilder: (context, index, realIndex) => Seo.image(
-            src: logic.imagesToShow[index],
-            alt: 'Main image ${index + 1} of ${product.title}',
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.network(logic.imagesToShow[index], fit: BoxFit.cover, width: double.infinity),
-            ),
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 12.0),
+        child: CircleAvatar(
+          backgroundColor: Colors.black12,
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black87),
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                Navigator.of(context).pop();
+              } else {
+                // No previous screen → restart app or go to home
+                // Option 1: Hard reload (only for Flutter Web)
+                // import 'dart:html' as html; already imported
+                html.window.location.href = '/';
+              }
+            },
           ),
         ),
       ),
+      centerTitle: true,
+      title: Text(
+        product?.title ?? '',
+        style: const TextStyle(
+          color: Colors.black87,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      flexibleSpace: const FlexibleSpaceBar(
+        background: SizedBox(), // no image
+      ),
     );
   }
+
 }

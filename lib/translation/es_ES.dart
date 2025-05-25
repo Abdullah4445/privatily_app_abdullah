@@ -54,8 +54,8 @@ const Map<String, String> esES = {
   'launch_anywhere_title_2': '→ cualquier lugar',
   'launch_anywhere_desc': 'Elige un script listo para lanzar, proporciona tus activos, y lo desplegaremos en tiendas de apps, dominios y hosting. Sin código. Sin estrés. Solo resultados.',
   'how_time_title': '¿Cuánto tiempo toma lanzar tu producto?',
-  'how_time_description': 'En LaunchCode, agilizamos tu lanzamiento.\nResumen rápido del proceso:\n1. Elige un script y entrega el contenido necesario.\n2. Personalizamos tu app en 15 días hábiles para Básico y 5 días para Premium.\n3. Lanzamos tu producto en App Store, Play Store y Panel en 3 días.',
-  'time_basic': 'Personalización para clientes Básicos',
+  'how_time_description':
+  'Chez LaunchCode, nous optimisons le lancement de votre produit.\nVoici un aperçu rapide du temps nécessaire pour déployer votre produit numérique :\n1. Choisissez un script, fournissez toutes les données requises (logo, nom de l\'entreprise, design, etc.).\n2. Notre équipe personnalise votre application en 15 jours ouvrables \npour les clients Basic et en 7 jours ouvrables pour les clients Premium.\n3. Nous déployons votre produit sur l\'App Store, le Play Store et le panneau d\'administration en 3 jours.', 'time_basic': 'Personalización para clientes Básicos',
   'time_premium': 'Personalización para clientes Premium',
   'time_appstore': 'Publicación en App Store',
   'time_playstore': 'Publicación en Play Store',
@@ -229,6 +229,9 @@ const Map<String, String> esES = {
   'SEO blogs, scripts, articles': 'Blogs SEO, guiones, artículos',
   "support_with_days": "Soporte: @days",
   "delivery_time_with_days": "Tiempo de entrega: @days",
-  "step_number": "Paso %s"
+  "step_number": "Paso %s",
+  "How to earn with this?": "Cómo ganar con este?",
+  "tryDemo": "Probar ahora",
+  "Choose your Plan": "Elige tu Plan",
 
 };

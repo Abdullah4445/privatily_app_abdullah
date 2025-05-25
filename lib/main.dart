@@ -65,6 +65,12 @@ class MyApp extends StatelessWidget {
         locale: const Locale('en', 'US'),
         fallbackLocale: const Locale('en', 'US'),
         initialRoute: '/',
+        theme: ThemeData(
+          fontFamily: Get.locale?.languageCode == 'ur' ? 'JameelNoori' : null,
+          textTheme: ThemeData.light().textTheme.apply(
+            fontFamily: Get.locale?.languageCode == 'ur' ? 'JameelNoori' : null,
+          ),
+        ),
         getPages: [
           GetPage(name: '/', page: () => const Home()),
           GetPage(name: CartPage.routeName, page: () => const CartPage()),

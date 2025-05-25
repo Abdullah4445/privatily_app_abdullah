@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -56,6 +57,7 @@ class _HomeState extends State<Home> {
   bool showChatBox = false;
   bool showLoginForm = false;
   bool showSignupForm = false;
+
   //New Variables
   bool showRoleSelection = false;
   RxBool showStudentCourses = false.obs;
@@ -74,12 +76,15 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     // Check initial login state
-    isLoggedIn.value = FirebaseAuth.instance.currentUser != null;
+    if(mounted){
+      isLoggedIn.value = FirebaseAuth.instance.currentUser != null;
 
-    // Listen for authentication changes
-    FirebaseAuth.instance.authStateChanges().listen((user) {
-      isLoggedIn.value = user != null;
-    });
+      // Listen for authentication changes
+      FirebaseAuth.instance.authStateChanges().listen((user) {
+        isLoggedIn.value = user != null;
+      });
+    }
+
   }
 
   void scrollToSection(GlobalKey key) {
@@ -135,91 +140,6 @@ class _HomeState extends State<Home> {
       right: 24,
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 500),
-        transitionBuilder: (child, anim) => FadeTransition(
-          opacity: anim,
-          child: ScaleTransition(
-            scale: CurvedAnimation(parent: anim, curve: Curves.easeOutBack),
-            child: SlideTransition(
-              position: Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero).animate(anim),
-              child: child,
-            ),
-          ),
-        ),
-        child: showChatBox
-            ? Material(
-          key: const ValueKey('chatbox'),
-          borderRadius: BorderRadius.circular(20),
-          elevation: 8,
-          color: Colors.transparent,
-          child: Container(
-            width: 360,
-            height: 480,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 25)],
-              image: DecorationImage(
-                image: NetworkImage('https://i.gifer.com/origin/0f/0f412581c9c78dec416072c7a42ef1b4.gif'), // Animated image URL
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: ClipRRect( // To clip the content inside the container
-              borderRadius: BorderRadius.circular(20),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5), // Adjust blur intensity
-                child: Container(
-                  color: Colors.white.withOpacity(0.7), // Adjust opacity for content visibility
-                  padding: const EdgeInsets.all(16),
-                  child: Obx(() {
-                    if (logic.isLoading.value) {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    if (logic.showChatScreen.value) {
-                      return ChattingPage(
-                        chatRoomId: logic.chatRoomIdForPopup.value,
-                        receiverId: logic.receiverIdForPopup.value,
-                        receiverName: logic.receiverNameForPopup.value,
-                      );
-                    } else if (showRoleSelection) { // Show role selection screen
-                      return _buildRoleSelection();
-                    } else if (showLoginForm) {
-                      return _buildLoginForm();
-                    } else if (showSignupForm) {
-                      return _buildSignupForm();
-                    } else {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                showLoginForm = true;
-                                showSignupForm = false;
-                              });
-                            },
-                            child: Text('Login'),
-                          ),
-                          SizedBox(height: 16),
-                          TextButton(
-                            onPressed: () {
-                              setState(() {
-                                showSignupForm = true;
-                                showLoginForm = false;
-                              });
-                            },
-                            child: Text('Create an account'),
-
-                          ),
-                        ],
-                      );
-                    }
-                  }),
-                ),
-              ),
-            ),
-          ),
-        )
-            : const SizedBox.shrink(),
         transitionBuilder:
             (child, anim) => FadeTransition(
               opacity: anim,
@@ -246,23 +166,121 @@ class _HomeState extends State<Home> {
                     height: 480,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 25)],
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          'https://i.gifer.com/origin/0f/0f412581c9c78dec416072c7a42ef1b4.gif',
+                        ),
+                        // Animated image URL
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                    child: Obx(
-                      () =>
-                          logic.showChatScreen.value
-                              ? ChattingPage(
+                    child: ClipRRect(
+                      // To clip the content inside the container
+                      borderRadius: BorderRadius.circular(20),
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(
+                          sigmaX: 5,
+                          sigmaY: 5,
+                        ), // Adjust blur intensity
+                        child: Container(
+                          color: Colors.white.withOpacity(0.7),
+                          // Adjust opacity for content visibility
+                          padding: const EdgeInsets.all(16),
+                          child: Obx(() {
+                            if (logic.isLoading.value) {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                            if (logic.showChatScreen.value) {
+                              return ChattingPage(
                                 chatRoomId: logic.chatRoomIdForPopup.value,
                                 receiverId: logic.receiverIdForPopup.value,
                                 receiverName: logic.receiverNameForPopup.value,
-                              )
-                              : const Center(child: CircularProgressIndicator()),
+                              );
+                            } else if (showRoleSelection) {
+                              // Show role selection screen
+                              return _buildRoleSelection();
+                            } else if (showLoginForm) {
+                              return _buildLoginForm();
+                            } else if (showSignupForm) {
+                              return _buildSignupForm();
+                            } else {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        showLoginForm = true;
+                                        showSignupForm = false;
+                                      });
+                                    },
+                                    child: Text('Login'),
+                                  ),
+                                  SizedBox(height: 16),
+                                  TextButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        showSignupForm = true;
+                                        showLoginForm = false;
+                                      });
+                                    },
+                                    child: Text('Create an account'),
+                                  ),
+                                ],
+                              );
+                            }
+                          }),
+                        ),
+                      ),
                     ),
                   ),
                 )
                 : const SizedBox.shrink(),
+        // transitionBuilder:
+        //     (child, anim) => FadeTransition(
+        //       opacity: anim,
+        //       child: ScaleTransition(
+        //         scale: CurvedAnimation(parent: anim, curve: Curves.easeOutBack),
+        //         child: SlideTransition(
+        //           position: Tween<Offset>(
+        //             begin: const Offset(0, 0.2),
+        //             end: Offset.zero,
+        //           ).animate(anim),
+        //           child: child,
+        //         ),
+        //       ),
+        //     ),
+        // child:
+        //     showChatBox
+        //         ? Material(
+        //           key: const ValueKey('chatbox'),
+        //           borderRadius: BorderRadius.circular(20),
+        //           elevation: 8,
+        //           color: Colors.transparent,
+        //           child: Container(
+        //             width: 360,
+        //             height: 480,
+        //             padding: const EdgeInsets.all(16),
+        //             decoration: BoxDecoration(
+        //               color: Colors.white,
+        //               borderRadius: BorderRadius.circular(20),
+        //               boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 25)],
+        //             ),
+        //             child: Obx(
+        //               () =>
+        //                   logic.showChatScreen.value
+        //                       ? ChattingPage(
+        //                         chatRoomId: logic.chatRoomIdForPopup.value,
+        //                         receiverId: logic.receiverIdForPopup.value,
+        //                         receiverName: logic.receiverNameForPopup.value,
+        //                       )
+        //                       : const Center(child: CircularProgressIndicator()),
+        //             ),
+        //           ),
+        //         )
+        //         : const SizedBox.shrink(),
       ),
     );
   }
@@ -289,7 +307,10 @@ class _HomeState extends State<Home> {
     // Check if the user is already logged in
     if (FirebaseAuth.instance.currentUser != null) {
       // User is already logged in, generate chatRoomId and show chat screen
-      String chatRoomId = logic.generateChatRoomId(FirebaseAuth.instance.currentUser!.uid, logic.fixedAdminId);
+      String chatRoomId = logic.generateChatRoomId(
+        FirebaseAuth.instance.currentUser!.uid,
+        logic.fixedAdminId,
+      );
       logic.chatRoomIdForPopup.value = chatRoomId;
       logic.receiverIdForPopup.value = logic.fixedAdminId;
       logic.receiverNameForPopup.value = logic.adminName;
@@ -394,7 +415,7 @@ class _HomeState extends State<Home> {
             obscureText: true,
           ),
           const Gap(12),
-          if(isStudent)
+          if (isStudent)
             DropdownButtonFormField<String>(
               decoration: InputDecoration(
                 labelText: 'Select Course',
@@ -406,12 +427,10 @@ class _HomeState extends State<Home> {
                 fillColor: Colors.grey[200],
               ),
               value: selectedCourse,
-              items: courses.map((String course) {
-                return DropdownMenuItem<String>(
-                  value: course,
-                  child: Text(course),
-                );
-              }).toList(),
+              items:
+                  courses.map((String course) {
+                    return DropdownMenuItem<String>(value: course, child: Text(course));
+                  }).toList(),
               onChanged: (String? value) {
                 setState(() {
                   selectedCourse = value;
@@ -423,7 +442,13 @@ class _HomeState extends State<Home> {
           ElevatedButton(
             onPressed: () async {
               if (selectedCourse != null) {
-                await logic.createUserWithEmailAndPassword(emailController.text, passwordController.text,nameController.text, selectedCourse!, isStudent: isStudent);
+                await logic.createUserWithEmailAndPassword(
+                  emailController.text,
+                  passwordController.text,
+                  nameController.text,
+                  selectedCourse!,
+                  isStudent: isStudent,
+                );
                 if (logic.auth.currentUser != null) {
                   setState(() {
                     showSignupForm = false;
@@ -437,9 +462,7 @@ class _HomeState extends State<Home> {
               backgroundColor: Colors.deepPurple, // Primary Color
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 48),
               textStyle: const TextStyle(fontSize: 18),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
             ),
             child: const Text('Create Account', style: TextStyle(color: Colors.white)),
           ),
@@ -447,10 +470,7 @@ class _HomeState extends State<Home> {
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             transitionBuilder: (Widget child, Animation<double> animation) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
+              return FadeTransition(opacity: animation, child: child);
             },
             child: TextButton(
               key: ValueKey<bool>(showLoginForm),
@@ -460,9 +480,13 @@ class _HomeState extends State<Home> {
                   showLoginForm = true;
                 });
               },
-              child: const Text('Already have an account? Login', style: TextStyle(color: Colors.deepPurple)),
+              child: const Text(
+                'Already have an account? Login',
+                style: TextStyle(color: Colors.deepPurple),
+              ),
             ),
-          ),        ],
+          ),
+        ],
       ),
     );
   }
@@ -519,9 +543,7 @@ class _HomeState extends State<Home> {
               backgroundColor: Colors.deepPurple, // Primary Color
               padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 48),
               textStyle: const TextStyle(fontSize: 18),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
             ),
             child: const Text('Login', style: TextStyle(color: Colors.white)),
           ),
@@ -529,10 +551,7 @@ class _HomeState extends State<Home> {
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             transitionBuilder: (Widget child, Animation<double> animation) {
-              return FadeTransition(
-                opacity: animation,
-                child: child,
-              );
+              return FadeTransition(opacity: animation, child: child);
             },
             child: TextButton(
               key: ValueKey<bool>(showSignupForm),
@@ -542,9 +561,13 @@ class _HomeState extends State<Home> {
                   showSignupForm = true;
                 });
               },
-              child: const Text('Create an account', style: TextStyle(color: Colors.deepPurple)),
+              child: const Text(
+                'Create an account',
+                style: TextStyle(color: Colors.deepPurple),
+              ),
             ),
-          ),        ],
+          ),
+        ],
       ),
     );
   }
@@ -570,7 +593,6 @@ class _HomeState extends State<Home> {
                   title: Image.asset('assets/images/logo_white.png', height: 120),
                   backgroundColor: Colors.white,
                   actions: [
-
                     if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
                       TextButton(
                         onPressed: () => scrollToSection(_whyUsKey),
@@ -581,20 +603,21 @@ class _HomeState extends State<Home> {
                       child: Text('Contact Us!'.tr),
                     ),
                     if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
-                      TextButton(onPressed: () => scrollToSection(_faqKey), child: Text('FAQ'.tr)),
-                    FirebaseAuth.instance.currentUser == null
-                        ? TextButton(
-                      onPressed: _openChatPopup,
-                      child: Text('Login'.tr),
-                    )
-                        : TextButton(
-                      onPressed: logic.logOut,
-                      child: Text('Logout'.tr),
-                    ),
+
                       TextButton(
                         onPressed: () => scrollToSection(_faqKey),
                         child: Text('FAQ'.tr),
                       ),
+
+                    // FirebaseAuth.instance.currentUser == null
+                    //     ? TextButton(onPressed: _openChatPopup, child: Text('Login'.tr))
+                    //     : TextButton(onPressed: logic.logOut, child: Text('Logout'.tr)
+                    // ),
+
+                    // TextButton(
+                    //   onPressed: () => scrollToSection(_faqKey),
+                    //   child: Text('FAQ'.tr),
+                    // ),
                     const Gap(10),
                     // Obx(() {
                     //   final count = Get.find<CartLogic>().itemCount;
@@ -621,9 +644,11 @@ class _HomeState extends State<Home> {
                             DropdownMenuItem(value: 'fr', child: Text('Français')),
                             DropdownMenuItem(value: 'es', child: Text('Español')),
                             DropdownMenuItem(value: 'ar', child: Text('عربي')),
+                            DropdownMenuItem(value: 'ur', child: Text('اردو')),
                           ],
                           onChanged: (val) {
                             selectedLang.value = val!;
+
                             Get.put(TranslationController()).changeLanguage(val);
                           },
                         ),
@@ -680,6 +705,7 @@ class _HomeState extends State<Home> {
                           child: _buildLaunchCodeHero(ctx),
                         ),
                       ),
+
                       const Gap(18),
 
                       const AnimatedOnScroll(child: HomeStatsSection()),
@@ -729,7 +755,7 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
-                floatingActionButton: floatingMessageButton(),
+                // floatingActionButton: floatingMessageButton(),
               ),
               chatPopup(),
             ],
@@ -738,6 +764,8 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+  var greyBackSize = 800.0;
 
   Widget _buildLaunchCodeHero(BuildContext ctx) {
     final width = MediaQuery.of(ctx).size.width;
@@ -754,78 +782,77 @@ class _HomeState extends State<Home> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ResponsiveBreakpoints.of(context).isMobile?Column(
-
-            children: [
-             Row(
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: [
-                 SizedBox(
-                   height: 50,
-                   width: 50,
-                   child: Lottie.asset(
-                     'assets/lotties/rocket.json', // 🔥 change to your lottie
-                     repeat: true,
-                     animate: true,
-                   ),
-                 ),
-                 Gap(8),
-                 Text(
-                   'launch_sooner'.tr,
-                   style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                 ),
-               ],
-             ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+          ResponsiveBreakpoints.of(context).isMobile
+              ? Column(
                 children: [
-                  const Icon(Icons.trending_up, color: Colors.green, size: 28),
-                  Gap(8),
-                  Text(
-                    'grow_faster'.tr,
-                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: Lottie.asset(
+                          'assets/lotties/rocket.json', // 🔥 change to your lottie
+                          repeat: true,
+                          animate: true,
+                        ),
+                      ),
+                      Gap(8),
+                      Text(
+                        'launch_sooner'.tr,
+                        style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.trending_up, color: Colors.green, size: 28),
+                      Gap(8),
+                      Text(
+                        'grow_faster'.tr,
+                        style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                 ],
               )
-
-            ],
-          ):Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-
-            children: [
-              Row(
+              : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+
                 children: [
-                  SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: Lottie.asset(
-                      'assets/lotties/rocket.json', // 🔥 change to your lottie
-                      repeat: true,
-                      animate: true,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: Lottie.asset(
+                          'assets/lotties/rocket.json', // 🔥 change to your lottie
+                          repeat: true,
+                          animate: true,
+                        ),
+                      ),
+                      Gap(8),
+                      Text(
+                        'launch_sooner'.tr,
+                        style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
-                  Gap(8),
-                  Text(
-                    'launch_sooner'.tr,
-                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.trending_up, color: Colors.green, size: 28),
+                      Gap(8),
+                      Text(
+                        'grow_faster'.tr,
+                        style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.trending_up, color: Colors.green, size: 28),
-                  Gap(8),
-                  Text(
-                    'grow_faster'.tr,
-                    style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              )
-
-            ],
-          ),
           const Gap(6),
 
           AnimatedOnScroll(
@@ -846,35 +873,37 @@ class _HomeState extends State<Home> {
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
-                ResponsiveBreakpoints.of(context).isMobile?Container():SizedBox(
-                  height: 500,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    physics: NeverScrollableScrollPhysics(),
-                    children: [
-                      SizedBox(
-                        height: 600,
-                        width: greyBackSize,
-                        child: Lottie.asset('assets/lotties/myGreyBack.json'),
+                ResponsiveBreakpoints.of(context).isMobile
+                    ? Container()
+                    : SizedBox(
+                      height: 500,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        physics: NeverScrollableScrollPhysics(),
+                        children: [
+                          SizedBox(
+                            height: 600,
+                            width: greyBackSize,
+                            child: Lottie.asset('assets/lotties/myGreyBack.json'),
+                          ),
+                          SizedBox(
+                            height: 600,
+                            width: greyBackSize,
+                            child: Lottie.asset('assets/lotties/myGreyBack.json'),
+                          ),
+                          SizedBox(
+                            height: 600,
+                            width: greyBackSize,
+                            child: Lottie.asset('assets/lotties/myGreyBack.json'),
+                          ),
+                          SizedBox(
+                            height: 600,
+                            width: greyBackSize,
+                            child: Lottie.asset('assets/lotties/myGreyBack.json'),
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        height: 600,
-                        width: greyBackSize,
-                        child: Lottie.asset('assets/lotties/myGreyBack.json'),
-                      ),
-                      SizedBox(
-                        height: 600,
-                        width: greyBackSize,
-                        child: Lottie.asset('assets/lotties/myGreyBack.json'),
-                      ),
-                      SizedBox(
-                        height: 600,
-                        width: greyBackSize,
-                        child: Lottie.asset('assets/lotties/myGreyBack.json'),
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
                 Padding(
                   key: _featuredKey,
                   padding: const EdgeInsets.symmetric(vertical: 2),
@@ -883,39 +912,58 @@ class _HomeState extends State<Home> {
 
                 LayoutBuilder(
                   builder: (context, constraints) {
-                    return SizedBox(
-                      height: 190,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        // padding: const EdgeInsets.symmetric(horizontal: 8),
-                        children: [
-                          // Wrap in a SizedBox to match the full width if content is small
-                          ConstrainedBox(
-                            constraints: BoxConstraints(minWidth: constraints.maxWidth),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children:  [
-                                PlanCard(
-                                  text: "BASIC PLAN".tr,
-                                  price: 150,
-                                  supportDays: "Mon-Fri".tr,
-                                  deliveryTime: "15 Days".tr,
-                                ),
-                                SizedBox(width: 2),
-                                PlanCard(
-                                  text: "ADVANCED PLAN".tr,
-                                  price: 350,
-                                  supportDays: "Mon-Sun".tr,
-                                  deliveryTime: "7 Days".tr,
-                                ),
-                              ],
+                    return Column( // Wrap with a Column
+                      mainAxisSize: MainAxisSize.min, // Important to prevent Column from taking infinite height
+                      children: [
+                        // Your Text widget here
+
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0), // Add some spacing
+                          child: Text(
+                            "Choose your Plan".tr, // Example text
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              // Add other styling as needed
                             ),
+                            textAlign: TextAlign.center,
                           ),
-                        ],
-                      ),
+                        ),
+                        // Your existing SizedBox containing the ListView
+                        SizedBox(
+                          height: 190, // This height is now for the ListView part
+                          child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            // padding: const EdgeInsets.symmetric(horizontal: 8),
+                            children: [
+                              ConstrainedBox(
+                                constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    PlanCard(
+                                      text: "BASIC PLAN".tr,
+                                      price: 150,
+                                      supportDays: "Mon-Fri".tr,
+                                      deliveryTime: "15 Days".tr,
+                                    ),
+                                    SizedBox(width: 2),
+                                    PlanCard(
+                                      text: "ADVANCED PLAN".tr,
+                                      price: 350,
+                                      supportDays: "Mon-Sun".tr,
+                                      deliveryTime: "7 Days".tr,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     );
                   },
-                ),
+                )
 
                 // 🟢 Lottie animation at the bottom
               ],

@@ -2,9 +2,9 @@
 
 // --- Main Project Model ---
 class Project {
-  final int? createdAt; // Consider using DateTime after parsing
+  final int? createdAt;
   final List<DemoAdminPanelLink>? demoAdminPanelLinks;
-  final List<String>? mobileShotUrls; // Top-level screenshots (renamed for clarity)
+  final List<String>? mobileShotUrls;
   final List<DemoApkLink>? demoApkLinks;
   final String? demoDetails;
   final String? demoVideoUrl;
@@ -21,12 +21,12 @@ class Project {
   final List<String>? teamMemberIds;
   final String? thumbnailUrl;
   final String? title;
-  final dynamic updatedAt; // Keep dynamic or parse to DateTime/Timestamp if needed
+  final dynamic updatedAt;
 
   Project({
     this.createdAt,
     this.demoAdminPanelLinks,
-    this.mobileShotUrls, // Corresponds to the top-level 'shotUrls' in JSON
+    this.mobileShotUrls,
     this.demoApkLinks,
     this.demoDetails,
     this.demoVideoUrl,
@@ -46,43 +46,60 @@ class Project {
     this.updatedAt,
   });
 
-  // Helper Getters for easier access to specific screenshot lists
-  List<String> get adminPanelScreenshots {
-    final List<String> shots = [];
-    if (demoAdminPanelLinks != null) {
-      for (var link in demoAdminPanelLinks!) {
-        if (link.shotUrls != null) {
-          shots.addAll(link.shotUrls!);
-        }
-      }
-    }
-    return shots;
+  /// ✅ Add this method to support partial updates (like translated title/description)
+  Project copyWith({
+    int? createdAt,
+    List<DemoAdminPanelLink>? demoAdminPanelLinks,
+    List<String>? mobileShotUrls,
+    List<DemoApkLink>? demoApkLinks,
+    String? demoDetails,
+    String? demoVideoUrl,
+    bool? isCustomizationAvailable,
+    bool? isProjectEnabled,
+    String? name,
+    double? price,
+    String? projectDesc,
+    String? projectId,
+    String? projectLink,
+    List<String>? reviews,
+    int? soldCount,
+    String? subtitle,
+    List<String>? teamMemberIds,
+    String? thumbnailUrl,
+    String? title,
+    dynamic updatedAt,
+  }) {
+    return Project(
+      createdAt: createdAt ?? this.createdAt,
+      demoAdminPanelLinks: demoAdminPanelLinks ?? this.demoAdminPanelLinks,
+      mobileShotUrls: mobileShotUrls ?? this.mobileShotUrls,
+      demoApkLinks: demoApkLinks ?? this.demoApkLinks,
+      demoDetails: demoDetails ?? this.demoDetails,
+      demoVideoUrl: demoVideoUrl ?? this.demoVideoUrl,
+      isCustomizationAvailable: isCustomizationAvailable ?? this.isCustomizationAvailable,
+      isProjectEnabled: isProjectEnabled ?? this.isProjectEnabled,
+      name: name ?? this.name,
+      price: price ?? this.price,
+      projectDesc: projectDesc ?? this.projectDesc,
+      projectId: projectId ?? this.projectId,
+      projectLink: projectLink ?? this.projectLink,
+      reviews: reviews ?? this.reviews,
+      soldCount: soldCount ?? this.soldCount,
+      subtitle: subtitle ?? this.subtitle,
+      teamMemberIds: teamMemberIds ?? this.teamMemberIds,
+      thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
+      title: title ?? this.title,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
   }
 
-  List<String> get mobileAppScreenshots {
-    // Returns the top-level list if it exists
-    return mobileShotUrls ?? [];
-  }
-
-  List<String> get apkDemoScreenshots {
-    final List<String> shots = [];
-    if (demoApkLinks != null) {
-      for (var link in demoApkLinks!) {
-        if (link.shotUrls != null) {
-          shots.addAll(link.shotUrls!);
-        }
-      }
-    }
-    return shots;
-  }
-
+  // --- Your existing factory and toJson methods stay the same ---
 
   factory Project.fromJson(Map<String, dynamic> json) => Project(
     createdAt: json['createdAt'] as int?,
     demoAdminPanelLinks: (json['demoAdminPanelLinks'] as List<dynamic>?)
         ?.map((x) => DemoAdminPanelLink.fromJson(x as Map<String, dynamic>))
         .toList(),
-    // Map the top-level 'shotUrls' from JSON to 'mobileShotUrls' in the model
     mobileShotUrls: (json['shotUrls'] as List<dynamic>?)
         ?.map((x) => x as String)
         .toList(),
@@ -108,13 +125,12 @@ class Project {
         .toList(),
     thumbnailUrl: json['thumbnailUrl'] as String?,
     title: json['title'] as String?,
-    updatedAt: json['updatedAt'], // Keep as dynamic
+    updatedAt: json['updatedAt'],
   );
 
   Map<String, dynamic> toJson() => {
     'createdAt': createdAt,
     'demoAdminPanelLinks': demoAdminPanelLinks?.map((x) => x.toJson()).toList(),
-    // Map 'mobileShotUrls' back to 'shotUrls' key in JSON
     'shotUrls': mobileShotUrls,
     'demoApkLinks': demoApkLinks?.map((x) => x.toJson()).toList(),
     'demoDetails': demoDetails,
@@ -134,7 +150,35 @@ class Project {
     'title': title,
     'updatedAt': updatedAt,
   };
+
+  // --- Your screenshot helpers stay unchanged ---
+  List<String> get adminPanelScreenshots {
+    final List<String> shots = [];
+    if (demoAdminPanelLinks != null) {
+      for (var link in demoAdminPanelLinks!) {
+        if (link.shotUrls != null) {
+          shots.addAll(link.shotUrls!);
+        }
+      }
+    }
+    return shots;
+  }
+
+  List<String> get mobileAppScreenshots => mobileShotUrls ?? [];
+
+  List<String> get apkDemoScreenshots {
+    final List<String> shots = [];
+    if (demoApkLinks != null) {
+      for (var link in demoApkLinks!) {
+        if (link.shotUrls != null) {
+          shots.addAll(link.shotUrls!);
+        }
+      }
+    }
+    return shots;
+  }
 }
+
 
 // --- Model for items in the 'demoAdminPanelLinks' array ---
 class DemoAdminPanelLink {

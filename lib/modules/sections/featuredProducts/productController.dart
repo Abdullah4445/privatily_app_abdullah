@@ -24,7 +24,10 @@ class ProductsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchTopProducts(); // Load products when the controller is initialized
+
+      fetchTopProducts();
+
+     // Load products when the controller is initialized
   }
 
   Future<void> fetchTopProducts() async {
@@ -39,8 +42,6 @@ class ProductsController extends GetxController {
           .orderBy('createdAt', descending: true)
           .get();
 
-      // Print the number of documents fetched for debugging
-      print("My total documents fetched are: ${snapshot.docs.length}");
 
       // Convert each document into a Project object using the fromJson factory
       if (snapshot.docs.isNotEmpty) {

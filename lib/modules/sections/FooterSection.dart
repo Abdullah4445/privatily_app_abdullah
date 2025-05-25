@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:privatily_app/modules/terms_and_conditions/terms_and_conditions_view.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../privacy_page/privacy_page_view.dart';
@@ -60,37 +61,37 @@ class FooterSection extends StatelessWidget {
 
                         _contactRow(Icons.phone, '+923058431046'),
                         _contactRow(Icons.article, 'footer_guides'.tr),
-                        _contactRow(Icons.help_outline, 'footer_support'.tr),
+                        // _contactRow(Icons.help_outline, 'footer_support'.tr),
                         const SizedBox(height: 16),
-                        Row(
-
-                          children: [
-                            IconButton(
-                              icon: const FaIcon(FontAwesomeIcons.facebook),color: Colors.white,
-                              onPressed: () {
-                                // open Facebook link
-                              },
-                            ),
-                            IconButton(
-                              icon: const FaIcon(FontAwesomeIcons.instagram),color: Colors.white,
-                              onPressed: () {
-                                // open Instagram link
-                              },
-                            ),
-                            IconButton(
-                              icon: const FaIcon(FontAwesomeIcons.linkedin),color: Colors.white,
-                              onPressed: () {
-                                // open LinkedIn link
-                              },
-                            ),
-                            IconButton(
-                              icon: const FaIcon(FontAwesomeIcons.twitter),color: Colors.white,
-                              onPressed: () {
-                                // open LinkedIn link
-                              },
-                            ),
-                          ],
-                        )
+                        // Row(
+                        //
+                        //   children: [
+                        //     IconButton(
+                        //       icon: const FaIcon(FontAwesomeIcons.facebook),color: Colors.white,
+                        //       onPressed: () {
+                        //         // open Facebook link
+                        //       },
+                        //     ),
+                        //     IconButton(
+                        //       icon: const FaIcon(FontAwesomeIcons.instagram),color: Colors.white,
+                        //       onPressed: () {
+                        //         // open Instagram link
+                        //       },
+                        //     ),
+                        //     IconButton(
+                        //       icon: const FaIcon(FontAwesomeIcons.linkedin),color: Colors.white,
+                        //       onPressed: () {
+                        //         // open LinkedIn link
+                        //       },
+                        //     ),
+                        //     IconButton(
+                        //       icon: const FaIcon(FontAwesomeIcons.twitter),color: Colors.white,
+                        //       onPressed: () {
+                        //         // open LinkedIn link
+                        //       },
+                        //     ),
+                        //   ],
+                        // )
 
 
 
@@ -145,8 +146,8 @@ class FooterSection extends StatelessWidget {
                           'footer_privacy'.tr,
                           'footer_refund'.tr,
                           'footer_license'.tr,
-                          'About us'.tr,
-                          'Contact us'.tr
+                          // 'About us'.tr,
+                          // 'Contact us'.tr
                         ]),
                       ],
                     ),
@@ -156,10 +157,10 @@ class FooterSection extends StatelessWidget {
 
 
                   // Footer Image
-                  SizedBox(
-                    width: isMobile ? double.infinity : 250,
+                 ResponsiveBreakpoints.of(context).isMobile?Container(): SizedBox(
+                    width: isMobile ? double.infinity : 600,
                     child: Image.asset(
-                      'assets/images/footer_person_1.png',
+                      'assets/images/footer_person.png',
                       height: 350,
                       fit: BoxFit.contain,
                     ),

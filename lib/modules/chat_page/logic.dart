@@ -100,6 +100,7 @@ class ChattingPageLogic extends GetxController {
       setUserOffline();
     }
   }
+
   void setTypingStatus(bool isTyping) async {
     final user = myFbAuth.currentUser;
     if (user != null) {

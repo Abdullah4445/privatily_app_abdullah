@@ -8,6 +8,8 @@ class MyLoader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Image.asset(
+        height: 90,
+        width: 90,
         'assets/myGif.gif', // Replace with your Lottie file
 
       ),

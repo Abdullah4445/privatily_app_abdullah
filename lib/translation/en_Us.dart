@@ -1,26 +1,33 @@
 const Map<String, String> enUS = {
   'launch_sooner': 'Launch Sooner.',
   'grow_faster': 'Grow Faster.',
-  'discover_software': 'Discover Ready-to-Use Software Scripts to Power Your Digital Business.',
+  'discover_software':
+      'Discover Ready-to-Use Software Scripts to Power Your Digital Business.',
   'explore_products': 'Explore Products',
   'browse_categories': 'Browse Categories',
   'rated_stars': 'Rated 4.2+ stars by entrepreneurs worldwide',
   'ready_to_launch': 'Ready-to-Launch Digital Assets for Immediate Impact',
-  'leverage_scripts': 'Leverage our expertly crafted scripts, applications, and admin panels, designed for optimal conversion and efficiency. Deploy seamlessly and start realizing your revenue potential faster.',
+  'leverage_scripts':
+      'Leverage our expertly crafted scripts, applications, and admin panels, designed for optimal conversion and efficiency. Deploy seamlessly and start realizing your revenue potential faster.',
   'app_title': 'LaunchCode',
   'why_launchcode_heading': 'Why LaunchCode?',
-  'why_launchcode_subtext': "LaunchCode removes the hurdles of starting from scratch. Our platform offers high-quality, ready-to-use software tools that you can deploy instantly. Whether you're a freelancer, startup, or agency, focus on growth, not building everything from scratch.",
+  'why_launchcode_subtext':
+      "LaunchCode removes the hurdles of starting from scratch. Our platform offers high-quality, ready-to-use software tools that you can deploy instantly. Whether you're a freelancer, startup, or agency, focus on growth, not building everything from scratch.",
   'feature_prebuilt': 'Pre-built software scripts',
   'feature_quicklaunch': 'Quick and setup-free launch',
   'feature_support': 'Dedicated launch support',
   'why_choose': 'Why Choose',
   'select_script': 'Select Your Script',
-  'select_script_desc': 'Choose from our collection of high-converting software scripts designed for success in various industries.',
+  'select_script_desc':
+      'Choose from our collection of high-converting software scripts designed for success in various industries.',
   'customization_details': 'Provide Customization Details',
-  'customization_details_desc': 'Provide us with your business name, logo, design preferences, and any other required details to tailor the product to your needs.',
+  'customization_details_desc':
+      'Provide us with your business name, logo, design preferences, and any other required details to tailor the product to your needs.',
   'get_ready_launch': 'Get Ready to Launch',
-  'get_ready_launch_desc': 'We’ll customize and deploy your app to the App Store, Play Store, and Admin Panel in as little as 3 days.',
-  'trusted_text': 'With over 10 years in the industry and having served 300+ clients, LaunchCode is the trusted partner for entrepreneurs worldwide. Our expert team ensures that your digital product is built, deployed, and live in no time!',
+  'get_ready_launch_desc':
+      'We’ll customize and deploy your app to the App Store, Play Store, and Admin Panel in as little as 3 days.',
+  'trusted_text':
+      'With over 10 years in the industry and having served 300+ clients, LaunchCode is the trusted partner for entrepreneurs worldwide. Our expert team ensures that your digital product is built, deployed, and live in no time!',
   'transparent': 'Transparent ',
   'pricing': 'Pricing',
   'where_live': 'Where do you live?',
@@ -36,28 +43,34 @@ const Map<String, String> enUS = {
   'go_premium': 'Go Premium',
 
   'testimonial_heading': 'Loved by global entrepreneurs powered by LaunchCode',
-  'testimonial_msg_1': 'LaunchCode made it incredibly easy to get my app live. Within days, my app was on the Play Store and I was receiving real customer traffic. 100% recommend!',
+  'testimonial_msg_1':
+      'LaunchCode made it incredibly easy to get my app live. Within days, my app was on the Play Store and I was receiving real customer traffic. 100% recommend!',
   'testimonial_name_1': 'Johan',
   'testimonial_country_1': 'From USA 🇺🇸',
-  'testimonial_msg_2': 'Their dashboard, support, and deployment process is seamless. LaunchCode is perfect for developers looking to scale fast.',
+  'testimonial_msg_2':
+      'Their dashboard, support, and deployment process is seamless. LaunchCode is perfect for developers looking to scale fast.',
   'testimonial_name_2': 'Faizal Khan',
   'testimonial_country_2': 'From UK 🇬🇧',
-  'testimonial_msg_3': 'From selecting the script to launching my brand online, LaunchCode handled everything! Now my store is running and earning.',
+  'testimonial_msg_3':
+      'From selecting the script to launching my brand online, LaunchCode handled everything! Now my store is running and earning.',
   'testimonial_name_3': 'Omar',
   'testimonial_country_3': 'From Egypt 🇪🇬',
 
   'bonus_title_prefix': 'Bonuses',
   'bonus_title_suffix': ' for Premium\nclients only',
-  'bonus_description': 'As a Premium client, we’ll assist you in setting up all the\nfinancial services available to you. You’ll have a dedicated\naccount manager and our exceptional support team, ready\nto assist you via chat, email, and phone.',
+  'bonus_description':
+      'As a Premium client, we’ll assist you in setting up all the\nfinancial services available to you. You’ll have a dedicated\naccount manager and our exceptional support team, ready\nto assist you via chat, email, and phone.',
   'mission_heading_1': 'Our Mission at ',
   'mission_heading_2': 'LaunchCode',
-  'mission_description': "LaunchCode’s mission is to simplify and speed up tech business launches worldwide. We provide ready-to-deploy software solutions and full-stack support—from branding and configuration to hosting and store submission. Our goal is to empower startups, freelancers, and agencies with automation and simplicity so they can focus on revenue instead of development.",
+  'mission_description':
+      "LaunchCode’s mission is to simplify and speed up tech business launches worldwide. We provide ready-to-deploy software solutions and full-stack support—from branding and configuration to hosting and store submission. Our goal is to empower startups, freelancers, and agencies with automation and simplicity so they can focus on revenue instead of development.",
   'launch_anywhere_title_1': 'Launch your digital business\nfrom ',
   'launch_anywhere_title_2': '→ anywhere',
-  'launch_anywhere_desc': 'Choose a ready-to-launch script, provide your assets, and let us deploy it across app stores, domains, and hosting platforms. No coding. No stress. Just results.',
+  'launch_anywhere_desc':
+      'Choose a ready-to-launch script, provide your assets, and let us deploy it across app stores, domains, and hosting platforms. No coding. No stress. Just results.',
   'how_time_title': 'How much time to deploy your product?',
-  'how_time_description': 'At LaunchCode, we streamline your product launch.\nHere’s a quick overview of the time it takes to deploy your digital product:\n1. Choose a script, provide all required data (logo, business name, design, etc.).\n2. Our team customizes your app in 15 business days for Basic clients and 5 working days for Premium clients.\n3. We deploy your product on App Store, Play Store, and Admin Panel within 3 days.',
-  'time_basic': 'Customization for Basic clients',
+  'how_time_description':
+  'At LaunchCode, we streamline your product launch.\nHere’s a quick overview of the time it takes to deploy your digital product:\n1. Choose a script, provide all required data (logo, business name, design, etc.).\n2. Our team customizes your app in 15 business days \nfor Basic clients and 7 working days for Premium clients.\n3. We deploy your product on App Store, Play Store, and Admin Panel within 3 days.','time_basic': 'Customization for Basic clients',
   'time_premium': 'Customization for Premium clients',
   'time_appstore': 'App Store Deployment',
   'time_playstore': 'Play Store Deployment',
@@ -80,12 +93,14 @@ const Map<String, String> enUS = {
   'footer_privacy': 'Privacy Policy',
   'footer_refund': 'Refund Policy',
   'footer_license': 'Licensing Info',
-  'footer_disclaimer': '© 2024–2025 LaunchCode. All rights reserved.\nLaunchCode is a platform offering digital products & deployment services. We do not provide legal advice or act as a legal entity.\nUse of our platform signifies agreement with our Terms, Privacy Policy, and Refund Policy. Please consult a legal or tax advisor where necessary.',
+  'footer_disclaimer':
+      '© 2024–2025 LaunchCode. All rights reserved.\nLaunchCode is a platform offering digital products & deployment services. We do not provide legal advice or act as a legal entity.\nUse of our platform signifies agreement with our Terms, Privacy Policy, and Refund Policy. Please consult a legal or tax advisor where necessary.',
   'faq_heading': 'Frequently Asked Questions',
   'faq_q1': 'How long does it take to launch my apps?',
   'faq_q1_a1': 'Basic deployments take 13–15 business days.',
   'faq_q1_a2': 'Premium packages are prioritized and completed within 4–7 business days.',
-  'faq_q1_a3': 'This includes launching to Play Store, App Store, and setting up hosting.',
+  'faq_q1_a3':
+      'This includes launching to Play Store, App Store, and setting up hosting.',
 
   'faq_q2': 'What material do I need to provide?',
   'faq_q2_a1': 'Your business name and logo.',
@@ -94,7 +109,8 @@ const Map<String, String> enUS = {
 
   'faq_q3': 'Can you publish apps on both Play Store and App Store?',
   'faq_q3_a1': 'Yes! LaunchCode supports publishing to both stores.',
-  'faq_q3_a2': 'We also configure your admin panel and host it using services like Hostinger or GoDaddy.',
+  'faq_q3_a2':
+      'We also configure your admin panel and host it using services like Hostinger or GoDaddy.',
 
   'faq_q4': 'Do I need coding experience to use LaunchCode?',
   'faq_q4_a1': 'Nope! We handle the technical setup and launch process for you.',
@@ -104,9 +120,9 @@ const Map<String, String> enUS = {
   'faq_q5_a1': 'You’ll receive a handover package with credentials and links.',
   'faq_q5_a2': 'From there, you can start promoting and earning revenue right away!',
 
-
   'contact_heading': "Got questions? Let's talk!",
-  'contact_subheading': "Drop your details and our LaunchCode experts will assist you in launching your dream product, hassle-free.",
+  'contact_subheading':
+      "Drop your details and our LaunchCode experts will assist you in launching your dream product, hassle-free.",
   'contact_form_title': 'Talk to a LaunchCode expert',
   'contact_name': 'Full Name',
   'contact_email': 'Email Address',
@@ -136,7 +152,8 @@ const Map<String, String> enUS = {
   'FAQ': 'FAQ',
   'Powered by Ailab Solutions': 'Powered by Ailab Solutions',
   'Featured Products': 'Featured Products',
-  'leverageOur': 'Leverage our expertly crafted scripts, applications, and admin panels, designed for optimal conversion and efficiency. Deploy seamlessly and start realizing your revenue potential faster.',
+  'leverageOur':
+      'Leverage our expertly crafted scripts, applications, and admin panels, designed for optimal conversion and efficiency. Deploy seamlessly and start realizing your revenue potential faster.',
 
   'price': 'Price',
   'description': 'Description',
@@ -158,7 +175,8 @@ const Map<String, String> enUS = {
   'us_premium_feature5': 'Faster deployment to app platforms with dedicated assistance',
   // UK
   'uk_basic_price': '£12/hour',
-  'uk_basic_description': 'Affordable support during standard business hours (9:00 AM to 5:00 PM GMT).',
+  'uk_basic_description':
+      'Affordable support during standard business hours (9:00 AM to 5:00 PM GMT).',
   'uk_basic_feature1': '5 Days Support (9:00 AM to 5:00 PM GMT)',
   'uk_basic_feature2': 'Standard script deployment',
   'uk_basic_feature3': 'Email support during business hours',
@@ -172,22 +190,27 @@ const Map<String, String> enUS = {
   'uk_premium_feature5': 'Accelerated deployment to app stores with expert guidance',
   // Canada
   'canada_basic_price': 'C\$18/hour',
-  'canada_basic_description': 'Reliable support during standard business hours (9:00 AM to 5:00 PM EST).',
+  'canada_basic_description':
+      'Reliable support during standard business hours (9:00 AM to 5:00 PM EST).',
   'canada_basic_feature1': '5 Days Support (9:00 AM to 5:00 PM EST)',
   'canada_basic_feature2': 'Standard application deployment',
   'canada_basic_feature3': 'Email support during business hours',
   'canada_basic_feature4': 'Basic server setup',
   'canada_premium_price': 'C\$65/hour',
-  'canada_premium_description': 'Dedicated 24/7 support with rapid response and resolution.',
+  'canada_premium_description':
+      'Dedicated 24/7 support with rapid response and resolution.',
   'canada_premium_feature1': '24/7 Dedicated Support (All day, every day)',
   'canada_premium_feature2': 'Priority application deployment and configuration',
   'canada_premium_feature3': 'Phone, chat, and email support at any time',
   'canada_premium_feature4': 'Premium server configuration and maintenance',
-  'canada_premium_feature5': 'Quicker deployment to app marketplaces with expert assistance',
+  'canada_premium_feature5':
+      'Quicker deployment to app marketplaces with expert assistance',
   // World
   'world_basic_price': '\$13/hour',
-  'world_basic_description': 'Global basic support during standard business hours (aligned with your timezone).',
-  'world_basic_feature1': '5 Days Support (aligned with your timezone, 9:00 AM to 5:00 PM)',
+  'world_basic_description':
+      'Global basic support during standard business hours (aligned with your timezone).',
+  'world_basic_feature1':
+      '5 Days Support (aligned with your timezone, 9:00 AM to 5:00 PM)',
   'world_basic_feature2': 'Standard script and application deployment',
   'world_basic_feature3': 'Email support during your business hours',
   'world_basic_feature4': 'Basic hosting and domain guidance',
@@ -197,23 +220,25 @@ const Map<String, String> enUS = {
   'world_premium_feature2': 'Expedited script and application deployment',
   'world_premium_feature3': 'Phone, chat, and email support anytime, anywhere',
   'world_premium_feature4': 'Premium hosting and domain management globally',
-  'world_premium_feature5': 'Faster deployment to global app stores with specialized support',
-  'for_new_proj':"For New Projects",
+  'world_premium_feature5':
+      'Faster deployment to global app stores with specialized support',
+  'for_new_proj': "For New Projects",
 
-  'other_services':"Other Services",
+  'other_services': "Other Services",
   'Select Script': 'Select Script',
-  'Provide Details':'Provide Details',
-  'Configuration':'Configuration',
-  'Upload & Confirm':'Upload & Confirm',
-  'Monitor & Earn':'Monitor & Earn',
-  'SMM (Optional)':'SMM (Optional)',
+  'Provide Details': 'Provide Details',
+  'Configuration': 'Configuration',
+  'Upload & Confirm': 'Upload & Confirm',
+  'Monitor & Earn': 'Monitor & Earn',
+  'SMM (Optional)': 'SMM (Optional)',
   'Choose from our Ready Made products.': 'Choose from our Ready Made products.',
   'Logo, name, accounts, hosting.': 'Logo, name, accounts, hosting.',
   'We customize and send you test links.': 'We customize and send you test links.',
-  'You confirm and apps are submitted to your stores.': 'You confirm and apps are submitted to your stores.',
+  'You confirm and apps are submitted to your stores.':
+      'You confirm and apps are submitted to your stores.',
   'Watch installs & revenue grow.': 'Watch installs & revenue grow.',
   'We can serve to market your product': 'We can serve to market your product',
-  'BASIC PLAN':'BASIC PLAN',
+  'BASIC PLAN': 'BASIC PLAN',
   'Mon-Fri': 'Mon-Fri',
   '15 Days': '15 Days',
   'ADVANCED PLAN': 'ADVANCED PLAN',
@@ -238,6 +263,10 @@ const Map<String, String> enUS = {
   'SEO blogs, scripts, articles': 'SEO blogs, scripts, articles',
   "support_with_days": "Support: @days",
   "delivery_time_with_days": "Delivery Time: @days",
-"step_number": "Step %s"
+  "step_number": "Step %s",
+  "How to earn with this?": "How to earn with this?",
+  "tryDemo": "Try Demo",
+  "Choose your Plan": "Choose your Plan",
+  "Contact Us!":"Contact Us!"
 
 };

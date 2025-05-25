@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -5,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 // Import your Project model
 import '../../models/products.dart';
+import '../../utils/translationHelper.dart';
 import '../cart/cart_logic.dart';
 
 class ProjectDetailsLogic extends GetxController {
@@ -39,15 +41,50 @@ class ProjectDetailsLogic extends GetxController {
     }
   }
 
-  void _loadProductFromArguments() {
+  void _loadProductFromArguments() async {
     if (Get.arguments is Project) {
       product.value = Get.arguments as Project;
+      await translateProjectDescriptionIfNeeded();
       _updateImagesToShow();
     } else {
-      Get.snackbar('Error', 'Could not load product details.');
-      Get.back(); // Optionally navigate back if data is missing
+
+      // Try fallback: use URL param to fetch from Firestore
+
+      final String? idFromUrl = Get.parameters['projectId'];
+
+
+      if (idFromUrl != null && idFromUrl.isNotEmpty) {
+
+        try {
+          final docSnapshot = await FirebaseFirestore.instance
+              .collection('projects')
+              .doc(idFromUrl)
+              .get();
+
+
+          if (docSnapshot.exists) {
+
+            product.value = Project.fromJson(docSnapshot.data()!);
+
+            _updateImagesToShow();
+          } else {
+            Get.snackbar('Not Found', 'No product found for this link.');
+            Get.back();
+          }
+          await translateProjectDescriptionIfNeeded();
+        } catch (e) {
+          Get.snackbar('Error', 'Failed to load product.');
+          Get.back();
+        }
+
+      } else {
+
+        Get.snackbar('Error', 'Missing product ID.');
+        Get.back();
+      }
     }
   }
+
 
   void _updateImagesToShow() {
     if (product.value == null) return;
@@ -76,7 +113,24 @@ class ProjectDetailsLogic extends GetxController {
     // 4. Assign the final List<String> to the RxList
     imagesToShow.assignAll(combinedImages);
 
-    print("Updated imagesToShow: ${imagesToShow.length} images"); // Optional: Debug log
+  }
+  Future<void> translateProjectDescriptionIfNeeded() async {
+    final lang = Get.locale?.languageCode ?? 'en';
+    if (lang == 'en' || product.value == null) return;
+
+    try {
+      final translatedDesc = await TranslationService.translateText(product.value!.projectDesc ?? '', lang);
+      final translatedTitle = await TranslationService.translateText(product.value!.title ?? '', lang);
+      final translatedSubtitle = await TranslationService.translateText(product.value!.subtitle ?? '', lang);
+
+      product.value = product.value!.copyWith(
+        title: translatedTitle,
+        subtitle: translatedSubtitle,
+        projectDesc: translatedDesc,
+      );
+    } catch (e) {
+      print("Translation error: $e");
+    }
   }
 
  

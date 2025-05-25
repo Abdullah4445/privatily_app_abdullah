@@ -53,12 +53,12 @@ class _FixedPriceBannerState extends State<FixedPriceBanner>
           padding: EdgeInsets.only(left: 12, right: 12),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFF007CF0), Color(0xFF00DFD8)],
+            gradient: LinearGradient(
+              colors:   [Colors.grey[300]!, Colors.white],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
                 color: Colors.tealAccent.withOpacity(0.4),
@@ -73,7 +73,7 @@ class _FixedPriceBannerState extends State<FixedPriceBanner>
             style: GoogleFonts.montserrat(
               fontSize: 12,
               fontWeight: FontWeight.w700,
-              color: Colors.white,
+              color: Colors.black87,
               letterSpacing: 1.2,
             ),
           ),
@@ -130,7 +130,7 @@ class _PlanCardState extends State<PlanCard> {
           },
           child: Card(
             elevation: 10,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             // margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             color: Colors.white,
             child: Stack(
@@ -210,11 +210,11 @@ class _PlanCardState extends State<PlanCard> {
                 // ✅ Lottie on hover — e.g. rocket flare
                 if (_hovered)
                   Positioned(
-                    top: -10,
-                    left: -10,
+                    top: -6,
+                    left: -6,
                     child: SizedBox(
-                      height: 80,
-                      width: 80,
+                      height: 60,
+                      width: 60,
                       child: Lottie.asset(
                         'assets/lotties/rocket.json', // 🔥 change to your lottie
                         repeat: true,

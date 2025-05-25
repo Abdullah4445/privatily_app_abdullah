@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:privatily_app/widgets/translationsController.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:seo/seo.dart'; // SEO package
 
 import '../../../animations/price.dart';
 import '../../../models/products.dart';
+import '../../../utils/translationHelper.dart';
 import '../../../widgets/myProgressIndicator.dart';
 import '../../cart/cart_logic.dart';
 import '../../cart/cart_view.dart';
@@ -24,6 +26,7 @@ class FeaturedProductsSection extends StatefulWidget {
 
 class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
   final cartController = Get.put(CartLogic());
+  final translationController = Get.put(TranslationController());
 
   @override
   Widget build(BuildContext context) {
@@ -62,13 +65,18 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
               ),
             ),
             const Gap(5),
-            Text('discover_software'.tr,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: screenWidth < 600 ? 16 : 18, color: Colors.black54)),
+            Text(
+              'discover_software'.tr,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: screenWidth < 600 ? 16 : 18,
+                color: Colors.black54,
+              ),
+            ),
             const Gap(5),
             SizedBox(
               width: double.infinity,
-              height: isMobile ? 300 : 450,
+              height: isMobile ? 320 : 450,
               child: CarouselSlider.builder(
                 itemCount: products.length,
                 itemBuilder: (context, index, realIdx) {
@@ -76,12 +84,13 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
                   return _buildCard(context, product);
                 },
                 options: CarouselOptions(
-                  height: isMobile ? 300 : 450,
-                  viewportFraction: isMobile
-                      ? 0.85
-                      : isLaptop
-                      ? 0.38
-                      : 0.26,
+                  height: isMobile ? 320 : 400,
+                  viewportFraction:
+                      isMobile
+                          ? 0.95
+                          : isLaptop
+                          ? 0.38
+                          : 0.26,
                   enableInfiniteScroll: true,
                   autoPlay: true,
                   enlargeCenterPage: false,
@@ -129,7 +138,8 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
     // Define the WhatsApp URL. You'll need the phone number.
     // Replace 'YOUR_PHONE_NUMBER' with the actual phone number, including country code.
     // You can also add a pre-filled message using '&text=Your message here'.
-    final whatsappUrl = "whatsapp://send?phone=+923058431046&text=I'm interested in your product: ${product.title}";
+    final whatsappUrl =
+        "whatsapp://send?phone=+923058431046&text=I'm interested in your product: ${product.title}";
 
     return Seo.link(
       href: '/product-detail/${product.projectId}',
@@ -140,17 +150,16 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
             Get.snackbar('Error', 'Missing product ID');
             return;
           }
-          Get.toNamed(
-            '/product-detail/${product.projectId}',
-            arguments: product,
-          );
+          Get.toNamed('/product-detail/${product.projectId}', arguments: product);
         },
         child: Container(
           margin: const EdgeInsets.only(right: 6),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(8),
-            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4))],
+            boxShadow: const [
+              BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4)),
+            ],
           ),
           child: SingleChildScrollView(
             child: Column(
@@ -166,18 +175,24 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
                         src: product.thumbnailUrl ?? '',
                         alt: product.title ?? 'Product image',
                         child: Image.network(
-                          product.thumbnailUrl ?? 'https://via.placeholder.com/300x200?text=No+Image',
+                          product.thumbnailUrl ??
+                              'https://via.placeholder.com/300x200?text=No+Image',
                           height: isMobile ? 215 : 295,
                           width: double.infinity,
                           fit: BoxFit.fill,
                           loadingBuilder: (ctx, child, progress) {
                             return progress == null ? child : const MyLoader();
                           },
-                          errorBuilder: (ctx, _, __) => Container(
-                            height: 200,
-                            color: Colors.grey[200],
-                            child: const Icon(Icons.broken_image, size: 48, color: Colors.grey),
-                          ),
+                          errorBuilder:
+                              (ctx, _, __) => Container(
+                                height: 200,
+                                color: Colors.grey[200],
+                                child: const Icon(
+                                  Icons.broken_image,
+                                  size: 48,
+                                  color: Colors.grey,
+                                ),
+                              ),
                         ),
                       ),
                     ),
@@ -199,7 +214,8 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
                             shape: BoxShape.circle,
                           ),
                           child: const Icon(
-                            FontAwesomeIcons.whatsapp, // Using a generic WhatsApp icon from Material Icons
+                            FontAwesomeIcons.whatsapp,
+                            // Using a generic WhatsApp icon from Material Icons
                             color: Colors.green,
                             size: 24,
                           ),
@@ -221,11 +237,25 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
                             child: Seo.text(
                               text: product.title ?? 'No Title',
                               style: TextTagStyle.h3,
-                              child: Text(
-                                product.title ?? 'No Title',
-                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
+                              child: FutureBuilder<String>(
+                                future: TranslationService.translateText(
+                                  product.title ?? 'No Title',
+                                  Get.locale?.languageCode ?? 'en',
+                                ),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Text('...');
+                                  } else if (snapshot.hasError) {
+                                    return Text('No Title'); // fallback to original
+                                  } else {
+                                    return Text(
+                                      snapshot.data ?? 'No Title',
+                                      style: Theme.of(context).textTheme.titleSmall
+                                          ?.copyWith(fontWeight: FontWeight.w600),
+                                    );
+                                  }
+                                },
                               ),
                             ),
                           ),
@@ -237,12 +267,28 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
                       Seo.text(
                         text: product.subtitle ?? '',
                         style: TextTagStyle.p,
-                        child: Text(
-                          product.subtitle ?? '',
-                          style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                        child:
+                        FutureBuilder<String>(
+                          future: TranslationService.translateText(
+                            product.subtitle?? 'No Subtitle',
+                            Get.locale?.languageCode ?? 'en',
+                          ),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Text('...');
+                            } else if (snapshot.hasError) {
+                              return Text('No Subtitle'); // fallback to original
+                            } else {
+                              return Text(
+                                snapshot.data ?? 'No Subtitle',
+                                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                              );
+                            }
+                          },
                         ),
+
+
                       ),
                       const Gap(4),
                       // Price and sales count
@@ -257,13 +303,37 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
                           //     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                           //   ),
                           // ),
+
+
+
                           Seo.text(
                             text: 'Deployed ${product.soldCount ?? 0} times',
                             style: TextTagStyle.p,
-                            child: Text(
-                              'Deployed ${product.soldCount ?? 0} times',
-                              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                            child:
+
+
+                            FutureBuilder<String>(
+                              future: TranslationService.translateText(
+                                "Deployed ${product.soldCount ?? 0} times"?? 'No Data',
+                                Get.locale?.languageCode ?? 'en',
+                              ),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Text('...');
+                                } else if (snapshot.hasError) {
+                                  return Text('No Data'); // fallback to original
+                                } else {
+                                  return Text(
+                                    snapshot.data ?? 'No Data',
+                                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                                  );
+                                }
+                              },
                             ),
+
+
+
                           ),
                         ],
                       ),

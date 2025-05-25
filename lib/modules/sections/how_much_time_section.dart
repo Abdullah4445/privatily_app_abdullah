@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:get/get.dart';
 import 'package:seo/seo.dart'; // SEO package for semantic text and images
@@ -25,15 +27,14 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
-    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.3),
       end: Offset.zero,
-    ).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
   }
 
   @override
@@ -52,14 +53,15 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
           child: TweenAnimationBuilder<int>(
             tween: IntTween(begin: 0, end: _visible ? endValue : 0),
             duration: const Duration(milliseconds: 2000),
-            builder: (context, value, _) => Text(
-              '${value}d',
-              style: const TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w900,
-                color: Colors.white,
-              ),
-            ),
+            builder:
+                (context, value, _) => Text(
+                  '${value}d',
+                  style: const TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                  ),
+                ),
           ),
         ),
         const SizedBox(height: 8),
@@ -69,10 +71,7 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
           style: TextTagStyle.p,
           child: Text(
             labelKey.tr,
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 15,
-            ),
+            style: const TextStyle(color: Colors.white70, fontSize: 15),
           ),
         ),
       ],
@@ -85,10 +84,7 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
       alt: 'Hourglass illustrating development time',
       child: Padding(
         padding: const EdgeInsets.only(top: 30),
-        child: Image.asset(
-          'assets/images/hourglass.png',
-          width: isMobile ? 180 : 340,
-        ),
+        child: Image.asset('assets/images/hourglass.png', width: isMobile ? 100 : 150),
       ),
     );
   }
@@ -96,7 +92,7 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isMobile = screenWidth < 768;
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
 
     return VisibilityDetector(
       key: const Key('launchcode-time-section'),
@@ -120,70 +116,134 @@ class _HowMuchTimeSectionState extends State<HowMuchTimeSection>
                 end: Alignment.bottomRight,
               ),
             ),
-            child: Flex(
-              direction: isMobile ? Axis.vertical : Axis.horizontal,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  flex: isMobile ? 0 : 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // Title as SEO-enhanced heading
-                      Seo.text(
-                        text: 'how_time_title'.tr,
-                        style: TextTagStyle.h2,
-                        child: Text(
-                          'how_time_title'.tr,
-                          style: const TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      // Description as SEO-enhanced paragraph
-                      Seo.text(
-                        text: 'how_time_description'.tr,
-                        style: TextTagStyle.p,
-                        child: Text(
-                          'how_time_description'.tr,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      ),
-                      _buildHourglassImage(isMobile),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 40, height: 40),
-                Expanded(
-                  flex: isMobile ? 0 : 1,
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.07),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+            child:
+                ResponsiveBreakpoints.of(context).isMobile
+                    ? Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _buildTimeBox(15, 'time_basic'),
-                        _buildTimeBox(5, 'time_premium'),
-                        _buildTimeBox(2, 'time_appstore'),
-                        _buildTimeBox(1, 'time_playstore'),
-                        _buildTimeBox(1, 'time_adminpanel'),
+                        _buildHourglassImage(isMobile),
+
+                        Column(
+                          children: [
+                            Seo.text(
+                              text: 'how_time_title'.tr,
+                              style: TextTagStyle.h3,
+                              child: Text(
+                                'how_time_title'.tr,
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            // Description as SEO-enhanced paragraph
+                            Seo.text(
+                              text: 'how_time_description'.tr,
+                              style: TextTagStyle.p,
+                              child: Text(
+                                'how_time_description'.tr,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        Gap(16),
+
+                        Expanded(
+                          flex: isMobile ? 0 : 1,
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.symmetric(horizontal: 32),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.07),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                _buildTimeBox(5, 'time_basic'),
+                                _buildTimeBox(2, 'time_premium'),
+                                _buildTimeBox(2, 'time_appstore'),
+                                _buildTimeBox(1, 'time_playstore'),
+                                _buildTimeBox(0, 'time_adminpanel'),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        // Title as SEO-enhanced heading
+                      ],
+                    )
+                    : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            _buildHourglassImage(isMobile),
+                            Gap(12),
+                            Column(
+                              children: [
+                                Seo.text(
+                                  text: 'how_time_title'.tr,
+                                  style: TextTagStyle.h3,
+                                  child: Text(
+                                    'how_time_title'.tr,
+                                    style: const TextStyle(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                // Description as SEO-enhanced paragraph
+                                Seo.text(
+                                  text: 'how_time_description'.tr,
+                                  style: TextTagStyle.p,
+                                  child: Text(
+                                    'how_time_description'.tr,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+
+                        Expanded(
+                          flex: isMobile ? 0 : 1,
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.symmetric(horizontal: 32),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.07),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                _buildTimeBox(5, 'time_basic'),
+                                _buildTimeBox(2, 'time_premium'),
+                                _buildTimeBox(2, 'time_appstore'),
+                                _buildTimeBox(1, 'time_playstore'),
+                                _buildTimeBox(0, 'time_adminpanel'),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        // Title as SEO-enhanced heading
                       ],
                     ),
-                  ),
-                ),
-              ],
-            ),
           ),
         ),
       ),
