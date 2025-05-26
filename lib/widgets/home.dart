@@ -766,6 +766,7 @@ class _HomeState extends State<Home> {
   }
 
   var greyBackSize = 800.0;
+  final planRowKey = GlobalKey();
 
   Widget _buildLaunchCodeHero(BuildContext ctx) {
     final width = MediaQuery.of(ctx).size.width;
@@ -900,24 +901,44 @@ class _HomeState extends State<Home> {
                   ],
                 ),
                 // Your existing SizedBox containing the ListView
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    PlanCard(
-                      text: "BASIC PLAN".tr,
-                      price: 150,
-                      supportDays: "Mon-Fri".tr,
-                      deliveryTime: "8 Days".tr,
-                    ),
-                    SizedBox(width: 2),
-
-                    PlanCard(
-                      text: "ADVANCED PLAN".tr,
-                      price: 350,
-                      supportDays: "Mon-Sun".tr,
-                      deliveryTime: "5 Days".tr,
-                    ),
-                  ],
+                Center(
+                  key: planRowKey,
+                  child:
+                  ResponsiveBreakpoints.of(context).isMobile?Column(
+                    children: [
+                      PlanCard(
+                        text: "BASIC PLAN".tr,
+                        price: 150,
+                        supportDays: "Mon-Fri".tr,
+                        deliveryTime: "8 Days".tr,
+                      ),
+                      const SizedBox(height: 12),
+                      PlanCard(
+                        text: "ADVANCED PLAN".tr,
+                        price: 350,
+                        supportDays: "Mon-Sun".tr,
+                        deliveryTime: "5 Days".tr,
+                      ),
+                    ],
+                  ):
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      PlanCard(
+                        text: "BASIC PLAN".tr,
+                        price: 150,
+                        supportDays: "Mon-Fri".tr,
+                        deliveryTime: "8 Days".tr,
+                      ),
+                      const SizedBox(width: 12),
+                      PlanCard(
+                        text: "ADVANCED PLAN".tr,
+                        price: 350,
+                        supportDays: "Mon-Sun".tr,
+                        deliveryTime: "5 Days".tr,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

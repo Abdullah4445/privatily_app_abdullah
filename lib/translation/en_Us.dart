@@ -3,7 +3,7 @@ const Map<String, String> enUS = {
   'grow_faster': 'Grow Faster.',
   'discover_software':
       'Discover Ready-to-Use Software Scripts to Power Your Digital Business.',
-  'explore_products': 'Explore Products',
+  'explore_products': 'Explore More Products',
   'browse_categories': 'Browse Categories',
   'rated_stars': 'Rated 4.2+ stars by entrepreneurs worldwide',
   'ready_to_launch': 'Ready-to-Launch Digital Assets for Immediate Impact',

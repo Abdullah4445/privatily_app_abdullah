@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:privatily_app/modules/allProjects/allProjects.dart';
 import 'package:privatily_app/widgets/translationsController.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -66,27 +67,16 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
               ),
             ),
             const Gap(5),
-           Wrap(
-             // mainAxisAlignment: MainAxisAlignment.center,
-             alignment: WrapAlignment.center,
-              children: [
-                Center(
-                  child: Text(
-                    'discover_software'.tr,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: screenWidth < 600 ? 16 : 18,
-                      color: Colors.black54,
-                    ),
-                  ),
-                ),
-                Gap(12),
-                ElevatedButton(onPressed: (){
-
-                  Get.toNamed('/allProducts');
-                }, child: Text('explore_products'.tr))
-              ],
-            ),
+           Center(
+             child: Text(
+               'discover_software'.tr,
+               textAlign: TextAlign.center,
+               style: TextStyle(
+                 fontSize: screenWidth < 600 ? 16 : 18,
+                 color: Colors.black54,
+               ),
+             ),
+           ),
             const Gap(5),
             SizedBox(
               width: double.infinity,
@@ -114,6 +104,8 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
                 ),
               ),
             ),
+            const Gap(16),
+            Center(child: const ExploreProductsButton()),
           ],
         ),
       );
@@ -153,7 +145,7 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
     // Replace 'YOUR_PHONE_NUMBER' with the actual phone number, including country code.
     // You can also add a pre-filled message using '&text=Your message here'.
     final whatsappUrl =
-        "whatsapp://send?phone=+923058431046&text=I'm interested in your product: ${product.title}";
+        "whatsapp://send?phone=+923058431046&text=I'm interested in your product: Name:${product.title} -------- id:${product.projectId}";
 
     return Seo.link(
       href: '/product-detail/${product.projectId}',
@@ -386,3 +378,63 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
     super.dispose();
   }
 }
+
+
+/// 🔵  Re-usable CTA for “Explore Products”
+/// Drop-in CTA – no stateful boilerplate, no InkResponse
+class ExploreProductsButton extends StatelessWidget {
+  const ExploreProductsButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // `ValueNotifier` lets us mutate scale inside a stateless widget
+    final hover = ValueNotifier(false);
+
+    return MouseRegion(
+      onEnter: (_) => hover.value = true,
+      onExit: (_) => hover.value = false,
+      cursor: SystemMouseCursors.click,
+      child: ValueListenableBuilder<bool>(
+        valueListenable: hover,
+        builder: (_, isHover, child) => AnimatedScale(
+          duration: const Duration(milliseconds: 120),
+          scale: isHover ? 1.04 : 1.0,
+          child: child,                     // re-use the button widget below
+        ),
+        child: _ctaButton(),
+      ),
+    );
+  }
+
+  /// Extracted for readability
+  ElevatedButton _ctaButton() => ElevatedButton.icon(
+    onPressed: () => Get.toNamed('/allProducts'),
+    icon: const Icon(Icons.shopping_bag_outlined, size: 20),
+    label: Text(
+      'explore_products'.tr.toUpperCase(),
+      style: GoogleFonts.inter(
+        fontWeight: FontWeight.w600,
+        letterSpacing: .8,
+      ),
+    ),
+    style: ElevatedButton.styleFrom(
+      elevation: 6,
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
+      backgroundColor: const Color(0xFF006BFF),
+      foregroundColor: Colors.white,
+      shadowColor: const Color(0x33006BFF),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(32),
+      ),
+    ).merge(
+      ButtonStyle(
+        overlayColor: WidgetStateProperty.resolveWith(
+              (states) => states.contains(WidgetState.hovered)
+              ? Colors.white.withOpacity(.05)
+              : null,
+        ),
+      ),
+    ),
+  );
+}
+
