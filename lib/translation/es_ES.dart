@@ -55,7 +55,7 @@ const Map<String, String> esES = {
   'launch_anywhere_desc': 'Elige un script listo para lanzar, proporciona tus activos, y lo desplegaremos en tiendas de apps, dominios y hosting. Sin código. Sin estrés. Solo resultados.',
   'how_time_title': '¿Cuánto tiempo toma lanzar tu producto?',
   'how_time_description':
-  'Chez LaunchCode, nous optimisons le lancement de votre produit.\nVoici un aperçu rapide du temps nécessaire pour déployer votre produit numérique :\n1. Choisissez un script, fournissez toutes les données requises (logo, nom de l\'entreprise, design, etc.).\n2. Notre équipe personnalise votre application en 15 jours ouvrables \npour les clients Basic et en 7 jours ouvrables pour les clients Premium.\n3. Nous déployons votre produit sur l\'App Store, le Play Store et le panneau d\'administration en 3 jours.', 'time_basic': 'Personalización para clientes Básicos',
+  'Chez LaunchCode, nous optimisons le lancement de votre produit.\nVoici un aperçu rapide du temps nécessaire pour déployer votre produit numérique :\n1. Choisissez un script, fournissez toutes les données requises (logo, nom de l\'entreprise, design, etc.).\n2. Notre équipe personnalise votre application en 8 jours ouvrables \npour les clients Basic et en 5 jours ouvrables pour les clients Premium.\n3. Nous déployons votre produit sur l\'App Store, le Play Store et le panneau d\'administration en 3 jours.', 'time_basic': 'Personalización para clientes Básicos',
   'time_premium': 'Personalización para clientes Premium',
   'time_appstore': 'Publicación en App Store',
   'time_playstore': 'Publicación en Play Store',
@@ -81,7 +81,7 @@ const Map<String, String> esES = {
   'footer_disclaimer': '© 2024–2025 LaunchCode. Todos los derechos reservados.\nLaunchCode ofrece productos digitales y servicios de despliegue. No damos asesoría legal ni actuamos como entidad legal.\nEl uso de la plataforma implica tu acuerdo con nuestros Términos, Política de privacidad y Política de reembolso.',
   'faq_heading': 'Preguntas Frecuentes',
   'faq_q1': '¿Cuánto tiempo tarda lanzar mis apps?',
-  'faq_q1_a1': 'Las implementaciones básicas tardan 13–15 días hábiles.',
+  'faq_q1_a1': 'Las implementaciones básicas tardan 8-12 días hábiles.',
   'faq_q1_a2': 'Los paquetes Premium se completan en 4–7 días hábiles.',
   'faq_q1_a3': 'Incluye publicación en Play Store, App Store y configuración de hosting.',
   'faq_q2': '¿Qué materiales debo proporcionar?',

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:seo/seo.dart';
 
 import '../../models/products.dart';
@@ -62,66 +63,127 @@ class ProjectDetailsPage extends StatelessWidget {
               MetaTag(name: 'og:image', content: logic.imagesToShow.first),
             MetaTag(name: 'twitter:card', content: 'summary_large_image'),
           ],
-          child: CustomScrollView(
-            slivers: [
-              _buildSliverAppBar(context, logic),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 24),
-                      _buildHeader(context, product),
-                      const SizedBox(height: 24),
-                      _buildSectionTitle(context, 'description'),
-                      const SizedBox(height: 8),
-                      _buildDescription(context, product),
-                      const SizedBox(height: 32),
-                      if (product.demoAdminPanelLinks?.isNotEmpty ?? false)
-                        ...product.demoAdminPanelLinks!.map((panel) => _buildShotBlockWithDemo(context, panel.name, panel.link, panel.shotUrls, logic)),
-                      if (product.demoApkLinks?.isNotEmpty ?? false)
-                        ...product.demoApkLinks!.map((apk) => _buildShotBlockWithDemo(context, apk.name, apk.link, apk.shotUrls, logic)),
-                      if (product.mobileShotUrls?.isNotEmpty ?? false)
-                        _buildShotBlockWithDemo(context, 'Overview Screenshots', null, product.mobileShotUrls, logic),
-                      const SizedBox(height: 48),
-                    ],
+          child: Scaffold(
+            appBar: AppBar(
+              // pinned: true,
+              backgroundColor: Colors.white,
+              // expandedHeight: 120,
+              elevation: 4,
+              iconTheme: const IconThemeData(color: Colors.black87),
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 12.0),
+                child: CircleAvatar(
+                  backgroundColor: Colors.black12,
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.black87),
+                    onPressed: () {
+                      if (Navigator.canPop(context)) {
+                        Navigator.of(context).pop();
+                      } else {
+                        // No previous screen → restart app or go to home
+                        // Option 1: Hard reload (only for Flutter Web)
+                        // import 'dart:html' as html; already imported
+                        html.window.location.href = '/';
+                      }
+                    },
                   ),
                 ),
               ),
-            ],
+              centerTitle: true,
+              title: Text(
+                product?.title ?? '',
+                style: const TextStyle(
+                  color: Colors.black87,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              flexibleSpace: const FlexibleSpaceBar(
+                background: SizedBox(), // no image
+              ),
+            ),
+             body: SingleChildScrollView(
+               child: Container(
+                 padding: EdgeInsets.all(8.0),
+                 child: Column(
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                   children: [
+                     const SizedBox(height: 24),
+                     _buildHeader(context, product),
+                     const SizedBox(height: 24),
+                     _buildSectionTitle(context, 'description'),
+                     const SizedBox(height: 8),
+                     _buildDescription(context, product),
+                     const SizedBox(height: 32),
+                     if (product.demoAdminPanelLinks?.isNotEmpty ?? false)
+                       ...product.demoAdminPanelLinks!.map((panel) => _buildShotBlockWithDemo(context, panel.name, panel.link, panel.shotUrls, logic)),
+                     if (product.demoApkLinks?.isNotEmpty ?? false)
+                       ...product.demoApkLinks!.map((apk) => _buildShotBlockWithDemo(context, apk.name, apk.link, apk.shotUrls, logic)),
+                     if (product.mobileShotUrls?.isNotEmpty ?? false)
+                       _buildShotBlockWithDemo(context, 'Overview Screenshots', null, product.mobileShotUrls, logic),
+                     const SizedBox(height: 48),
+                   ],
+                 ),
+               ),
+             ),
           ),
         );
       }),
     );
   }
 
+
   Widget _buildHeader(BuildContext context, Project product) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(product.title ?? '', style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
-            TextButton(
-              onPressed: () => showDialog(context: context, builder: (ctx) => LaunchSteps()),
-              child: Text("How to earn with this?".tr),
-            ),
-          ],
-        ),
-        if (product.subtitle?.isNotEmpty ?? false)
-          Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Text(product.subtitle!, style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.grey[600])),
+    // Get the base style
+    TextStyle? baseTitleStyle = Theme.of(context).textTheme.headlineSmall?.copyWith(
+      fontWeight: FontWeight.bold,
+    );
+
+    // Determine the final style using ResponsiveBreakpoints
+    TextStyle? finalTitleStyle = baseTitleStyle;
+
+    if (ResponsiveBreakpoints.of(context).isMobile) { // Check if it's MOBILE breakpoint
+      finalTitleStyle = baseTitleStyle?.copyWith(
+        fontSize: 16, // Or some other size suitable for mobile
+        // e.g., baseTitleStyle.fontSize! * 0.8 if you want it relative
+      );
+    }
+    // You could add more conditions for TABLET, DESKTOP if needed
+    // else if (ResponsiveBreakpoints.of(context).isTablet) {
+    //   finalTitleStyle = baseTitleStyle?.copyWith(fontSize: 20);
+    // }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  product.subtitle ?? '',
+                  style: finalTitleStyle, // Apply the responsive style
+                ),
+              ),
+              const SizedBox(width: 8),
+              TextButton(
+                onPressed: () => showDialog(context: context, builder: (ctx) => LaunchSteps()),
+                // Assuming .tr is from GetX for translations
+                child: Text("How to earn with this?".tr),
+              ),
+            ],
           ),
-        const SizedBox(height: 12),
-        if ((product.soldCount ?? 0) > 0)
-          Text('Deployed: ${product.soldCount}', style: TextStyle(color: Colors.grey[600])),
-      ],
+          if ((product.soldCount ?? 0) > 0) ...[
+            const SizedBox(height: 4),
+            Text('Deployed: ${product.soldCount}', style: TextStyle(color: Colors.grey[600])),
+          ]
+        ],
+      ),
     );
   }
-
   Widget _buildSectionTitle(BuildContext context, String title) => Row(
     children: [
       Container(width: 4, height: 24, color: _accentColor),
@@ -416,47 +478,6 @@ class ProjectDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSliverAppBar(BuildContext context, ProjectDetailsLogic logic) {
-    final product = logic.product.value;
 
-    return SliverAppBar(
-      pinned: true,
-      backgroundColor: Colors.white,
-      expandedHeight: 120,
-      elevation: 4,
-      iconTheme: const IconThemeData(color: Colors.black87),
-      leading: Padding(
-        padding: const EdgeInsets.only(left: 12.0),
-        child: CircleAvatar(
-          backgroundColor: Colors.black12,
-          child: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black87),
-            onPressed: () {
-              if (Navigator.canPop(context)) {
-                Navigator.of(context).pop();
-              } else {
-                // No previous screen → restart app or go to home
-                // Option 1: Hard reload (only for Flutter Web)
-                // import 'dart:html' as html; already imported
-                html.window.location.href = '/';
-              }
-            },
-          ),
-        ),
-      ),
-      centerTitle: true,
-      title: Text(
-        product?.title ?? '',
-        style: const TextStyle(
-          color: Colors.black87,
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-      flexibleSpace: const FlexibleSpaceBar(
-        background: SizedBox(), // no image
-      ),
-    );
-  }
 
 }

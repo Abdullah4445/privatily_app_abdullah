@@ -105,7 +105,6 @@ class _LaunchStepsState extends State<LaunchSteps> {
                                       color: Colors.grey.shade700,
                                     ),
                                   ),
-
                                   const SizedBox(height: 3),
                                   Text(
                                     step['title'],

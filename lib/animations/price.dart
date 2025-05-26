@@ -128,101 +128,105 @@ class _PlanCardState extends State<PlanCard> {
               );
             }
           },
-          child: Card(
-            elevation: 10,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            // margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            color: Colors.white,
-            child: Stack(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      FixedPriceBanner(price: widget.price, text: widget.text),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          const Icon(Icons.support_agent, size: 18, color: Colors.teal),
-                          const SizedBox(width: 8),
-                          Text(
-                            'support_with_days'.trParams({'days': widget.supportDays.toString()}),
-                            style: GoogleFonts.poppins(fontSize: 13),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          const Icon(Icons.access_time, size: 18, color: Colors.blue),
-                          const SizedBox(width: 8),
-                          Text(
-                            'delivery_time_with_days'.trParams({'days': widget.deliveryTime.toString()}),
-                            style: GoogleFonts.poppins(fontSize: 13),
-                          ),
-                        ],
-                      ),
+          child: SizedBox(
+            width: 230,   // increase width as needed
+            height: 190,
+            child: Card(
+              elevation: 10,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              // margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              color: Colors.white,
+              child: Stack(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        FixedPriceBanner(price: widget.price, text: widget.text),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            const Icon(Icons.support_agent, size: 18, color: Colors.teal),
+                            const SizedBox(width: 8),
+                            Text(
+                              'support_with_days'.trParams({'days': widget.supportDays.toString()}),
+                              style: GoogleFonts.poppins(fontSize: 13),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(Icons.access_time, size: 18, color: Colors.blue),
+                            const SizedBox(width: 8),
+                            Text(
+                              'delivery_time_with_days'.trParams({'days': widget.deliveryTime.toString()}),
+                              style: GoogleFonts.poppins(fontSize: 13),
+                            ),
+                          ],
+                        ),
 
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          const Icon(Icons.price_check_outlined, size: 18, color: Colors.blue),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Fixed Price for all Scripts'.tr,
-                            style: GoogleFonts.poppins(fontSize: 13),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
-                // ✅ WhatsApp Icon Top Right
-                Positioned(
-                  bottom: 5,
-                  right: 8,
-                  child: GestureDetector(
-                    onTap: () async {
-                      final Uri uri = Uri.parse(whatsappUrl);
-                      if (!await launchUrl(uri)) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Could not launch WhatsApp')),
-                        );
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.8),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        FontAwesomeIcons.whatsapp,
-                        color: Colors.green,
-                        size: 24,
-                      ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(Icons.price_check_outlined, size: 18, color: Colors.blue),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Fixed Price for all Scripts'.tr,
+                              style: GoogleFonts.poppins(fontSize: 13),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                ),
 
-                // ✅ Lottie on hover — e.g. rocket flare
-                if (_hovered)
+                  // ✅ WhatsApp Icon Top Right
                   Positioned(
-                    top: -6,
-                    left: -6,
-                    child: SizedBox(
-                      height: 60,
-                      width: 60,
-                      child: Lottie.asset(
-                        'assets/lotties/rocket.json', // 🔥 change to your lottie
-                        repeat: true,
-                        animate: true,
+                    bottom: 5,
+                    right: 8,
+                    child: GestureDetector(
+                      onTap: () async {
+                        final Uri uri = Uri.parse(whatsappUrl);
+                        if (!await launchUrl(uri)) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Could not launch WhatsApp')),
+                          );
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.8),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          FontAwesomeIcons.whatsapp,
+                          color: Colors.green,
+                          size: 24,
+                        ),
                       ),
                     ),
                   ),
-              ],
+
+                  // ✅ Lottie on hover — e.g. rocket flare
+                  if (_hovered)
+                    Positioned(
+                      top: -6,
+                      left: -6,
+                      child: SizedBox(
+                        height: 60,
+                        width: 60,
+                        child: Lottie.asset(
+                          'assets/lotties/rocket.json', // 🔥 change to your lottie
+                          repeat: true,
+                          animate: true,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         ),

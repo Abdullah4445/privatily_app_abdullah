@@ -69,7 +69,7 @@ const Map<String, String> frFR = {
   'stats_title': 'LaunchCode en Chiffres',
   'how_time_title': 'Combien de temps faut-il pour déployer votre produit ?',
   'how_time_description':
-  'Chez LaunchCode, nous optimisons le lancement de votre produit.\nVoici un aperçu rapide du temps nécessaire pour déployer votre produit numérique :\n1. Choisissez un script, fournissez toutes les données requises (logo, nom de l\'entreprise, design, etc.).\n2. Notre équipe personnalise votre application en 15 jours ouvrables \npour les clients Basic et en 7 jours ouvrables pour les clients Premium.\n3. Nous déployons votre produit sur l\'App Store, le Play Store et le panneau d\'administration en 3 jours.',
+  'Chez LaunchCode, nous optimisons le lancement de votre produit.\nVoici un aperçu rapide du temps nécessaire pour déployer votre produit numérique :\n1. Choisissez un script, fournissez toutes les données requises (logo, nom de l\'entreprise, design, etc.).\n2. Notre équipe personnalise votre application en 8 jours ouvrables \npour les clients Basic et en 5 jours ouvrables pour les clients Premium.\n3. Nous déployons votre produit sur l\'App Store, le Play Store et le panneau d\'administration en 3 jours.',
   'time_basic': 'Personnalisation pour les clients Basiques',
   'time_premium': 'Personnalisation pour les clients Premium',
   'time_appstore': 'Publication sur l\'App Store',

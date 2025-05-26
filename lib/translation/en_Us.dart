@@ -70,7 +70,7 @@ const Map<String, String> enUS = {
       'Choose a ready-to-launch script, provide your assets, and let us deploy it across app stores, domains, and hosting platforms. No coding. No stress. Just results.',
   'how_time_title': 'How much time to deploy your product?',
   'how_time_description':
-  'At LaunchCode, we streamline your product launch.\nHere’s a quick overview of the time it takes to deploy your digital product:\n1. Choose a script, provide all required data (logo, business name, design, etc.).\n2. Our team customizes your app in 15 business days \nfor Basic clients and 7 working days for Premium clients.\n3. We deploy your product on App Store, Play Store, and Admin Panel within 3 days.','time_basic': 'Customization for Basic clients',
+  'At LaunchCode, we streamline your product launch.\nHere’s a quick overview of the time it takes to deploy your digital product:\n1. Choose a script, provide all required data (logo, business name, design, etc.).\n2. Our team customizes your app in 8 business days \nfor Basic clients and 5 working days for Premium clients.\n3. We deploy your product on App Store, Play Store, and Admin Panel within 3 days.','time_basic': 'Customization for Basic clients',
   'time_premium': 'Customization for Premium clients',
   'time_appstore': 'App Store Deployment',
   'time_playstore': 'Play Store Deployment',
@@ -97,7 +97,7 @@ const Map<String, String> enUS = {
       '© 2024–2025 LaunchCode. All rights reserved.\nLaunchCode is a platform offering digital products & deployment services. We do not provide legal advice or act as a legal entity.\nUse of our platform signifies agreement with our Terms, Privacy Policy, and Refund Policy. Please consult a legal or tax advisor where necessary.',
   'faq_heading': 'Frequently Asked Questions',
   'faq_q1': 'How long does it take to launch my apps?',
-  'faq_q1_a1': 'Basic deployments take 13–15 business days.',
+  'faq_q1_a1': 'Basic deployments take 8-12 business days.',
   'faq_q1_a2': 'Premium packages are prioritized and completed within 4–7 business days.',
   'faq_q1_a3':
       'This includes launching to Play Store, App Store, and setting up hosting.',

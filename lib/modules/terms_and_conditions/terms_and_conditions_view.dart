@@ -25,60 +25,85 @@ class TermsAndConditionsPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             const Text(
-              'Last Updated: April 2025\n\n'
-                  'By using LaunchCode, you agree to the following terms and conditions. If you do not agree to these terms, please refrain from using the app.',
+              'Last Updated: May 26, 2025\n\n'
+                  'Welcome to LaunchCode. By accessing or using our website, you agree to comply with and be bound by the following terms and conditions. If you do not agree to these terms, please refrain from using our services.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             const Text(
-              '1. Introduction\n'
-                  'These Terms and Conditions govern your use of the LaunchCode mobile application ("App") and the services provided within the App. By accessing and using the App, you agree to comply with these Terms and Conditions.',
+              '1. Use of the Website\n'
+                  'You agree to use our website only for lawful purposes and in a manner that does not infringe the rights of, restrict, or inhibit anyone else\'s use and enjoyment of the website.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             const Text(
-              '2. User Account\n'
-                  'To use certain features of the App, you will need to create a user account. You are responsible for maintaining the confidentiality of your account credentials.',
+              '2. Intellectual Property\n'
+                  'All content on this website, including text, graphics, logos, and images, is the property of LaunchCode or its content suppliers and is protected by international copyright laws.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             const Text(
-              '3. Subscription\n'
-                  'Certain services within the App require a subscription. Details of the available subscription plans, including payment terms, will be displayed at the point of purchase.',
+              '3. User Accounts\n'
+                  'To access certain features, you may be required to create an account. You are responsible for maintaining the confidentiality of your account information.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             const Text(
-              '4. Privacy\n'
-                  'Your privacy is important to us. Please review our Privacy Policy, which explains how we collect and use your personal information.',
+              '4. Product Information\n'
+                  'We strive to ensure all product descriptions and prices are accurate. However, errors may occur and we reserve the right to correct them at any time.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             const Text(
-              '5. Termination\n'
-                  'We may suspend or terminate your access to the App at any time for violations of these Terms or any applicable laws.',
+              '5. Orders and Payments\n'
+                  'All orders are subject to acceptance and availability. Payments must be made through the methods specified on the website.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             const Text(
-              '6. Limitation of Liability\n'
-                  'We are not liable for any damages arising from your use of the App, to the maximum extent permitted by law.',
+              '6. Shipping and Delivery\n'
+                  'Delivery times are estimates and not guaranteed. We are not responsible for delays caused by carriers or external factors.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             const Text(
-              '7. Changes\n'
-                  'We reserve the right to modify these Terms at any time. Any changes will be posted within the App or on our website.',
+              '7. Returns and Refunds\n'
+                  'Please refer to our Return Policy. We reserve the right to refuse returns that do not comply with our policy.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             const Text(
-              '8. Contact Information\n'
-                  'If you have any questions regarding these Terms, please contact us at: contact@launchcode.com',
+              '8. Limitation of Liability\n'
+                  'To the fullest extent permitted by law, LaunchCode shall not be liable for any damages arising from the use or inability to use this website.',
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '9. Indemnification\n'
+                  'You agree to indemnify and hold harmless LaunchCode and its affiliates from any claims or liabilities arising from your use of the website.',
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '10. Changes to Terms\n'
+                  'We reserve the right to modify these terms at any time. Changes are effective upon posting. Continued use implies acceptance.',
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '11. Governing Law\n'
+                  'These terms are governed by the laws of Pakistan and disputes shall be subject to its exclusive jurisdiction.',
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '12. Contact Information\n'
+                  'For questions regarding these Terms and Conditions, contact us at: support@launchcode.shop',
               style: TextStyle(fontSize: 16),
             ),
           ],
-        ),
+        )
+
       ),
     );
   }

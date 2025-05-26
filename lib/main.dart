@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:privatily_app/modules/allProjects/allProjects.dart';
 import 'package:privatily_app/modules/cart/cart_logic.dart';
 import 'package:privatily_app/translation/app_translations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -75,6 +76,7 @@ class MyApp extends StatelessWidget {
           GetPage(name: '/', page: () => const Home()),
           GetPage(name: CartPage.routeName, page: () => const CartPage()),
           GetPage(name: CheckoutPage.routeName, page: () => const CheckoutPage()),
+          GetPage(name: AllProducts.routeName, page: () => const AllProducts()),
           GetPage(
             name: '/product-detail/:projectId',
             page: () => ProjectDetailsPage(),

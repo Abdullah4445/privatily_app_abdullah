@@ -690,7 +690,7 @@ class _HomeState extends State<Home> {
                       //             color: Colors.black87)),
                       //   ),
                       // ),
-                      const Gap(12),
+                      const Gap(6),
                       // AnimatedOnScroll(
                       //   child: Seo.image(
                       //     src: 'assets/images/preview.png',
@@ -770,7 +770,7 @@ class _HomeState extends State<Home> {
   Widget _buildLaunchCodeHero(BuildContext ctx) {
     final width = MediaQuery.of(ctx).size.width;
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       alignment: Alignment.center,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -862,112 +862,111 @@ class _HomeState extends State<Home> {
               child: const LaunchSteps(),
             ),
           ),
+          const Gap(6),
+          Padding(
+            key: _featuredKey,
+            padding: const EdgeInsets.symmetric(vertical: 0),
+            child: const FeaturedProductsSection(),
+          ),
 
           // const Gap(16),
           Container(
-            height:
-                !ResponsiveBreakpoints.of(context).isMobile
-                    ? 750
-                    : 660, // Adjusted height to fit everything comfortably
-            alignment: Alignment.bottomCenter,
-            child: Stack(
-              alignment: Alignment.bottomCenter,
+            // height:
+            //       270, // Adjusted height to fit everything comfortably
+            color: Colors.white,
+            alignment: Alignment.topCenter,
+            child:
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                ResponsiveBreakpoints.of(context).isMobile
-                    ? Container()
-                    : SizedBox(
-                      height: 500,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        physics: NeverScrollableScrollPhysics(),
-                        children: [
-                          SizedBox(
-                            height: 600,
-                            width: greyBackSize,
-                            child: Lottie.asset('assets/lotties/myGreyBack.json'),
-                          ),
-                          SizedBox(
-                            height: 600,
-                            width: greyBackSize,
-                            child: Lottie.asset('assets/lotties/myGreyBack.json'),
-                          ),
-                          SizedBox(
-                            height: 600,
-                            width: greyBackSize,
-                            child: Lottie.asset('assets/lotties/myGreyBack.json'),
-                          ),
-                          SizedBox(
-                            height: 600,
-                            width: greyBackSize,
-                            child: Lottie.asset('assets/lotties/myGreyBack.json'),
-                          ),
-                        ],
-                      ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 100,
+                      // width: greyBackSize,
+                      child: Lottie.asset('assets/lotties/myBack.json'),
                     ),
-                Padding(
-                  key: _featuredKey,
-                  padding: const EdgeInsets.symmetric(vertical: 2),
-                  child: const FeaturedProductsSection(),
+                    Text(
+                      "Choose your Plan".tr, // Example text
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        // Add other styling as needed
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
+                // Your existing SizedBox containing the ListView
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    PlanCard(
+                      text: "BASIC PLAN".tr,
+                      price: 150,
+                      supportDays: "Mon-Fri".tr,
+                      deliveryTime: "8 Days".tr,
+                    ),
+                    SizedBox(width: 2),
 
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Column( // Wrap with a Column
-                      mainAxisSize: MainAxisSize.min, // Important to prevent Column from taking infinite height
-                      children: [
-                        // Your Text widget here
-
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10.0), // Add some spacing
-                          child: Text(
-                            "Choose your Plan".tr, // Example text
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              // Add other styling as needed
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        // Your existing SizedBox containing the ListView
-                        SizedBox(
-                          height: 190, // This height is now for the ListView part
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            // padding: const EdgeInsets.symmetric(horizontal: 8),
-                            children: [
-                              ConstrainedBox(
-                                constraints: BoxConstraints(minWidth: constraints.maxWidth),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    PlanCard(
-                                      text: "BASIC PLAN".tr,
-                                      price: 150,
-                                      supportDays: "Mon-Fri".tr,
-                                      deliveryTime: "15 Days".tr,
-                                    ),
-                                    SizedBox(width: 2),
-                                    PlanCard(
-                                      text: "ADVANCED PLAN".tr,
-                                      price: 350,
-                                      supportDays: "Mon-Sun".tr,
-                                      deliveryTime: "7 Days".tr,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                )
-
-                // 🟢 Lottie animation at the bottom
+                    PlanCard(
+                      text: "ADVANCED PLAN".tr,
+                      price: 350,
+                      supportDays: "Mon-Sun".tr,
+                      deliveryTime: "5 Days".tr,
+                    ),
+                  ],
+                ),
               ],
             ),
+
+            // Stack(
+            //   alignment: Alignment.bottomCenter,
+            //   children: [
+            //     // ResponsiveBreakpoints.of(context).isMobile
+            //     //     ? Container()
+            //     //     : SizedBox(
+            //     //       height: 300,
+            //     //       child: ListView(
+            //     //         scrollDirection: Axis.horizontal,
+            //     //         physics: NeverScrollableScrollPhysics(),
+            //     //         children: [
+            //     //           // SizedBox(
+            //     //           //   height: 600,
+            //     //           //   width: greyBackSize,
+            //     //           //   child: Lottie.asset('assets/lotties/myGreyBack.json'),
+            //     //           // ),
+            //     //           SizedBox(
+            //     //             height: 600,
+            //     //             width: greyBackSize,
+            //     //             child: Lottie.asset('assets/lotties/myBack.json'),
+            //     //           ),
+            //     //
+            //     //         ],
+            //     //       ),
+            //     //     ),
+            //
+            //
+            //
+            //
+            //     // LayoutBuilder(
+            //     //   builder: (context, constraints) {
+            //     //     return Column( // Wrap with a Column
+            //     //       mainAxisSize: MainAxisSize.min, // Important to prevent Column from taking infinite height
+            //     //       children: [
+            //     //         // Your Text widget here
+            //     //
+            //     //
+            //     //       ],
+            //     //     );
+            //     //   },
+            //     // )
+            //
+            //     // 🟢 Lottie animation at the bottom
+            //   ],
+            // ),
           ),
         ],
       ),

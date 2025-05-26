@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import 'privacy_page_logic.dart';
-
-import 'package:flutter/material.dart';
 
 class PrivacyPolicyPage extends StatelessWidget {
   const PrivacyPolicyPage({Key? key}) : super(key: key);
@@ -25,50 +20,56 @@ class PrivacyPolicyPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             const Text(
-              'Last Updated: April 2025\n\n'
-                  'This Privacy Policy explains how LaunchCode collects, uses, and protects your personal data when you use our mobile application and services.',
+              'Last Updated: May 26, 2025\n\n'
+                  'This Privacy Policy outlines how LaunchCode collects, uses, and protects your personal information when you use our website and services.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             const Text(
-              '1. Data Collection\n'
-                  'We collect personal information, such as your name, email address, and profile photo, when you register for an account. We may also collect information about your usage of the App, including device information, location data, and usage statistics.',
+              '1. Information We Collect\n'
+                  'We may collect personal details such as your name, email address, profile photo, and payment information. We also collect technical data like device information, browser type, IP address, and usage statistics.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             const Text(
-              '2. Data Usage\n'
-                  'We use your data to provide and improve the App, including user authentication, service delivery, and personalized experiences.',
+              '2. How We Use Your Information\n'
+                  'We use your information to operate our services, manage your account, provide customer support, send updates, and improve user experience.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             const Text(
-              '3. Data Sharing\n'
-                  'We do not share your personal data with third parties except as necessary to provide our services, comply with the law, or protect our rights.',
+              '3. Sharing Your Data\n'
+                  'We do not sell your personal information. We may share data with trusted partners to help provide and improve our services or as required by law.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             const Text(
               '4. Data Security\n'
-                  'We implement reasonable security measures to protect your personal data. However, we cannot guarantee the absolute security of data transmitted over the internet.',
+                  'We use industry-standard security practices to protect your personal information. However, no method of transmission over the internet is completely secure.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             const Text(
-              '5. User Rights\n'
-                  'You have the right to access, correct, or delete your personal data. You may also withdraw consent for data processing at any time.',
+              '5. Your Rights\n'
+                  'You may access, update, or delete your personal data at any time. You may also withdraw your consent where applicable.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             const Text(
-              '6. Changes to Privacy Policy\n'
-                  'We may update this Privacy Policy from time to time. Any changes will be communicated within the App or on our website.',
+              '6. Cookies and Tracking Technologies\n'
+                  'We may use cookies and similar tools to enhance user experience and analyze site usage. You can control cookie settings through your browser.',
               style: TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 20),
             const Text(
-              '7. Contact Information\n'
-                  'If you have any questions or concerns about our Privacy Policy, please contact us at: contact@launchcode.com',
+              '7. Changes to This Policy\n'
+                  'We may revise this Privacy Policy periodically. Updated versions will be posted on our website with the new effective date.',
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '8. Contact Us\n'
+                  'If you have any questions or concerns about this Privacy Policy, please contact us at: support@launchcode.shop',
               style: TextStyle(fontSize: 16),
             ),
           ],

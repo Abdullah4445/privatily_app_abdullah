@@ -22,21 +22,20 @@ class RefundPolicyPage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             const Text(
-              'At LaunchCode.shop, we value your satisfaction. If you are not satisfied with your purchase, you can request a refund within 2 days of purchasing the product. '
-                  'Refund requests made after 2 days will not be accepted. Please follow the steps below to initiate your refund request:\n\n'
-                  '1. Contact our support team at support@launchcode.com.\n'
-                  '2. Provide your order details, including your order ID and purchase date.\n'
-                  '3. Explain the reason for your refund request.\n\n'
-                  'We will review your request and respond within 1 business day.\n\n'
-                  'Please note that refunds are only eligible for products purchased directly through our platform. Digital goods and services are subject to our terms of service and may not be refunded after the 2-day window.\n\n'
-                  'Thank you for choosing LaunchCode.shop, and we look forward to assisting you!',
+              'Last Updated: May 26, 2025\n\n'
+                  'At LaunchCode.shop, all purchases are final and **non-refundable**. We encourage you to carefully review the script or product details before making a purchase.\n\n'
+                  'Our products are digital in nature and delivered instantly upon successful payment. Due to the non-tangible, irrevocable nature of digital goods, we do not offer refunds under any circumstances.\n\n'
+                  '**Important:**\n'
+                  '- Make sure you fully understand the product.\n'
+                  '- Only proceed with the payment if you are confident in your selection.\n\n'
+                  'By completing a purchase on LaunchCode.shop, you acknowledge and agree to this no-refund policy.\n\n'
+                  'If you have any questions before purchasing, feel free to contact us at: support@launchcode.shop',
               style: TextStyle(
                 fontSize: 16,
                 height: 1.5,
                 color: Colors.black87,
               ),
             ),
-
           ],
         ),
       ),

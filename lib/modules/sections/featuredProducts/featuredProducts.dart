@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:privatily_app/modules/allProjects/allProjects.dart';
 import 'package:privatily_app/widgets/translationsController.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:seo/seo.dart'; // SEO package
@@ -65,13 +66,26 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
               ),
             ),
             const Gap(5),
-            Text(
-              'discover_software'.tr,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: screenWidth < 600 ? 16 : 18,
-                color: Colors.black54,
-              ),
+           Wrap(
+             // mainAxisAlignment: MainAxisAlignment.center,
+             alignment: WrapAlignment.center,
+              children: [
+                Center(
+                  child: Text(
+                    'discover_software'.tr,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: screenWidth < 600 ? 16 : 18,
+                      color: Colors.black54,
+                    ),
+                  ),
+                ),
+                Gap(12),
+                ElevatedButton(onPressed: (){
+
+                  Get.toNamed('/allProducts');
+                }, child: Text('explore_products'.tr))
+              ],
             ),
             const Gap(5),
             SizedBox(

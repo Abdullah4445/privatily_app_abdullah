@@ -97,6 +97,7 @@ flutter:
    - assets/lotties/plane.json
    - assets/lotties/iwon.json
    - assets/lotties/back.json
+   - assets/lotties/myBack.json
    - assets/lotties/myGreyBack.json
    - assets/lotties/rocket.json
    - assets/lotties/
