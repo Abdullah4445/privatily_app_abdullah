@@ -267,6 +267,6 @@ const Map<String, String> enUS = {
   "How to earn with this?": "How to earn with this?",
   "tryDemo": "Try Demo",
   "Choose your Plan": "Choose your Plan",
-  "Contact Us!":"Contact Us!"
+  "Contact Us!":"Email Us!"
 
 };

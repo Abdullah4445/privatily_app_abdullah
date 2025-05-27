@@ -70,7 +70,7 @@ class _AllProductsState extends State<AllProducts> {
                     crossAxisCount: crossAxisCount,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
-                    childAspectRatio: breakpoints.isMobile ? 495 / 520 : 590 / 490,
+                    childAspectRatio: breakpoints.isMobile ? 490 / 520 : 590 / 490,
                   ),
                   itemCount: results.length,
                   itemBuilder: (context, i) {

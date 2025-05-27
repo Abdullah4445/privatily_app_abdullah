@@ -915,7 +915,7 @@ class _HomeState extends State<Home> {
                       const SizedBox(height: 12),
                       PlanCard(
                         text: "ADVANCED PLAN".tr,
-                        price: 350,
+                        price: 450,
                         supportDays: "Mon-Sun".tr,
                         deliveryTime: "5 Days".tr,
                       ),
