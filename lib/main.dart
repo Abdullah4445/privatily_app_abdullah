@@ -71,6 +71,7 @@ class MyApp extends StatelessWidget {
           textTheme: ThemeData.light().textTheme.apply(
             fontFamily: Get.locale?.languageCode == 'ur' ? 'JameelNoori' : null,
           ),
+          focusColor: Colors.transparent,
         ),
         getPages: [
           GetPage(name: '/', page: () => const Home()),

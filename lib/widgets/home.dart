@@ -872,8 +872,7 @@ class _HomeState extends State<Home> {
 
           // const Gap(16),
           Container(
-            // height:
-            //       270, // Adjusted height to fit everything comfortably
+            height:      ResponsiveBreakpoints.of(context).isMobile? 510:330, // Adjusted height to fit everything comfortably
             color: Colors.white,
             alignment: Alignment.topCenter,
             child:
@@ -908,14 +907,14 @@ class _HomeState extends State<Home> {
                     children: [
                       PlanCard(
                         text: "BASIC PLAN".tr,
-                        price: 150,
+                        price: 199,
                         supportDays: "Mon-Fri".tr,
                         deliveryTime: "8 Days".tr,
                       ),
                       const SizedBox(height: 12),
                       PlanCard(
                         text: "ADVANCED PLAN".tr,
-                        price: 450,
+                        price: 449,
                         supportDays: "Mon-Sun".tr,
                         deliveryTime: "5 Days".tr,
                       ),

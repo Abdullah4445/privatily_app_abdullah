@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
@@ -50,16 +51,17 @@ class _LaunchStepsState extends State<LaunchSteps> {
     return Center(
       child: SizedBox(
         height: 200,
-      child: Row(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+           Gap(12), // Add a Spacer at the beginning
             Flexible(
               child: FocusableActionDetector(
                 autofocus: true,
                 mouseCursor: SystemMouseCursors.click,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  // physics: NeverScrollableScrollPhysics(), // Remove or comment this line
-                  shrinkWrap: false,
+                  shrinkWrap: true, // Change to true to only take necessary width
                   itemCount: steps.length,
                   itemBuilder: (context, index) {
                     final step = steps[index];
@@ -120,34 +122,24 @@ class _LaunchStepsState extends State<LaunchSteps> {
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(fontSize: 12, color: Colors.black87),
                                   ),
-                                  // if (!isLast)
-                                  //   const Padding(
-                                  //     padding: EdgeInsets.only(top: 10),
-                                  //     child: Icon(Icons.arrow_forward_rounded, color: Colors.redAccent),
-                                  //   ),
                                 ],
                               ),
                             ),
-
-                            // ✅ Lottie Positioned – plane (steps 1-4), hurrah (step 5)
                             Positioned(
                               top: 6,
                               right: 6,
                               child: SizedBox(
                                 width: isLast ? 110 : 72,
                                 height: isLast ? 110 : 72,
-                                child: isLastAho?Container():
-
-                                Lottie.asset(
+                                child: isLastAho ? Container() : Lottie.asset(
                                   isLast
-                                      ? 'assets/lotties/iwon.json' // 🎉 Show hurrah on last step
-                                      : 'assets/lotties/plane.json', // ✈️ Plane for others
+                                      ? 'assets/lotties/iwon.json'
+                                      : 'assets/lotties/plane.json',
                                   repeat: true,
                                   animate: true,
                                 ),
                               ),
                             ),
-
                           ],
                         ),
                       ),
@@ -156,6 +148,7 @@ class _LaunchStepsState extends State<LaunchSteps> {
                 ),
               ),
             ),
+            Gap(12),  // Add a Spacer at the end
           ],
         ),
       ),

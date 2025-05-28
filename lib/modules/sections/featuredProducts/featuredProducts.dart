@@ -104,7 +104,7 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
                 ),
               ),
             ),
-            const Gap(16),
+            const Gap(10),
             Center(child: const ExploreProductsButton()),
           ],
         ),
@@ -320,24 +320,52 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
 
                             FutureBuilder<String>(
                               future: TranslationService.translateText(
-                                "Deployed ${product.soldCount ?? 0} times"?? 'No Data',
+                                "Deployed ${product.soldCount ?? 0} times" ?? 'No Data',
                                 Get.locale?.languageCode ?? 'en',
                               ),
                               builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
                                   return const Text('...');
                                 } else if (snapshot.hasError) {
-                                  return Text('No Data'); // fallback to original
+                                  return const Text('No Data'); // fallback to original
                                 } else {
-                                  return Text(
-                                    snapshot.data ?? 'No Data',
-                                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                                  final String translatedText = snapshot.data ?? 'No Data';
+
+                                  // Split the text to apply different styles
+                                  // Assuming the format is always "Deployed X times"
+                                  final List<String> parts = translatedText.split(' ');
+
+                                  // Find the numeric part and subsequent "times"
+                                  String prefix = '';
+                                  String boldPart = '';
+                                  if (parts.length >= 3 && parts[0] == 'Deployed') {
+                                    prefix = 'Deployed ';
+                                    boldPart = '${parts[1]} ${parts[2]}'; // e.g., "76 times"
+                                  } else {
+                                    // Fallback if the format is not as expected
+                                    prefix = translatedText;
+                                  }
+
+                                  return Text.rich(
+                                    TextSpan(
+                                      text: prefix,
+                                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                                      children: <TextSpan>[
+                                        if (boldPart.isNotEmpty)
+                                          TextSpan(
+                                            text: boldPart,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.bold, // Apply bold style here
+                                            ),
+                                          ),
+                                      ],
+                                    ),
                                   );
                                 }
                               },
-                            ),
-
+                            )
 
 
                           ),
@@ -409,22 +437,23 @@ class ExploreProductsButton extends StatelessWidget {
   /// Extracted for readability
   ElevatedButton _ctaButton() => ElevatedButton.icon(
     onPressed: () => Get.toNamed('/allProducts'),
-    icon: const Icon(Icons.shopping_bag_outlined, size: 20),
+    icon: const Icon(Icons.shopping_bag_outlined, size: 16),
     label: Text(
       'explore_products'.tr.toUpperCase(),
       style: GoogleFonts.inter(
+        fontSize: 10,
         fontWeight: FontWeight.w600,
         letterSpacing: .8,
       ),
     ),
     style: ElevatedButton.styleFrom(
       elevation: 6,
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       backgroundColor: const Color(0xFF006BFF),
       foregroundColor: Colors.white,
       shadowColor: const Color(0x33006BFF),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(32),
+        borderRadius: BorderRadius.circular(10),
       ),
     ).merge(
       ButtonStyle(

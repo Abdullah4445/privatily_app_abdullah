@@ -55,12 +55,12 @@ class _HomeStatsSectionState extends State<HomeStatsSection> {
                 children: [
                   _StatItem(
                     titleKey: 'stats_clients',
-                    endValue: 300,
+                    endValue: 360,
                     animate: _visible,
                   ),
                   _StatItem(
                     titleKey: 'stats_projects',
-                    endValue: 800,
+                    endValue: 360,
                     animate: _visible,
                   ),
                   _StatItem(

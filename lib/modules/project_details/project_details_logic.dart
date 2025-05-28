@@ -16,8 +16,138 @@ class ProjectDetailsLogic extends GetxController {
   final RxList<String> imagesToShow = <String>[].obs;
 
   bool get isProductLoaded => product.value != null;
+  final isDescriptionExpanded = false.obs;
 
-  @override
+  void toggleDescriptionExpansion() {
+    isDescriptionExpanded.toggle();
+    print('isDescriptionExpanded toggled to: ${isDescriptionExpanded.value}');
+  }
+
+  Widget buildThumbnail(BuildContext context, String? thumbnailUrl) {
+    if (thumbnailUrl == null || thumbnailUrl.isEmpty) {
+      return const SizedBox.shrink(); // Or a placeholder
+    }
+
+    return GestureDetector(
+      onTap: () {
+        _openImagePreview(context, thumbnailUrl);
+      },
+      child: Center(
+        child: Hero(
+          tag: thumbnailUrl, // Unique tag for Hero animation
+          child: Image.network(
+            thumbnailUrl,
+            height: 200,
+            width: 490,
+            fit: BoxFit.contain, // Or BoxFit.cover depending on your preference
+            errorBuilder: (context, error, stackTrace) {
+              return const Icon(Icons.broken_image, size: 50);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _openImagePreview(BuildContext context, String imageUrl) {
+    final TransformationController transformationController = TransformationController();
+    double scale = 1.0;
+
+    showDialog(
+      context: context,
+      barrierColor: Colors.black87,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Dialog(
+              insetPadding: EdgeInsets.zero,
+              backgroundColor: Colors.transparent,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  InteractiveViewer(
+                    panEnabled: true,
+                    scaleEnabled: true,
+                    minScale: 0.5,
+                    maxScale: 5.0,
+                    transformationController: transformationController,
+                    child: Hero(
+                      tag: imageUrl,
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(Icons.broken_image, size: 100, color: Colors.white);
+                        },
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 16,
+                    left: 16,
+                    child: IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 32,
+                    right: 16,
+                    child: Column(
+                      children: [
+                        // Zoom In Button
+                        CircleAvatar(
+                          backgroundColor: Colors.black54,
+                          child: IconButton(
+                            icon: const Icon(Icons.zoom_in, color: Colors.white),
+                            onPressed: () {
+                              setState(() {
+                                scale = (scale + 0.2).clamp(1.0, 5.0);
+                                final focalPoint = MediaQuery.of(context).size.center(Offset.zero);
+                                transformationController.value = Matrix4.identity()
+                                  ..translate(
+                                    focalPoint.dx * (1 - scale),
+                                    focalPoint.dy * (1 - scale),
+                                  )
+                                  ..scale(scale);
+                              });
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        // Zoom Out Button
+                        CircleAvatar(
+                          backgroundColor: Colors.black54,
+                          child: IconButton(
+                            icon: const Icon(Icons.zoom_out, color: Colors.white),
+                            onPressed: () {
+                              setState(() {
+                                scale = (scale - 0.2).clamp(1.0, 5.0);
+                                final focalPoint = MediaQuery.of(context).size.center(Offset.zero);
+                                transformationController.value = Matrix4.identity()
+                                  ..translate(
+                                    focalPoint.dx * (1 - scale),
+                                    focalPoint.dy * (1 - scale),
+                                  )
+                                  ..scale(scale);
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   void onInit() {
     super.onInit();
