@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
+import '../student_lanuchcode/widgets/responsivefile.dart';
+
 class HomeLogic extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -18,9 +20,15 @@ class HomeLogic extends GetxController {
   var isLoading = false.obs;
 
   // ✅ Create User with Email and Password and save details
-  Future<void> createUserWithEmailAndPassword(String email, String password, String name,String course ,{required bool isStudent}) async {
+  Future<void> createUserWithEmailAndPassword(
+      String email,
+      String password,
+      String name,
+      String courseId, // Receive the course ID
+          {required bool isStudent}
+      ) async {
     try {
-      if(email.isEmpty || name.isEmpty || password.isEmpty ){
+      if (email.isEmpty || name.isEmpty || password.isEmpty) {
         Get.snackbar("Error", "Everything is Required");
         return;
       }
@@ -35,11 +43,11 @@ class HomeLogic extends GetxController {
 
       // ✅ Store User data in "Users" collection
       await firestore.collection("Users").doc(userId).set({
-        'name':name,
+        'name': name,
         'id': userId,
         'email': email,
         'role': role,
-        'course': course,
+        'courseId': courseId, // Save the course ID
       });
       // Generate chatRoomId
       String chatRoomId = generateChatRoomId(userId, fixedAdminId);
@@ -60,7 +68,6 @@ class HomeLogic extends GetxController {
       isLoading.value = false;
     }
   }
-
   // ✅ Sign In with Email and Password
   Future<void> signInWithEmailAndPassword(String email, String password, {required bool isStudent}) async {
     try {
@@ -109,5 +116,40 @@ class HomeLogic extends GetxController {
     return userId1.hashCode <= userId2.hashCode
         ? "$userId1-$userId2"
         : "$userId2-$userId1";
+  }
+  Future<Map<String, dynamic>?> getCourseDataByName(String courseName) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
+          .collection('course')
+          .where('name', isEqualTo: courseName)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        // Assuming course names are unique
+        return snapshot.docs.first.data(); // Return the course data
+      } else {
+        print("Course not found: $courseName");
+        return null; // Course not found
+      }
+    } catch (e) {
+      print("Error fetching course: $e");
+      Get.snackbar('Error', 'Failed to load course data.');
+      return null;
+    }
+  }
+
+  Future<List<String>> getCoursesFromFirestore() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance.collection('course').get();
+      List<String> courses = snapshot.docs
+          .map((doc) => doc['name'] as String)
+          .toList();
+      return courses;
+    } catch (e) {
+      print("Error fetching courses: $e");
+      Get.snackbar('Error', 'Failed to load courses.');
+      return []; // Return an empty list in case of error.
+    }
   }
 }
