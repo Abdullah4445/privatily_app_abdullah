@@ -8,7 +8,7 @@ class HomeLogic extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  final String fixedAdminId = 'bnS6fNg9srhKktTSufF2AA9tdQZ2';
+  final String fixedAdminId = 'PZTeDIeZ1DOJG2ErYwpf6tDnXz32';
   final String adminName = 'Admin';
 
   var showChatScreen = false.obs;
