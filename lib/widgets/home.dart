@@ -524,7 +524,7 @@ class _HomeState extends State<Home> {
           const Gap(32),
           ElevatedButton(
             onPressed: () async {
-              // loginWithEmailAndPassword(emailController.text, passwordController.text);
+              logic.signInWithEmailAndPassword(emailController.text, passwordController.text);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.deepPurple, // Primary Color

@@ -69,7 +69,7 @@ class HomeLogic extends GetxController {
     }
   }
   // ✅ Sign In with Email and Password
-  Future<void> signInWithEmailAndPassword(String email, String password, {required bool isStudent}) async {
+  Future<void> signInWithEmailAndPassword(String email, String password, ) async {
     try {
       isLoading.value = true;
       final credential = await auth.signInWithEmailAndPassword(
