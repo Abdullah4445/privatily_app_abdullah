@@ -82,21 +82,16 @@ class _HomeState extends State<Home> {
     super.initState();
     _loadCourses();
     // Check initial login state
-    if (mounted) {
-      FirebaseAuth.instance.authStateChanges().listen((user) async {
-        isLoggedIn.value = user != null;
+    FirebaseAuth.instance.authStateChanges().listen((user) async {
+      isLoggedIn.value = user != null;
 
-        if (user != null) {
-          // Fetch user role from Firestore after login
-          await _fetchUserRole(user.uid);
-        } else {
-          userRole = null; // Reset the user role when logged out
-        }
-        setState(() {
-          // Rebuild the widget to reflect the updated state
-        });
-      });
-    }
+      if (user != null) {
+        // Fetch user role from Firestore after login
+        await _fetchUserRole(user.uid);
+      } else {
+        userRole = null; // Reset the user role when logged out
+      }
+    });
   }
 
   Future<void> _loadCourses() async {
