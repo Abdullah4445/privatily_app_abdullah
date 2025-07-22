@@ -1,21 +1,18 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:privatily_app/modules/allProjects/allProjects.dart';
-import 'package:privatily_app/widgets/translationsController.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:seo/seo.dart'; // SEO package
 
-import '../../../animations/price.dart';
 import '../../../models/products.dart';
-import '../../../utils/translationHelper.dart';
 import '../../../widgets/myProgressIndicator.dart';
+import '../../../widgets/translationsController.dart';
 import '../../cart/cart_logic.dart';
-import '../../cart/cart_view.dart';
 import 'productController.dart';
 
 /// Featured products carousel section with SEO enhancements
@@ -67,16 +64,16 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
               ),
             ),
             const Gap(5),
-           Center(
-             child: Text(
-               'discover_software'.tr,
-               textAlign: TextAlign.center,
-               style: TextStyle(
-                 fontSize: screenWidth < 600 ? 16 : 18,
-                 color: Colors.black54,
-               ),
-             ),
-           ),
+            Center(
+              child: Text(
+                'discover_software'.tr,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: screenWidth < 600 ? 16 : 18,
+                  color: Colors.black54,
+                ),
+              ),
+            ),
             const Gap(5),
             SizedBox(
               width: double.infinity,
@@ -90,11 +87,11 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
                 options: CarouselOptions(
                   height: isMobile ? 320 : 400,
                   viewportFraction:
-                      isMobile
-                          ? 0.95
-                          : isLaptop
-                          ? 0.38
-                          : 0.26,
+                  isMobile
+                      ? 0.95
+                      : isLaptop
+                      ? 0.38
+                      : 0.26,
                   enableInfiniteScroll: true,
                   autoPlay: true,
                   enlargeCenterPage: false,
@@ -178,28 +175,25 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
                     ClipRRect(
                       borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
                       child: Seo.image(
-                        src: product.thumbnailUrl ?? '',
-                        alt: product.title ?? 'Product image',
-                        child: Image.network(
-                          product.thumbnailUrl ??
-                              'https://via.placeholder.com/300x200?text=No+Image',
-                          height: isMobile ? 215 : 295,
-                          width: double.infinity,
-                          fit: BoxFit.fill,
-                          loadingBuilder: (ctx, child, progress) {
-                            return progress == null ? child : const MyLoader();
-                          },
-                          errorBuilder:
-                              (ctx, _, __) => Container(
-                                height: 200,
-                                color: Colors.grey[200],
-                                child: const Icon(
-                                  Icons.broken_image,
-                                  size: 48,
-                                  color: Colors.grey,
-                                ),
+                          src: product.thumbnailUrl ?? '',
+                          alt: product.title ?? 'Product image',
+                          child: CachedNetworkImage(
+                            imageUrl: product.thumbnailUrl ??
+                                'https://via.placeholder.com/300x200?text=No+Image',
+                            height: isMobile ? 215 : 295,
+                            width: double.infinity,
+                            fit: BoxFit.fill,
+                            placeholder: (context, url) => MyLoader(),
+                            errorWidget: (context, url, error) => Container(
+                              height: 200,
+                              color: Colors.grey[200],
+                              child: const Icon(
+                                Icons.broken_image,
+                                size: 48,
+                                color: Colors.grey,
                               ),
-                        ),
+                            ),
+                          )
                       ),
                     ),
                     // WhatsApp icon positioned at the top right
@@ -241,28 +235,35 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
                         children: [
                           Expanded(
                             child: Seo.text(
-                              text: product.title ?? 'No Title',
-                              style: TextTagStyle.h3,
-                              child: FutureBuilder<String>(
-                                future: TranslationService.translateText(
+                                text: product.title ?? 'No Title',
+                                style: TextTagStyle.h3,
+                                child: Text(
                                   product.title ?? 'No Title',
-                                  Get.locale?.languageCode ?? 'en',
-                                ),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const Text('...');
-                                  } else if (snapshot.hasError) {
-                                    return Text('No Title'); // fallback to original
-                                  } else {
-                                    return Text(
-                                      snapshot.data ?? 'No Title',
-                                      style: Theme.of(context).textTheme.titleSmall
-                                          ?.copyWith(fontWeight: FontWeight.w600),
-                                    );
-                                  }
-                                },
-                              ),
+                                  style: Theme.of(context).textTheme.titleSmall
+                                      ?.copyWith(fontWeight: FontWeight.w600),
+                                )
+
+                              // FutureBuilder<String>(
+                              //   future: TranslationService.translateText(
+                              //     product.title ?? 'No Title',
+                              //     Get.locale?.languageCode ?? 'en',
+                              //   ),
+                              //   builder: (context, snapshot) {
+                              //     if (snapshot.connectionState ==
+                              //         ConnectionState.waiting) {
+                              //       return const Text('...');
+                              //     } else if (snapshot.hasError) {
+                              //       return Text('No Title'); // fallback to original
+                              //     } else {
+                              //       return Text(
+                              //         snapshot.data ?? 'No Title',
+                              //         style: Theme.of(context).textTheme.titleSmall
+                              //             ?.copyWith(fontWeight: FontWeight.w600),
+                              //       )
+                              //       ;
+                              //     }
+                              //   },
+                              // ),
                             ),
                           ),
                           _buildRatingStars(4.5),
@@ -271,28 +272,32 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
                       const Gap(4),
                       // Product subtitle
                       Seo.text(
-                        text: product.subtitle ?? '',
-                        style: TextTagStyle.p,
-                        child:
-                        FutureBuilder<String>(
-                          future: TranslationService.translateText(
-                            product.subtitle?? 'No Subtitle',
-                            Get.locale?.languageCode ?? 'en',
-                          ),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Text('...');
-                            } else if (snapshot.hasError) {
-                              return Text('No Subtitle'); // fallback to original
-                            } else {
-                              return Text(
-                                snapshot.data ?? 'No Subtitle',
-                                style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                              );
-                            }
-                          },
-                        ),
+                          text: product.subtitle ?? '',
+                          style: TextTagStyle.p,
+                          child: Text(
+                            product.subtitle ?? 'No Subtitle',
+                            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                          )
+                        // FutureBuilder<String>(
+                        //   future: TranslationService.translateText(
+                        //     product.subtitle?? 'No Subtitle',
+                        //     Get.locale?.languageCode ?? 'en',
+                        //   ),
+                        //   builder: (context, snapshot) {
+                        //     if (snapshot.connectionState ==
+                        //         ConnectionState.waiting) {
+                        //       return const Text('...');
+                        //     } else if (snapshot.hasError) {
+                        //       return Text('No Subtitle'); // fallback to original
+                        //     } else {
+                        //       return Text(
+                        //         snapshot.data ?? 'No Subtitle',
+                        //         style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                        //       )
+                        //       ;
+                        //     }
+                        //   },
+                        // ),
 
 
                       ),
@@ -313,59 +318,87 @@ class _FeaturedProductsSectionState extends State<FeaturedProductsSection> {
 
 
                           Seo.text(
-                            text: 'Deployed ${product.soldCount ?? 0} times',
-                            style: TextTagStyle.p,
-                            child:
+                              text: 'Deployed ${product.soldCount ?? 0} times',
+                              style: TextTagStyle.p,
+                              child:  RichText(
+                                text: TextSpan(
+                                  text: 'Deployed ',
+                                  style: DefaultTextStyle.of(context).style,
+                                  children: <TextSpan>[
+
+                                    TextSpan(text:'${product.soldCount ?? 0} times', style: const TextStyle(fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              )
 
 
-                            FutureBuilder<String>(
-                              future: TranslationService.translateText(
-                                "Deployed ${product.soldCount ?? 0} times" ?? 'No Data',
-                                Get.locale?.languageCode ?? 'en',
-                              ),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return const Text('...');
-                                } else if (snapshot.hasError) {
-                                  return const Text('No Data'); // fallback to original
-                                } else {
-                                  final String translatedText = snapshot.data ?? 'No Data';
+                            // Text.rich(
+                            //   TextSpan(
+                            //     text: prefix,
+                            //     style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                            //     children: <TextSpan>[
+                            //       if (boldPart.isNotEmpty)
+                            //         TextSpan(
+                            //           text: boldPart,
+                            //           style: TextStyle(
+                            //             fontSize: 12,
+                            //             color: Colors.black87,
+                            //             fontWeight: FontWeight.bold, // Apply bold style here
+                            //           ),
+                            //         ),
+                            //     ],
+                            //   ),
+                            // )
 
-                                  // Split the text to apply different styles
-                                  // Assuming the format is always "Deployed X times"
-                                  final List<String> parts = translatedText.split(' ');
 
-                                  // Find the numeric part and subsequent "times"
-                                  String prefix = '';
-                                  String boldPart = '';
-                                  if (parts.length >= 3 && parts[0] == 'Deployed') {
-                                    prefix = 'Deployed ';
-                                    boldPart = '${parts[1]} ${parts[2]}'; // e.g., "76 times"
-                                  } else {
-                                    // Fallback if the format is not as expected
-                                    prefix = translatedText;
-                                  }
-
-                                  return Text.rich(
-                                    TextSpan(
-                                      text: prefix,
-                                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                                      children: <TextSpan>[
-                                        if (boldPart.isNotEmpty)
-                                          TextSpan(
-                                            text: boldPart,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.black87,
-                                              fontWeight: FontWeight.bold, // Apply bold style here
-                                            ),
-                                          ),
-                                      ],
-                                    ),
-                                  );
-                                }
-                              },
-                            )
+                            // FutureBuilder<String>(
+                            //   future: TranslationService.translateText(
+                            //     "Deployed ${product.soldCount ?? 0} times" ?? 'No Data',
+                            //     Get.locale?.languageCode ?? 'en',
+                            //   ),
+                            //   builder: (context, snapshot) {
+                            //     if (snapshot.connectionState == ConnectionState.waiting) {
+                            //       return const Text('...');
+                            //     } else if (snapshot.hasError) {
+                            //       return const Text('No Data'); // fallback to original
+                            //     } else {
+                            //       final String translatedText = snapshot.data ?? 'No Data';
+                            //
+                            //       // Split the text to apply different styles
+                            //       // Assuming the format is always "Deployed X times"
+                            //       final List<String> parts = translatedText.split(' ');
+                            //
+                            //       // Find the numeric part and subsequent "times"
+                            //       String prefix = '';
+                            //       String boldPart = '';
+                            //       if (parts.length >= 3 && parts[0] == 'Deployed') {
+                            //         prefix = 'Deployed ';
+                            //         boldPart = '${parts[1]} ${parts[2]}'; // e.g., "76 times"
+                            //       } else {
+                            //         // Fallback if the format is not as expected
+                            //         prefix = translatedText;
+                            //       }
+                            //
+                            //       return Text.rich(
+                            //         TextSpan(
+                            //           text: prefix,
+                            //           style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                            //           children: <TextSpan>[
+                            //             if (boldPart.isNotEmpty)
+                            //               TextSpan(
+                            //                 text: boldPart,
+                            //                 style: TextStyle(
+                            //                   fontSize: 12,
+                            //                   color: Colors.black87,
+                            //                   fontWeight: FontWeight.bold, // Apply bold style here
+                            //                 ),
+                            //               ),
+                            //           ],
+                            //         ),
+                            //       );
+                            //     }
+                            //   },
+                            // )
 
 
                           ),
@@ -415,7 +448,7 @@ class ExploreProductsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // `ValueNotifier` lets us mutate scale inside a stateless widget
+    // ValueNotifier lets us mutate scale inside a stateless widget
     final hover = ValueNotifier(false);
 
     return MouseRegion(
@@ -466,4 +499,3 @@ class ExploreProductsButton extends StatelessWidget {
     ),
   );
 }
-
