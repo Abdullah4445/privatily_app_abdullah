@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:privatily_app/modules/allProjects/allProjects.dart';
 import 'package:privatily_app/modules/cart/cart_logic.dart';
 import 'package:privatily_app/translation/app_translations.dart';
+import 'package:privatily_app/widgets/homenew.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'firebase_options.dart';
