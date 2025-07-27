@@ -1,18 +1,15 @@
 import 'dart:async';
-import 'dart:math';
-import 'package:animated_icon/animated_icon.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:privatily_app/modules/chat_page/chat/view/widgets/guestStatus.dart';
 import 'package:privatily_app/modules/chat_page/chat/view/widgets/msgAnim_Icon.dart';
-import 'package:privatily_app/modules/chat_page/chat/view/widgets/typing_indicator.dart';
 import 'package:privatily_app/modules/chat_page/chat/view/widgets/variables/globalVariables.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../firebase_utils.dart';
+import '../../../../models/messages.dart';
 import '../../logic.dart';
 import 'widgets/message_bubble.dart';
 import 'widgets/message_input_field.dart';
@@ -37,23 +34,25 @@ class ChattingPage extends StatefulWidget {
 
 class _ChattingPageState extends State<ChattingPage> with WidgetsBindingObserver {
   final ChattingPageLogic logic = Get.put(ChattingPageLogic());
-  final TextEditingController _messageController = TextEditingController();
   final RxBool showCommonQuestions = true.obs;
   String? guestName;
-  bool hasAskedName = false;
 
   Timer? _typingTimer;
-  final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
+  final _firestore = FirebaseFirestore.instance; // Keep this if used elsewhere, otherwise it's redundant here.
 
   @override
   void initState() {
-
     super.initState();
-     globalChatRoomId = widget.chatRoomId;
-    _loadGuestName();
+    globalChatRoomId = widget.chatRoomId;
     WidgetsBinding.instance.addObserver(this);
     setUserOnline(globalChatRoomId);
+
+    // Call _loadMessages to set up the stream listener
+    _loadMessages();
+
+    // IMPORTANT: Mark all unread messages as seen when the chat page is opened
+    // This ensures that as soon as the user enters the chat, messages meant for them are marked as read.
+    _markAllUnreadMessagesAsSeen();
   }
 
   @override
@@ -65,58 +64,36 @@ class _ChattingPageState extends State<ChattingPage> with WidgetsBindingObserver
     super.dispose();
   }
 
+  // Load messages from the database and handle delivery/seen status
+  void _loadMessages() {
+    logic.getMessages(widget.chatRoomId).listen((newMessages) {
+      // Update the messages list in the logic controller
+      logic.updateMessages(newMessages);
 
+      // After updating the messages, process them for delivery and seen status
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+        if (currentUserId == null) return; // Ensure current user is logged in
 
-
-
-  Future<void> _loadGuestName() async {
-    final prefs = await SharedPreferences.getInstance();
-    guestName = prefs.getString('guest_name');
+        for (var message in newMessages) {
+          // Mark messages as delivered if they are for the current user and not yet delivered
+          if (message.receiverId == currentUserId && !message.isDelivered) {
+            logic.markMessageAsDelivered(widget.chatRoomId, message.id);
+          }
+        }
+        // After processing delivery, also mark all unread messages as seen
+        // This handles cases where new messages arrive while the user is already on the screen.
+        _markAllUnreadMessagesAsSeen();
+      });
+    });
   }
 
-  Future<void> sendWithNameCheck(String message) async {
-    if (guestName == null) await _loadGuestName();
-
-    if (guestName == null && !hasAskedName) {
-      hasAskedName = true;
-      final name = await showDialog<String>(
-        context: context,
-        builder: (context) {
-          final controller = TextEditingController();
-          return AlertDialog(
-            title: const Text("Enter your name"),
-            content: TextField(
-              controller: controller,
-              decoration: const InputDecoration(hintText: "Your name"),
-            ),
-            actions: [
-              TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text("Cancel")),
-              TextButton(
-                  onPressed: () =>
-                      Navigator.pop(context, controller.text.trim()),
-                  child: const Text("Continue")),
-            ],
-          );
-        },
-      );
-
-      if (name == null || name.isEmpty) {
-        hasAskedName = false;
-        return;
-      }
-
-      guestName = name;
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('guest_name', guestName!);
-      await _firestore //CHANGED TO _firestore
-          .collection('ChatsRoomId')
-          .doc(widget.chatRoomId)
-          .set({'guestName': guestName}, SetOptions(merge: true));
+  // Helper function to mark all unread messages for the current user as seen
+  Future<void> _markAllUnreadMessagesAsSeen() async {
+    final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+    if (currentUserId != null) {
+      await logic.markMessagesAsRead(widget.chatRoomId, currentUserId);
     }
-
-    await logic.sendMessage(widget.chatRoomId, widget.receiverId, message);
   }
 
   @override
@@ -127,13 +104,12 @@ class _ChattingPageState extends State<ChattingPage> with WidgetsBindingObserver
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: AdminStatus(adminUserId: widget.receiverId),
           ),
           Expanded(
-            child: StreamBuilder(
+            child: StreamBuilder<List<Messages>>( // Explicitly define type for clarity
               stream: logic.getMessages(widget.chatRoomId),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -157,27 +133,28 @@ class _ChattingPageState extends State<ChattingPage> with WidgetsBindingObserver
 
                 return ListView.builder(
                   padding: const EdgeInsets.all(12),
-                  reverse: true,
+                  reverse: true, // Show latest messages at the bottom
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     final msg = messages[index];
-                    final isMe =
-                        msg.senderId == logic.myFbAuth.currentUser?.uid;
-                    final current = msg.timestamp ?? DateTime.now();
+                    final isMe = msg.senderId == FirebaseAuth.instance.currentUser?.uid;
 
-                    final next = index + 1 < messages.length
-                        ? messages[index + 1].timestamp
-                        : null;
-
-                    final showDate = next == null ||
-                        current.day != next.day ||
-                        current.month != next.month ||
-                        current.year != next.year;
+                    // Ensure timestamp is not null before formatting
+                    final String formattedTime = msg.timestamp != null
+                        ? DateFormat('hh:mm a').format(msg.timestamp!)
+                        : DateFormat('hh:mm a').format(DateTime.now()); // Fallback to current time
 
                     return Column(
                       children: [
-                        if (showDate) DateLabel(timestamp: current),
-                        MessageBubble(message: msg.messageText, isMe: isMe),
+                        // Show date label only if the date changes from the previous message
+                        if (showDate(msg, index, messages)) DateLabel(timestamp: msg.timestamp!),
+                        MessageBubble(
+                          message: msg.messageText,
+                          isMe: isMe,
+                          messagetime: formattedTime,
+                          isDelivered: msg.isDelivered,
+                          isSeen: msg.isSeen,
+                        ),
                       ],
                     );
                   },
@@ -186,25 +163,28 @@ class _ChattingPageState extends State<ChattingPage> with WidgetsBindingObserver
             ),
           ),
           MsgAnimIcon(guestUserId: widget.receiverId),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: CommonQuestions(
-                onSelect: sendWithNameCheck, showToggle: showCommonQuestions),
+              onSelect: (String message) {
+                logic.sendMessage(widget.chatRoomId, widget.receiverId, message);
+              },
+              showToggle: showCommonQuestions,
+            ),
           ),
           MessageInputField(
-            controller: _messageController,
+            controller: logic.messageController,
             onSend: (text) async {
               if (text.trim().isNotEmpty) {
-                await sendWithNameCheck(text.trim());
-                _messageController.clear();
+                await logic.sendMessage(widget.chatRoomId, widget.receiverId, text.trim());
+                logic.messageController.clear();
               }
             },
             onChanged: (text) {
               final isTyping = text.trim().isNotEmpty;
               print("onChanged called. text: '$text', isTyping: $isTyping");
 
-             logic.setTypingStatus(isTyping);
+              logic.setTypingStatus(isTyping);
 
               if (_typingTimer != null && _typingTimer!.isActive) {
                 print("Timer cancelled");
@@ -214,18 +194,30 @@ class _ChattingPageState extends State<ChattingPage> with WidgetsBindingObserver
               if (isTyping) {
                 _typingTimer = Timer(const Duration(seconds: 1), () {
                   print("Timer expired, setting isTyping to false");
-                 logic.setTypingStatus(false);
+                  logic.setTypingStatus(false);
                 });
               } else {
                 print("Text field is empty");
               }
-            },
+            }, chatRoomId: widget.chatRoomId, receiverId: widget.receiverId,
           ),
-
+          if (logic.isLoading) const Center(child: CircularProgressIndicator()),
         ],
       ),
     );
   }
+
+  // Helper function to determine if a date label should be shown
+  bool showDate(Messages msg, int index, List<Messages> messages) {
+    // If timestamp is null, treat it as now for comparison, though ideally it should always be present.
+    final current = msg.timestamp ?? DateTime.now();
+    // Check if there's a next message and its timestamp
+    final next = index + 1 < messages.length ? messages[index + 1].timestamp : null;
+
+    // Show date if it's the last message (no next message) or if the date changes from the next message
+    return next == null ||
+        current.day != next.day ||
+        current.month != next.month ||
+        current.year != next.year;
+  }
 }
-
-

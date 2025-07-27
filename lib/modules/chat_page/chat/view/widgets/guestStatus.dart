@@ -25,19 +25,32 @@ class AdminStatus extends StatelessWidget {
           final isOnline = userData['isOnline'] ?? false;
           final isTyping = userData['isTyping'] ?? false;
           final lastSeen = userData['lastSeen'] as Timestamp?;
+          // Debug logs for extracted values
+          print("AdminStatus: isOnline = $isOnline");
+          print("AdminStatus: isTyping = $isTyping");
+          print("AdminStatus: lastSeen (Timestamp) = $lastSeen");
 
           if (isTyping) {
-            return const TypingIndicator(); // ✅ Animated typing effect
+            // If admin is typing, show typing indicator.
+            return const TypingIndicator();
           } else if (isOnline) {
+            // If admin is online (and not typing), show "Online".
             return const Text(
-              "Admin is Online",
+              "Online",
               style: TextStyle(
                 color: Colors.green,
                 fontStyle: FontStyle.italic,
               ),
             );
           } else {
+            // This 'else' block is reached ONLY IF:
+            // 1. isTyping is false
+            // 2. AND isOnline is false
+            // This means the admin is OFFLINE.
+
             if (lastSeen != null) {
+              // If admin is offline AND lastSeen data is available,
+              // then format and display the "Admin last seen: [time]" message.
               DateTime dateTime = lastSeen.toDate();
               String formattedDate =
               DateFormat('dd/MM/yyyy hh:mm a').format(dateTime);
@@ -49,6 +62,8 @@ class AdminStatus extends StatelessWidget {
                 ),
               );
             } else {
+              // If admin is offline AND lastSeen data is NOT available (null),
+              // then display "Admin is Offline".
               return const Text(
                 "Admin is Offline",
                 style: TextStyle(

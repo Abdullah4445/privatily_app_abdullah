@@ -5,11 +5,13 @@ class Messages {
   String senderId;
   String messageText;
   String receiverId;
-  String messageType; // 'text' or 'voice'
+  String messageType; // 'text', 'voice', or 'image'
   DateTime? timestamp;
   String? audioUrl;
   String? name;
-
+  String? imageUrl; // Added for image messages
+  bool isDelivered; // New: Track if message is delivered
+  bool isSeen; // New: Track if message is seen
 
   Messages({
     required this.id,
@@ -20,6 +22,9 @@ class Messages {
     this.timestamp,
     this.audioUrl,
     this.name,
+    this.imageUrl,
+    this.isDelivered = false, // Default to false
+    this.isSeen = false, // Default to false
   });
 
   factory Messages.fromJson(Map<String, dynamic> json, String id) {
@@ -32,6 +37,9 @@ class Messages {
       messageType: json['messageType'] ?? 'text',
       timestamp: (json['timestamp'] as Timestamp?)?.toDate(),
       audioUrl: json['audioUrl'],
+      imageUrl: json['imageUrl'] as String?,
+      isDelivered: json['isDelivered'] ?? false, // Parse from Firestore
+      isSeen: json['isSeen'] ?? false, // Parse from Firestore
     );
   }
 
@@ -44,6 +52,9 @@ class Messages {
       'messageType': messageType,
       'timestamp': timestamp != null ? Timestamp.fromDate(timestamp!) : FieldValue.serverTimestamp(),
       'audioUrl': audioUrl,
+      'imageUrl': imageUrl,
+      'isDelivered': isDelivered,
+      'isSeen': isSeen,
     };
   }
 }

@@ -115,9 +115,9 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
 
           // Inject JSON-LD structured data
           final jsonLdScript =
-              html.ScriptElement()
-                ..type = 'application/ld+json'
-                ..text = '''
+          html.ScriptElement()
+            ..type = 'application/ld+json'
+            ..text = '''
               {
                 "@context": "https://schema.org",
                 "@type": "Product",
@@ -151,90 +151,90 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               MetaTag(name: 'twitter:card', content: 'summary_large_image'),
             ],
             child: Scaffold(
-              appBar:   _buildAppBar(product),
-              body: TabBarView(children: [
-                SingleChildScrollView(
-                  child: Container(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Gap(8),
-                        _buildHeader(context, product),
-                        const SizedBox(height: 24),
-                        _buildSectionTitle(context, 'description'),
-                        const SizedBox(height: 8),
-                        ResponsiveBreakpoints.of(context).isMobile?Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(width: 300, child: _buildDescription(context, product)),
+                appBar:   _buildAppBar(product),
+                body: TabBarView(children: [
+                  SingleChildScrollView(
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Gap(8),
+                          _buildHeader(context, product),
+                          const SizedBox(height: 24),
+                          _buildSectionTitle(context, 'description'),
+                          const SizedBox(height: 8),
+                          ResponsiveBreakpoints.of(context).isMobile?Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(width: 300, child: _buildDescription(context, product)),
 
-                            Obx(() => AnimatedOpacity(
-                              opacity: logic.isDescriptionExpanded.value ? 1.0 : 0.0,
-                              duration: const Duration(milliseconds: 300),
-                              child: Visibility(
-                                visible: logic.isDescriptionExpanded.value, // Only build if visible
-                                child: logic.buildThumbnail(context, product.thumbnailUrl),
+                              Obx(() => AnimatedOpacity(
+                                opacity: logic.isDescriptionExpanded.value ? 1.0 : 0.0,
+                                duration: const Duration(milliseconds: 300),
+                                child: Visibility(
+                                  visible: logic.isDescriptionExpanded.value, // Only build if visible
+                                  child: logic.buildThumbnail(context, product.thumbnailUrl),
+                                ),
+                              )),
+
+                            ],
+                          ): Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(width: 300, child: _buildDescription(context, product)),
+
+                              Obx(() => AnimatedOpacity(
+                                opacity: logic.isDescriptionExpanded.value ? 1.0 : 0.0,
+                                duration: const Duration(milliseconds: 300),
+                                child: Visibility(
+                                  visible: logic.isDescriptionExpanded.value, // Only build if visible
+                                  child: logic.buildThumbnail(context, product.thumbnailUrl),
+                                ),
+                              )),
+                            ],
+                          ),
+                          const SizedBox(height: 32),
+                          if (product.demoAdminPanelLinks?.isNotEmpty ?? false)
+                            ...product.demoAdminPanelLinks!.map(
+                                  (panel) => _buildShotBlockWithDemo(
+                                context,
+                                panel.name,
+                                panel.link,
+                                panel.shotUrls,
+                                logic,
                               ),
-                            )),
-
-                          ],
-                        ): Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(width: 300, child: _buildDescription(context, product)),
-
-                            Obx(() => AnimatedOpacity(
-                              opacity: logic.isDescriptionExpanded.value ? 1.0 : 0.0,
-                              duration: const Duration(milliseconds: 300),
-                              child: Visibility(
-                                visible: logic.isDescriptionExpanded.value, // Only build if visible
-                                child: logic.buildThumbnail(context, product.thumbnailUrl),
+                            ),
+                          if (product.demoApkLinks?.isNotEmpty ?? false)
+                            ...product.demoApkLinks!.map(
+                                  (apk) => _buildShotBlockWithDemo(
+                                context,
+                                apk.name,
+                                apk.link,
+                                apk.shotUrls,
+                                logic,
                               ),
-                            )),
-                          ],
-                        ),
-                        const SizedBox(height: 32),
-                        if (product.demoAdminPanelLinks?.isNotEmpty ?? false)
-                          ...product.demoAdminPanelLinks!.map(
-                                (panel) => _buildShotBlockWithDemo(
+                            ),
+                          if (product.mobileShotUrls?.isNotEmpty ?? false)
+                            _buildShotBlockWithDemo(
                               context,
-                              panel.name,
-                              panel.link,
-                              panel.shotUrls,
+                              'Overview Screenshots',
+                              null,
+                              product.mobileShotUrls,
                               logic,
                             ),
-                          ),
-                        if (product.demoApkLinks?.isNotEmpty ?? false)
-                          ...product.demoApkLinks!.map(
-                                (apk) => _buildShotBlockWithDemo(
-                              context,
-                              apk.name,
-                              apk.link,
-                              apk.shotUrls,
-                              logic,
-                            ),
-                          ),
-                        if (product.mobileShotUrls?.isNotEmpty ?? false)
-                          _buildShotBlockWithDemo(
-                            context,
-                            'Overview Screenshots',
-                            null,
-                            product.mobileShotUrls,
-                            logic,
-                          ),
-                        Text(product.projectId.toString()),
+                          Text(product.projectId.toString()),
 
-                        const SizedBox(height: 105),
-                      ],
+                          const SizedBox(height: 105),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                CommentsSection(projectId: product.projectId ?? ''),
-              ])
+                  CommentsSection(projectId: product.projectId ?? ''),
+                ])
             ),
           );
         }),
@@ -330,7 +330,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
               child: AnimatedTextKit(
                 animatedTexts: [
                   TypewriterAnimatedText(  product.subtitle ?? '',
-                  speed: const Duration(milliseconds: 80)),
+                      speed: const Duration(milliseconds: 80)),
                 ],
                 totalRepeatCount: 1, // Or set to null for infinite loop
                 pause: const Duration(milliseconds: 1000),
@@ -413,12 +413,12 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
   );
 
   Widget _buildShotBlockWithDemo(
-    BuildContext context,
-    String? title,
-    String? demoLink,
-    List<String>? urls,
-    ProjectDetailsLogic logic,
-  ) {
+      BuildContext context,
+      String? title,
+      String? demoLink,
+      List<String>? urls,
+      ProjectDetailsLogic logic,
+      ) {
     if (urls == null || urls.isEmpty) return const SizedBox();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -465,10 +465,10 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
   }
 
   Widget _buildImageList(
-    BuildContext context,
-    List<String> images,
-    ProjectDetailsLogic logic,
-  ) {
+      BuildContext context,
+      List<String> images,
+      ProjectDetailsLogic logic,
+      ) {
     return SizedBox(
       height: 180,
       child: ListView.separated(
@@ -477,24 +477,24 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder:
             (ctx, i) => GestureDetector(
-              onTap: () => _openImageViewer(context, images, i),
-              child: Material(
-                elevation: 6,
-                borderRadius: BorderRadius.circular(12),
-                clipBehavior: Clip.hardEdge,
-                child: Seo.image(
-                  src: images[i],
-                  alt:
-                      'Screenshot ${i + 1} of ${logic.product.value?.title ?? 'product'}',
-                  child: Image.network(
-                    images[i],
-                    width: 150,
-                    height: 180,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+          onTap: () => _openImageViewer(context, images, i),
+          child: Material(
+            elevation: 6,
+            borderRadius: BorderRadius.circular(12),
+            clipBehavior: Clip.hardEdge,
+            child: Seo.image(
+              src: images[i],
+              alt:
+              'Screenshot ${i + 1} of ${logic.product.value?.title ?? 'product'}',
+              child: Image.network(
+                images[i],
+                width: 150,
+                height: 180,
+                fit: BoxFit.cover,
               ),
             ),
+          ),
+        ),
       ),
     );
   }
@@ -512,239 +512,239 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
       barrierColor: Colors.black87,
       builder:
           (_) => StatefulBuilder(
-            builder:
-                (ctx, setState) => Dialog(
-                  insetPadding: EdgeInsets.zero,
-                  backgroundColor: Colors.transparent,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // === Image Viewer with Swipe ===
-                      InteractiveViewer(
-                        panEnabled: true,
-                        scaleEnabled: true,
-                        minScale: 1,
-                        maxScale: 5,
-                        transformationController: transformationController,
-                        child: CardSwiper(
-                          controller: swiperController,
-                          cardsCount: images.length,
-                          initialIndex: initialIndex,
-                          onSwipe: (prev, next, dir) {
-                            setState(() {
-                              currentIndex = next!;
-                              scale = 1.0;
-                              transformationController.value = Matrix4.identity();
-                            });
-                            return true;
-                          },
-                          cardBuilder:
-                              (ctx, i, _, __) => ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: Center(
-                                  child: Image.network(images[i], fit: BoxFit.contain),
-                                ),
-                              ),
-                        ),
-                      ),
-
-                      // === Close Button ===
-                      Positioned(
-                        top: 32,
-                        left: 16,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.black54,
-                          child: IconButton(
-                            icon: const Icon(Icons.close, color: Colors.white),
-                            onPressed: () => Navigator.of(context).pop(),
-                          ),
-                        ),
-                      ),
-
-                      // === Swipe Left Arrow ===
-                      if (currentIndex > 0)
-                        Positioned(
-                          left: 16,
-                          top: MediaQuery.of(context).size.height / 2 - 24,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.black54,
-                            child: IconButton(
-                              icon: const Icon(
-                                Icons.arrow_back_ios_new,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {
-                                swiperController.swipe(CardSwiperDirection.left);
-                                setState(() {
-                                  currentIndex--;
-                                  scale = 1.0;
-                                  transformationController.value = Matrix4.identity();
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-
-                      // === Swipe Right Arrow ===
-                      if (currentIndex < images.length - 1)
-                        Positioned(
-                          right: 16,
-                          top: MediaQuery.of(context).size.height / 2 - 24,
-                          child: CircleAvatar(
-                            backgroundColor: Colors.black54,
-                            child: IconButton(
-                              icon: const Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {
-                                swiperController.swipe(CardSwiperDirection.right);
-                                setState(() {
-                                  currentIndex++;
-                                  scale = 1.0;
-                                  transformationController.value = Matrix4.identity();
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-
-                      // === Control Pad: Zoom + Pan Cluster ===
-                      Positioned(
-                        bottom: 32,
-                        right: 16,
-                        child: Column(
-                          children: [
-                            // Zoom In Button
-                            CircleAvatar(
-                              backgroundColor: Colors.black54,
-                              child: IconButton(
-                                icon: const Icon(Icons.zoom_in, color: Colors.white),
-                                onPressed: () {
-                                  setState(() {
-                                    scale = (scale + 0.2).clamp(1.0, 5.0);
-                                    final focalPoint = MediaQuery.of(
-                                      context,
-                                    ).size.center(Offset.zero);
-                                    transformationController.value =
-                                        Matrix4.identity()
-                                          ..translate(
-                                            focalPoint.dx * (1 - scale),
-                                            focalPoint.dy * (1 - scale),
-                                          )
-                                          ..scale(scale);
-                                  });
-                                },
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-
-                            // D-Pad Container
-                            Container(
-                              padding: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                color: Colors.black38,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Column(
-                                children: [
-                                  // Up
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.arrow_drop_up,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        transformationController.value =
-                                            transformationController.value
-                                              ..translate(0.0, panDelta);
-                                      });
-                                    },
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      // Left
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.arrow_left,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            transformationController.value =
-                                                transformationController.value
-                                                  ..translate(panDelta, 0.0);
-                                          });
-                                        },
-                                      ),
-                                      const SizedBox(width: 8),
-                                      // Right
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.arrow_right,
-                                          color: Colors.white,
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            transformationController.value =
-                                                transformationController.value
-                                                  ..translate(-panDelta, 0.0);
-                                          });
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                  // Down
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        transformationController.value =
-                                            transformationController.value
-                                              ..translate(0.0, -panDelta);
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            const SizedBox(height: 8),
-
-                            // Zoom Out Button
-                            CircleAvatar(
-                              backgroundColor: Colors.black54,
-                              child: IconButton(
-                                icon: const Icon(Icons.zoom_out, color: Colors.white),
-                                onPressed: () {
-                                  setState(() {
-                                    scale = (scale - 0.2).clamp(1.0, 5.0);
-                                    final focalPoint = MediaQuery.of(
-                                      context,
-                                    ).size.center(Offset.zero);
-                                    transformationController.value =
-                                        Matrix4.identity()
-                                          ..translate(
-                                            focalPoint.dx * (1 - scale),
-                                            focalPoint.dy * (1 - scale),
-                                          )
-                                          ..scale(scale);
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+        builder:
+            (ctx, setState) => Dialog(
+          insetPadding: EdgeInsets.zero,
+          backgroundColor: Colors.transparent,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // === Image Viewer with Swipe ===
+              InteractiveViewer(
+                panEnabled: true,
+                scaleEnabled: true,
+                minScale: 1,
+                maxScale: 5,
+                transformationController: transformationController,
+                child: CardSwiper(
+                  controller: swiperController,
+                  cardsCount: images.length,
+                  initialIndex: initialIndex,
+                  onSwipe: (prev, next, dir) {
+                    setState(() {
+                      currentIndex = next!;
+                      scale = 1.0;
+                      transformationController.value = Matrix4.identity();
+                    });
+                    return true;
+                  },
+                  cardBuilder:
+                      (ctx, i, _, __) => ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Center(
+                      child: Image.network(images[i], fit: BoxFit.contain),
+                    ),
                   ),
                 ),
+              ),
+
+              // === Close Button ===
+              Positioned(
+                top: 32,
+                left: 16,
+                child: CircleAvatar(
+                  backgroundColor: Colors.black54,
+                  child: IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+              ),
+
+              // === Swipe Left Arrow ===
+              if (currentIndex > 0)
+                Positioned(
+                  left: 16,
+                  top: MediaQuery.of(context).size.height / 2 - 24,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.black54,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        swiperController.swipe(CardSwiperDirection.left);
+                        setState(() {
+                          currentIndex--;
+                          scale = 1.0;
+                          transformationController.value = Matrix4.identity();
+                        });
+                      },
+                    ),
+                  ),
+                ),
+
+              // === Swipe Right Arrow ===
+              if (currentIndex < images.length - 1)
+                Positioned(
+                  right: 16,
+                  top: MediaQuery.of(context).size.height / 2 - 24,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.black54,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        swiperController.swipe(CardSwiperDirection.right);
+                        setState(() {
+                          currentIndex++;
+                          scale = 1.0;
+                          transformationController.value = Matrix4.identity();
+                        });
+                      },
+                    ),
+                  ),
+                ),
+
+              // === Control Pad: Zoom + Pan Cluster ===
+              Positioned(
+                bottom: 32,
+                right: 16,
+                child: Column(
+                  children: [
+                    // Zoom In Button
+                    CircleAvatar(
+                      backgroundColor: Colors.black54,
+                      child: IconButton(
+                        icon: const Icon(Icons.zoom_in, color: Colors.white),
+                        onPressed: () {
+                          setState(() {
+                            scale = (scale + 0.2).clamp(1.0, 5.0);
+                            final focalPoint = MediaQuery.of(
+                              context,
+                            ).size.center(Offset.zero);
+                            transformationController.value =
+                            Matrix4.identity()
+                              ..translate(
+                                focalPoint.dx * (1 - scale),
+                                focalPoint.dy * (1 - scale),
+                              )
+                              ..scale(scale);
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+
+                    // D-Pad Container
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.black38,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        children: [
+                          // Up
+                          IconButton(
+                            icon: const Icon(
+                              Icons.arrow_drop_up,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                transformationController.value =
+                                transformationController.value
+                                  ..translate(0.0, panDelta);
+                              });
+                            },
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // Left
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.arrow_left,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    transformationController.value =
+                                    transformationController.value
+                                      ..translate(panDelta, 0.0);
+                                  });
+                                },
+                              ),
+                              const SizedBox(width: 8),
+                              // Right
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.arrow_right,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    transformationController.value =
+                                    transformationController.value
+                                      ..translate(-panDelta, 0.0);
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                          // Down
+                          IconButton(
+                            icon: const Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                transformationController.value =
+                                transformationController.value
+                                  ..translate(0.0, -panDelta);
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 8),
+
+                    // Zoom Out Button
+                    CircleAvatar(
+                      backgroundColor: Colors.black54,
+                      child: IconButton(
+                        icon: const Icon(Icons.zoom_out, color: Colors.white),
+                        onPressed: () {
+                          setState(() {
+                            scale = (scale - 0.2).clamp(1.0, 5.0);
+                            final focalPoint = MediaQuery.of(
+                              context,
+                            ).size.center(Offset.zero);
+                            transformationController.value =
+                            Matrix4.identity()
+                              ..translate(
+                                focalPoint.dx * (1 - scale),
+                                focalPoint.dy * (1 - scale),
+                              )
+                              ..scale(scale);
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
+        ),
+      ),
     );
   }
 }
@@ -768,10 +768,10 @@ class HowToEarnButton extends StatelessWidget {
           valueListenable: hover,
           builder:
               (_, isHover, child) => AnimatedScale(
-                duration: const Duration(milliseconds: 120),
-                scale: isHover ? 1.04 : 1.0,
-                child: child, // re-use the button widget below
-              ),
+            duration: const Duration(milliseconds: 120),
+            scale: isHover ? 1.04 : 1.0,
+            child: child, // re-use the button widget below
+          ),
           child: _ctaButton(context),
         ),
       ),
@@ -783,34 +783,34 @@ class HowToEarnButton extends StatelessWidget {
     return ElevatedButton.icon(
       onPressed:
           () => showDialog(
-            context: context,
-            builder:
-                (ctx) => Scaffold(
-                  backgroundColor: Colors.transparent,
-                  body: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      LaunchSteps(),
-                      Positioned(
-                        right: 8,
-                        top: 15,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: IconButton(
-                            onPressed: () {
-                              Get.back();
-                            },
-                            icon: Icon(Icons.close, color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ],
+        context: context,
+        builder:
+            (ctx) => Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Stack(
+            alignment: Alignment.center,
+            children: [
+              LaunchSteps(),
+              Positioned(
+                right: 8,
+                top: 15,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: Icon(Icons.close, color: Colors.white),
                   ),
                 ),
+              ),
+            ],
           ),
+        ),
+      ),
       icon: const Icon(Icons.monetization_on, size: 18),
       label: Text(
         'How to earn with this?'.tr,
@@ -830,10 +830,10 @@ class HowToEarnButton extends StatelessWidget {
       ).merge(
         ButtonStyle(
           overlayColor: WidgetStateProperty.resolveWith(
-            (states) =>
-                states.contains(WidgetState.hovered)
-                    ? Colors.white.withOpacity(.05)
-                    : null,
+                (states) =>
+            states.contains(WidgetState.hovered)
+                ? Colors.white.withOpacity(.05)
+                : null,
           ),
         ),
       ),
@@ -862,10 +862,10 @@ class RequestSetup extends StatelessWidget {
           valueListenable: hover,
           builder:
               (_, isHover, child) => AnimatedScale(
-                duration: const Duration(milliseconds: 120),
-                scale: isHover ? 1.04 : 1.0,
-                child: child, // re-use the button widget below
-              ),
+            duration: const Duration(milliseconds: 120),
+            scale: isHover ? 1.04 : 1.0,
+            child: child, // re-use the button widget below
+          ),
           child: _ctaButton(context),
         ),
       ),
@@ -902,10 +902,10 @@ class RequestSetup extends StatelessWidget {
       ).merge(
         ButtonStyle(
           overlayColor: WidgetStateProperty.resolveWith(
-            (states) =>
-                states.contains(WidgetState.hovered)
-                    ? Colors.white.withOpacity(.05)
-                    : null,
+                (states) =>
+            states.contains(WidgetState.hovered)
+                ? Colors.white.withOpacity(.05)
+                : null,
           ),
         ),
       ),

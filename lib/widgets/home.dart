@@ -68,7 +68,7 @@ class _HomeState extends State<Home> {
 
   RxString selectedLang = 'en'.obs;
   List<String> courses = [];
-  final HomeLogic courseLogic = HomeLogic(); // Replace HomeLogic with your actual logic class
+  // final HomeLogic courseLogic = HomeLogic(); // Replace HomeLogic with your actual logic class
 
   //Controllers
   final TextEditingController emailController = TextEditingController();
@@ -95,7 +95,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> _loadCourses() async {
-    courses = await courseLogic.getCoursesFromFirestore();
+    courses = await logic.getCoursesFromFirestore();
     setState(() {}); // Trigger a rebuild to update the dropdown
   }
 
@@ -525,18 +525,18 @@ class _HomeState extends State<Home> {
           ),
           const Gap(32),
 
-          Obx(()=>   courseLogic.isLoading.value == true?CircularProgressIndicator(): ElevatedButton(
+          Obx(()=>   logic.isLoading.value == true?CircularProgressIndicator(): ElevatedButton(
             onPressed: () async {
 
-              await courseLogic.signInWithEmailAndPassword(emailController.text, passwordController.text);
-              if (logic.auth.currentUser != null) {
-
-                _openChatPopup(); // Open Chat Popup
-                showSignupForm.value = false;
-                showLoginForm.value = false;
-
-
-              }
+              await logic.signInWithEmailAndPassword(emailController.text, passwordController.text);
+              // if (logic.auth.currentUser != null) {
+              //
+              //   _openChatPopup(); // Open Chat Popup
+              //   showSignupForm.value = false;
+              //   showLoginForm.value = false;
+              //
+              //
+              // }
 
 
 
@@ -625,7 +625,7 @@ class _HomeState extends State<Home> {
                           List<Widget> buttons = [
                             TextButton(
                               onPressed: () {
-                                courseLogic.logOut();
+                                logic.logOut();
                                 showChatBox.value = !showChatBox.value;
                                 showLoginForm.value = false;
                                 showSignupForm.value = false;
