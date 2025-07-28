@@ -2,12 +2,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:privatily_app/admin_launchcode/dashboard/dashboard_binding.dart';
+import 'package:privatily_app/admin_launchcode/dashboard/dashboard_view.dart';
 import 'package:privatily_app/modules/allProjects/allProjects.dart';
 import 'package:privatily_app/modules/cart/cart_logic.dart';
 import 'package:privatily_app/student_lanuchcode/screens/Home/home.dart';
 import 'package:privatily_app/translation/app_translations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
+import 'admin_launchcode/home_page/logic.dart';
+import 'admin_launchcode/home_page/view.dart';
+import 'admin_launchcode/projects/newprojectscreen.dart';
+import 'admin_launchcode/projects/projects.dart';
+import 'admin_launchcode/screens/coursescreen.dart';
+import 'admin_launchcode/screens/driver.dart';
+import 'admin_launchcode/screens/home.dart';
+import 'admin_launchcode/screens/reviews.dart';
+import 'admin_launchcode/screens/setting.dart';
+import 'admin_launchcode/screens/students_screen/students.dart';
 import 'firebase_options.dart';
 import 'firebase_utils.dart';
 import 'modules/cart/cart_view.dart';
@@ -79,10 +91,59 @@ class MyApp extends StatelessWidget {
           GetPage(name: CartPage.routeName, page: () => const CartPage()),
           GetPage(name: CheckoutPage.routeName, page: () => const CheckoutPage()),
           GetPage(name: AllProducts.routeName, page: () => const AllProducts()),
-          GetPage(name: '/dashboard', page: () => const HomePage()),
+          GetPage(name: '/HomePage', page: () => const HomePage()),
           GetPage(
             name: '/product-detail/:projectId',
             page: () => ProjectDetailsPage(),
+          ),
+          GetPage(
+            name: "/Admindashboard",
+            page: () => AdminDashboardPage(),
+            binding: BindingsBuilder(() {
+              Get.put(LogicadminHome()); // ✅ Make sure HomeLogic is available
+            }),
+          ),
+          GetPage(
+            name: '/home',
+            page: () => HomeScreen(),
+          ),
+          GetPage(
+            name: '/projects',
+            page: () => ProjectScreen(),
+          ),
+          GetPage(
+            name: "/course",
+            page: () => CourseScreen(),
+          ),
+          GetPage(
+            name: '/reviews',
+            page: () => ReviewsScreen(),
+          ),
+
+          /// ✅ Dynamically get IDs from HomeLogic for ChattingPage
+          GetPage(
+            name: '/chats',
+            page: () {
+              // final homeLogic = Get.find<HomeLogic>();
+              return AdminChatHome();
+            },
+          ),
+
+          GetPage(
+            name: '/students',
+            page: () => StudentsScreen(),
+          ),
+          GetPage(
+            name: '/driver',
+            page: () => DriverScreen(),
+          ),
+          GetPage(
+            name: '/settings',
+            page: () => SettingsScreen(),
+          ),
+          GetPage(
+            name: '/addNew',
+            page: () => AddProjectScreen(),
           ),
         ],
         builder: (context, child) => ResponsiveBreakpoints.builder(
@@ -94,6 +155,7 @@ class MyApp extends StatelessWidget {
             const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
           ],
         ),
+        initialBinding:AppBinding(),
         // Remove `home` when using initialRoute
         // home: const Home(),
       ),

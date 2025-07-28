@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:privatily_app/admin_launchcode/dashboard/dashboard_view.dart';
 
+import '../admin_launchcode/login_screen/view.dart';
 import '../student_lanuchcode/widgets/responsivefile.dart';
 
 class HomeLogic extends GetxController {
@@ -69,7 +71,7 @@ class HomeLogic extends GetxController {
     }
   }
   // ✅ Sign In with Email and Password
-  Future<void> signInWithEmailAndPassword(String email, String password, ) async {
+  Future<void> signInWithEmailAndPassword(String email, String password) async {
     try {
       isLoading.value = true;
       final credential = await auth.signInWithEmailAndPassword(
@@ -77,14 +79,22 @@ class HomeLogic extends GetxController {
         password: password,
       );
 
-      final userId = credential.user!.uid;
-      // Generate chatRoomId
-      String chatRoomId = generateChatRoomId(userId, fixedAdminId);
+      final String myGmail = "shoaibsarwar103@gmail.com";
+      const String myPassword = "12345678";
 
-      chatRoomIdForPopup.value = chatRoomId;
-      receiverIdForPopup.value = fixedAdminId;
-      receiverNameForPopup.value = adminName;
-      showChatScreen.value = true;
+      if (email == myGmail && password == myPassword) {
+        Get.toNamed("/Admindashboard");
+        print("go dash board screen");
+      } else {
+        final userId = credential.user!.uid;
+        // Generate chatRoomId
+        String chatRoomId = generateChatRoomId(userId, fixedAdminId);
+
+        chatRoomIdForPopup.value = chatRoomId;
+        receiverIdForPopup.value = fixedAdminId;
+        receiverNameForPopup.value = adminName;
+        showChatScreen.value = true;
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         Get.snackbar("Error", "No user found for that email.");
@@ -97,7 +107,6 @@ class HomeLogic extends GetxController {
       isLoading.value = false;
     }
   }
-
   Future<void> logOut() async {
     try {
       await auth.signOut();

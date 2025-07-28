@@ -4,11 +4,13 @@ import 'dart:ui';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:privatily_app/animations/serviceCards.dart';
+import 'package:privatily_app/fullscreenchatwidget.dart';
 import 'package:privatily_app/modules/stepstolaunch/stepstolaunch.dart';
 import 'package:privatily_app/widgets/translationsController.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -159,7 +161,7 @@ class _HomeState extends State<Home> {
   //   );
   // }
 
-  /// ✅ CHAT POPUP
+  /// ✅ CHAT   POPUP
   Widget chatPopup() {
     return Positioned(
       bottom: 100,
@@ -267,14 +269,19 @@ class _HomeState extends State<Home> {
   Widget floatingMessageButton() => FloatingActionButton(
     backgroundColor: Colors.deepPurple,
     onPressed: () async {
-      _openChatPopup();
+      if (kIsWeb) {
+        _openChatPopup();
+      } else {
+        Get.to(() => FullscreenChatWidget());
+      }
     },
     child: Obx(() => Icon(
-      showChatBox.value ? Icons.close : Icons.chat_bubble_outline,
+      showChatBox.value
+          ? Icons.close
+          : Icons.chat_bubble_outline, // Change icon as needed
       color: Colors.white,
     )),
   );
-
   void _openChatPopup() {
     showChatBox.value = !showChatBox.value;
     showLoginForm.value = false;
@@ -640,7 +647,7 @@ class _HomeState extends State<Home> {
                           if (userRole == 'student') {
                             buttons.add(TextButton(
                               onPressed: () {
-                                Get.toNamed("/dashboard");
+                                Get.toNamed("/HomePage");
                                 // Get.toNamed('/dashboard');
                               },
                               child: Text('Dashboard'.tr),
