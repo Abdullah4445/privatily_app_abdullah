@@ -1,9 +1,9 @@
 // Redesigned ProjectDetailsPage with SEO-safe meta and injected JSON-LD manually via dart:html
 
-import 'dart:html' as html;
+// import 'dart:html' as html;
 
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:carousel_slider_plus/carousel_slider_plus.dart';
+// import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -26,7 +26,7 @@ import 'project_details_logic.dart';
 class ProjectDetailsPage extends StatefulWidget {
   ProjectDetailsPage({super.key});
 
-  static const _horizontalPadding = 16.0;
+  // static const _horizontalPadding = 16.0;
   static const _accentColor = Color(0xFF00E676);
 
   @override
@@ -76,7 +76,7 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
           if (Navigator.canPop(ctx)) {
             Navigator.pop(ctx);
           } else {
-            html.window.location.href = '/';
+            // html.window.location.href = '/';
           }
         },
       ),
@@ -114,23 +114,23 @@ class _ProjectDetailsPageState extends State<ProjectDetailsPage> {
           if (product == null) return const Center(child: Text('Product not found.'));
 
           // Inject JSON-LD structured data
-          final jsonLdScript =
-          html.ScriptElement()
-            ..type = 'application/ld+json'
-            ..text = '''
-              {
-                "@context": "https://schema.org",
-                "@type": "Product",
-                "name": "${product.title}",
-                "description": "${product.projectDesc}",
-                "image": ${logic.imagesToShow.map((url) => '"$url"').toList()},
-                "offers": {
-                  "@type": "Offer",
-                  "availability": "https://schema.org/InStock"
-                }
-              }
-            ''';
-          html.document.head!.append(jsonLdScript);
+          // final jsonLdScript =
+          // html.ScriptElement()
+          //   ..type = 'application/ld+json'
+          //   ..text = '''
+          //     {
+          //       "@context": "https://schema.org",
+          //       "@type": "Product",
+          //       "name": "${product.title}",
+          //       "description": "${product.projectDesc}",
+          //       "image": ${logic.imagesToShow.map((url) => '"$url"').toList()},
+          //       "offers": {
+          //         "@type": "Offer",
+          //         "availability": "https://schema.org/InStock"
+          //       }
+          //     }
+          //   ''';
+          // html.document.head!.append(jsonLdScript);
 
           return Seo.head(
             tags: [

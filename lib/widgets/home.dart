@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'dart:ui';
 
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -18,11 +16,8 @@ import 'package:seo/seo.dart'; // SEO package
 
 import '../animations/animated_on_scrool.dart';
 import '../animations/price.dart';
-import '../modules/cart/cart_logic.dart';
-import '../modules/cart/cart_view.dart';
+
 import '../modules/chat_page/chat/view/chatting_page.dart';
-import '../modules/chat_page/view.dart';
-import '../modules/preview/privatily_preview_image.dart';
 import '../modules/sections/FAQ_section.dart';
 import '../modules/sections/FooterSection.dart';
 import '../modules/sections/contact_us_seaction.dart';
@@ -36,9 +31,7 @@ import '../modules/sections/testimonial_section.dart';
 import '../modules/sections/transparent_pricing_seaction.dart';
 import '../modules/sections/why_incorporate_us_section.dart';
 import '../modules/sections/why_privatily_section.dart';
-import '../student_lanuchcode/widgets/responsivefile.dart';
 import 'homellogic.dart';
-import 'myProgressIndicator.dart';
 
 /// Home page with SEO enhancements
 class Home extends StatefulWidget {
@@ -607,6 +600,70 @@ class _HomeState extends State<Home> {
                   ),
                   backgroundColor: Colors.white,
                   actions: [
+                    StreamBuilder<User?>(
+                      stream: FirebaseAuth.instance.authStateChanges(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final userEmail = snapshot.data?.email ?? '';
+
+                          List<Widget> buttons = [];
+
+                          // ✅ If Admin Email — Add Admin + Dashboard First
+                          if (userEmail == "shoaibsarwar103@gmail.com") {
+                            buttons.addAll([
+                              TextButton(
+                                onPressed: () {
+                                  Get.toNamed("/Admindashboard");
+                                },
+                                child: Text("Admin Dashboard".tr),
+                              ),
+                              // TextButton(
+                              //   onPressed: () {
+                              //     Get.toNamed("/HomePage");
+                              //   },
+                              //   child: Text("Dashboard".tr),
+                              // ),
+                            ]);
+                          }
+
+                          // ✅ If Student Role — Add Dashboard
+                          else if (userRole == 'student') {
+                            buttons.add(TextButton(
+                              onPressed: () {
+                                Get.toNamed("/HomePage");
+                              },
+                              child: Text('Dashboard'.tr),
+                            ));
+                          }
+
+                          // ✅ Always show Logout
+                          buttons.add(TextButton(
+                            onPressed: () {
+                              logic.logOut();
+                              showChatBox.value = !showChatBox.value;
+                              showLoginForm.value = false;
+                              showSignupForm.value = false;
+                              showRoleSelection.value = true;
+                              logic.showChatScreen.value = false;
+                            },
+                            child: Text('Logout'.tr),
+                          ));
+
+                          return Row(children: buttons);
+                        } else {
+                          // Not logged in — show Login button
+                          return TextButton(
+                            onPressed: () {
+                              _openChatPopup();
+                              showRoleSelection.value = true;
+                            },
+                            child: Text('Login'.tr),
+                          );
+                        }
+                      },
+                    ),
+
+                    // Other buttons after Admin/Dashboard
                     if (ResponsiveBreakpoints.of(context).largerThan(MOBILE))
                       TextButton(
                         onPressed: () => scrollToSection(_whyUsKey),
@@ -622,55 +679,8 @@ class _HomeState extends State<Home> {
                         child: Text('FAQ'.tr),
                       ),
 
-                    // Login Function
-                    StreamBuilder<User?>(
-                      stream: FirebaseAuth.instance.authStateChanges(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          // User is logged in. Show Logout and possibly Dashboard.
-
-                          List<Widget> buttons = [
-                            TextButton(
-                              onPressed: () {
-                                logic.logOut();
-                                showChatBox.value = !showChatBox.value;
-                                showLoginForm.value = false;
-                                showSignupForm.value = false;
-                                showRoleSelection.value = true;
-                                logic.showChatScreen.value = false;
-
-                              },
-                              child: Text('Logout'.tr),
-                            )
-                          ];
-
-                          if (userRole == 'student') {
-                            buttons.add(TextButton(
-                              onPressed: () {
-                                Get.toNamed("/HomePage");
-                                // Get.toNamed('/dashboard');
-                              },
-                              child: Text('Dashboard'.tr),
-                            ));
-                          }
-
-                          return Row(children: buttons);
-                        } else {
-                          // User is not logged in
-                          return TextButton(
-                            onPressed: () {
-                              _openChatPopup();
-                              showRoleSelection.value = true;
-                              // showChatBox = true;
-
-                            },
-                            child: Text('Login'.tr),
-                          );
-                        }
-                      },
-                    ),
-
                     const Gap(10),
+
                     // Language selector
                     Container(
                       width: 85,
@@ -695,6 +705,8 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                   ],
+
+
                 ),
                 body:
                     SingleChildScrollView(
