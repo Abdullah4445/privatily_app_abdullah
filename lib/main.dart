@@ -37,7 +37,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Use clean URLs (no hash) for SEO-friendly paths
   // setUrlStrategy(PathUrlStrategy());
-  usePathUrlStrategy();
+  // usePathUrlStrategy();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

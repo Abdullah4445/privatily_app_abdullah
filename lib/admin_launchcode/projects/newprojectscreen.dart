@@ -5,7 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker_web/image_picker_web.dart';
+// import 'package:image_picker_web/image_picker_web.dart';
 import 'package:privatily_app/admin_launchcode/projects/projects_controller.dart';
 import 'package:uuid/uuid.dart';
 
@@ -120,7 +120,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                 onTap: () async {
                   if (kIsWeb) {
                     print("web ");
-                    bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
+                    // bytesFromPicker = await ImagePickerWeb.getImageAsBytes();
                     setState(() {});
                   } else if (Platform.isAndroid || Platform.isIOS) {
                     print("Other");
@@ -404,7 +404,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
     List<String> downloadUrls = [];
 
     // Use image_picker_web to select multiple images as bytes
-    pickedImages = (await ImagePickerWeb.getMultiImagesAsBytes())!;
+    // pickedImages = (await ImagePickerWeb.getMultiImagesAsBytes())!;
 
     // Loop through the picked images and upload them to Firebase Storage
     for (var image in pickedImages) {
@@ -431,7 +431,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
     List<String> adminDownloadUrls = [];
 
     // Use image_picker_web to select multiple images as bytes
-    adminImagesLinks = (await ImagePickerWeb.getMultiImagesAsBytes())!;
+    // adminImagesLinks = (await ImagePickerWeb.getMultiImagesAsBytes())!;
 
     // Loop through the picked images and upload them to Firebase Storage
     for (var image in adminImagesLinks) {
