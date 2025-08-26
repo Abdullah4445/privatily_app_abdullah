@@ -13,7 +13,8 @@ import 'package:privatily_app/modules/stepstolaunch/stepstolaunch.dart';
 import 'package:privatily_app/widgets/translationsController.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:seo/seo.dart'; // SEO package
-
+import 'dart:io' show Platform; // mobile/desktop ke liye
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../animations/animated_on_scrool.dart';
 import '../animations/price.dart';
 
@@ -259,21 +260,32 @@ class _HomeState extends State<Home> {
   }
 
 
+
+
   Widget floatingMessageButton() => FloatingActionButton(
     backgroundColor: Colors.deepPurple,
     onPressed: () async {
       if (kIsWeb) {
+        // Agar app web par chal rahi hai
         _openChatPopup();
+      } else if (Platform.isAndroid || Platform.isIOS) {
+        // Agar app mobile par chal rahi hai
+        Get.to(() => FullscreenChatWidget());
+      } else if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+        // Agar app desktop OS par chal rahi hai
+        Get.to(() => FullscreenChatWidget());
+        // yahan tum chaho to desktop ke liye alag widget bhi use kar sakte ho
       } else {
+        // Agar koi unknown platform ho (fallback)
         Get.to(() => FullscreenChatWidget());
       }
     },
-    child: Obx(() => Icon(
-      showChatBox.value
-          ? Icons.close
-          : Icons.chat_bubble_outline, // Change icon as needed
-      color: Colors.white,
-    )),
+    child: Obx(
+          () => Icon(
+        showChatBox.value ? Icons.close : Icons.chat_bubble_outline,
+        color: Colors.white,
+      ),
+    ),
   );
   void _openChatPopup() {
     showChatBox.value = !showChatBox.value;

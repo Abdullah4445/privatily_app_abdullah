@@ -1,10 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
-import 'package:privatily_app/admin_launchcode/dashboard/dashboard_view.dart';
-
-import '../admin_launchcode/login_screen/view.dart';
-import '../student_lanuchcode/widgets/responsivefile.dart';
 
 class HomeLogic extends GetxController {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
